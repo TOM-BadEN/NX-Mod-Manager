@@ -1,5 +1,7 @@
 # NX Mod Manager
 
+[中文](./README.md) [English](./README_EN.md)
+
 A mod manager designed specifically for Nintendo Switch, supporting multi-language interface, audio feedback, name mapping, and providing intuitive mod installation, uninstallation, and management functions.
 
 MODs are installed using copy method. For large MODs, the installation speed is slower, but considering the convenience of backing up the MODS2 folder, the copy installation method is adopted.
@@ -124,11 +126,13 @@ mods2/Game Name[Mod Version Tag]/Game ID/Mod Name[Mod Type Tag]/Specific mod fil
 - Example: V1.2.0 written as `[1.2.0]`
 
 **Mod Type Tags**:
-- `[F]`: Frame rate patch
-- `[G]`: Graphics enhancement
-- `[B]`: Game beautification
-- `[P]`: More gameplay
-- `[C]`: Cheat codes
+| Tag  | Meaning     |
+| ---- | -------- |
+| [F]  | Frame rate patch |
+| [G]  | Graphics enhancement |
+| [B]  | Game beautification |
+| [P]  | More gameplay |
+| [C]  | Cheat codes   |
 
 **Note:** Tag format is `[X]`, where X is the tag content. To avoid recognition errors, please do not use `[]` brackets for non-tag content in the path.
 
@@ -250,17 +254,18 @@ SSM2/
 ## Acknowledgments
 
 Thanks to the following open source projects and libraries for their contributions:
-
-- **[untitled](https://github.com/ITotalJustice/untitled)** - ITotalJustice untitled
-- **[libhaze](https://github.com/ITotalJustice/libhaze)** - ITotalJustice的libhaze
-- **[haze](https://github.com/Atmosphere-NX/Atmosphere/tree/master/troposphere/haze)** - Atmosphere-NX的haze
-- **[devkitPro](https://devkitpro.org/)** - Nintendo Switch development toolchain
-- **[libnx](https://github.com/switchbrew/libnx)** - Switch system library providing low-level API support
-- **[deko3d](https://github.com/devkitPro/deko3d)** - Switch GPU graphics API for high-performance rendering
-- **[NanoVG](https://github.com/memononen/nanovg)** - Lightweight 2D vector graphics library
-- **[switch-libpulsar](https://github.com/p-sam/switch-libpulsar)** - Switch audio playback library
-- **[fontstash](https://github.com/memononen/fontstash)** - Font rendering library
-- **[yyjson](https://github.com/ibireme/yyjson)** - High-performance JSON parsing library
-- **[libnxtc](https://github.com/DarkMatterCore/libnxtc)** - Title cache management library (this project uses libnxtc-add-version with added version member)
-- **[stb](https://github.com/nothings/stb)** - Image processing library
-- **[miniz](https://github.com/richgel999/miniz)** - Compression library
+| Project | Link | Description |
+| ------- | ---- | ----------- |
+| untitled | [ITotalJustice/untitled](https://github.com/ITotalJustice/untitled) | ITotalJustice untitled |
+| libhaze | [ITotalJustice/libhaze](https://github.com/ITotalJustice/libhaze) | ITotalJustice libhaze |
+| haze | [Atmosphere-NX/haze](https://github.com/Atmosphere-NX/Atmosphere/tree/master/troposphere/haze) | Atmosphere-NX haze |
+| devkitPro | [devkitPro](https://devkitpro.org/) | Nintendo Switch development toolchain |
+| libnx | [switchbrew/libnx](https://github.com/switchbrew/libnx) | Switch system library providing low-level API support |
+| deko3d | [devkitPro/deko3d](https://github.com/devkitPro/deko3d) | Switch GPU graphics API for high-performance rendering |
+| NanoVG | [memononen/nanovg](https://github.com/memononen/nanovg) | Lightweight 2D vector graphics library |
+| switch-libpulsar | [p-sam/switch-libpulsar](https://github.com/p-sam/switch-libpulsar) | Switch audio playback library |
+| fontstash | [memononen/fontstash](https://github.com/memononen/fontstash) | Font rendering library |
+| yyjson | [ibireme/yyjson](https://github.com/ibireme/yyjson) | High-performance JSON parsing library |
+| libnxtc | [DarkMatterCore/libnxtc](https://github.com/DarkMatterCore/libnxtc) | Title cache management library (this project uses libnxtc-add-version with added version member) |
+| stb | [nothings/stb](https://github.com/nothings/stb) | Image processing library |
+| miniz | [richgel999/miniz](https://github.com/richgel999/miniz) | Compression library |

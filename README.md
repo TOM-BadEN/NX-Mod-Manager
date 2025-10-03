@@ -1,6 +1,10 @@
-# NX Mod Manager
+<div align="center">
+  <img src="./assets/icon.jpg" width="200"><br>
 
-**Note**: For English users, please see README_EN.md
+  <h1>NX Mod Manager</h1>
+</div>
+
+[中文](./README.md) [English](./README_EN.md)
 
 一个专为Nintendo Switch设计的模组管理器，支持多语言，音效反馈，名称映射，提供直观的模组添加、安装、卸载和管理功能。
 
@@ -125,11 +129,14 @@ mods2/游戏名字[模组版本标签]/游戏ID/模组名字[模组类型标签]
 - 例如：V1.2.0 写成 `[1.2.0]`
 
 **模组类型标签**：
-- `[F]`：帧率补丁
-- `[G]`：图形增强
-- `[B]`：游戏美化
-- `[P]`：更多玩法
-- `[C]`：金手指
+| 标签 | 含义     |
+| ---- | -------- |
+| [F]  | 帧率补丁 |
+| [G]  | 图形增强 |
+| [B]  | 游戏美化 |
+| [P]  | 更多玩法 |
+| [C]  | 金手指   |
+
 
 **注意：** 标签格式为`[X]`，X为标签内容。为了避免识别出错，路径中非标签内容请不要使用`[]`括号。
 
@@ -251,17 +258,18 @@ SSM2/
 ## 致谢
 
 感谢以下开源项目和库的贡献：
-
-- **[untitled](https://github.com/ITotalJustice/untitled)** - ITotalJustice的untitled
-- **[libhaze](https://github.com/ITotalJustice/libhaze)** - ITotalJustice的libhaze
-- **[haze](https://github.com/Atmosphere-NX/Atmosphere/tree/master/troposphere/haze)** - Atmosphere-NX的haze
-- **[devkitPro](https://devkitpro.org/)** - Nintendo Switch开发工具链
-- **[libnx](https://github.com/switchbrew/libnx)** - Switch系统库，提供底层API支持
-- **[deko3d](https://github.com/devkitPro/deko3d)** - Switch GPU图形API，实现高性能渲染
-- **[NanoVG](https://github.com/memononen/nanovg)** - 轻量级2D矢量图形库
-- **[switch-libpulsar](https://github.com/p-sam/switch-libpulsar)** - Switch音频播放库
-- **[fontstash](https://github.com/memononen/fontstash)** - 字体渲染库
-- **[yyjson](https://github.com/ibireme/yyjson)** - 高性能JSON解析库
-- **[libnxtc](https://github.com/DarkMatterCore/libnxtc)** - 标题缓存管理库（本项目使用的是添加了version成员的libnxtc-add-version）
-- **[stb](https://github.com/nothings/stb)** - 图像处理库
-- **[miniz](https://github.com/richgel999/miniz)** - 压缩库
+| 项目 | 链接 | 说明 |
+| ---- | ---- | ---- |
+| untitled | [ITotalJustice/untitled](https://github.com/ITotalJustice/untitled) | ITotalJustice 的 untitled |
+| libhaze | [ITotalJustice/libhaze](https://github.com/ITotalJustice/libhaze) | ITotalJustice 的 libhaze |
+| haze | [Atmosphere-NX/haze](https://github.com/Atmosphere-NX/Atmosphere/tree/master/troposphere/haze) | Atmosphere-NX 的 haze |
+| devkitPro | [devkitPro](https://devkitpro.org/) | Nintendo Switch 开发工具链 |
+| libnx | [switchbrew/libnx](https://github.com/switchbrew/libnx) | Switch 系统库，提供底层 API 支持 |
+| deko3d | [devkitPro/deko3d](https://github.com/devkitPro/deko3d) | Switch GPU 图形 API，实现高性能渲染 |
+| NanoVG | [memononen/nanovg](https://github.com/memononen/nanovg) | 轻量级 2D 矢量图形库 |
+| switch-libpulsar | [p-sam/switch-libpulsar](https://github.com/p-sam/switch-libpulsar) | Switch 音频播放库 |
+| fontstash | [memononen/fontstash](https://github.com/memononen/fontstash) | 字体渲染库 |
+| yyjson | [ibireme/yyjson](https://github.com/ibireme/yyjson) | 高性能 JSON 解析库 |
+| libnxtc | [DarkMatterCore/libnxtc](https://github.com/DarkMatterCore/libnxtc) | 标题缓存管理库（本项目使用的是添加了 version 成员的 libnxtc-add-version） |
+| stb | [nothings/stb](https://github.com/nothings/stb) | 图像处理库 |
+| miniz | [richgel999/miniz](https://github.com/richgel999/miniz) | 压缩库 |
