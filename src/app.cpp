@@ -2782,14 +2782,28 @@ std::pair<u64, std::string> App::GetModIdAndSubdirCountStdio(const std::string& 
     if (modid_dir) {
         struct dirent* subentry;
         while ((subentry = readdir(modid_dir)) != nullptr) {
-            // 跳过当前目录和父目录和带点的文件
-            // Skip current and parent directory entries and files with dots
-            std::string dirname = subentry->d_name;
-            if (strcmp(subentry->d_name, ".") == 0 || strcmp(subentry->d_name, "..") == 0 ||(dirname.find('.') != std::string::npos)) {
+            // 跳过当前目录和父目录
+            // Skip current and parent directory entries
+            if (strcmp(subentry->d_name, ".") == 0 || strcmp(subentry->d_name, "..") == 0) {
                 continue;
             }
             
-            mod_count++; // 计数有效的MOD目录
+            // 判断类型
+            if (subentry->d_type == DT_DIR) {
+                // 是目录，直接计数
+                mod_count++;
+            } else if (subentry->d_type == DT_REG) {
+                // 是文件，检查是否为zip
+                std::string filename = subentry->d_name;
+                size_t len = filename.length();
+                if (len > 4) {
+                    std::string ext = filename.substr(len - 4);
+                    if (ext == ".zip" || ext == ".ZIP") {
+                        mod_count++;
+                    }
+                }
+            }
+            // 其他类型（链接、特殊文件等）不处理
         }
         closedir(modid_dir);
     }

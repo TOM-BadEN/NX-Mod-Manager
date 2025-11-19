@@ -42,7 +42,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 
 APP_TITLE	:= NX-Mod-Manager
 APP_AUTHOR	:= Tom
-APP_VERSION	:= "2.2.6"
+APP_VERSION	:= "2.2.7"
 ICON		:= assets/icon.jpg
 
 TARGET		:=	NX-Mod-Manager
