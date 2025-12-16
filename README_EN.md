@@ -6,7 +6,7 @@
 [![platform](https://img.shields.io/badge/bilibili-玩家-FB7299?logo=bilibili&logoColor=FFFFFF)](https://www.bilibili.com/video/BV1PrnTzcEqc/?spm_id_from=333.1387.homepage.video_card.click&vd_source=ee56f275632e70ae7ca2577aa1a56b81)
 [![Latest Version](https://img.shields.io/github/v/release/TOM-BadEN/NX-Mod-Manager?label=Latest&color=blue&logo=github&logoColor=FFFFFF)](https://github.com/TOM-BadEN/NX-Mod-Manager/releases/latest)
 [![GitHub Downloads](https://img.shields.io/github/downloads/TOM-BadEN/NX-Mod-Manager/total?label=Downloads&color=6f42c1&logo=github&logoColor=FFFFFF)](https://somsubhra.github.io/github-release-stats/?username=TOM-BadEN&repository=NX-Mod-Manager&page=1&per_page=300)
-[![HB App Store](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/TOM-BadEN/NX-Mod-Manager/main/.github/hbappstore.json&label=HB%20store&color=green&logo=homeassistantcommunitystore&logoColor=FFFFFF)](https://hb-app.store/switch/NX-Mod-Manager)
+[![HB App Store](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/TOM-BadEN/NX-Mod-Manager/main/.github/hbappstore.json&label=HB%20store&color=green&logo=homeassistantcommunitystore&logoColor=FFFFFF)](https://hb-app.store/switch/NXModManager)
 [![PayPal](https://img.shields.io/badge/PayPal-Donate-blue?logo=paypal&logoColor=FFFFFF)](https://PayPal.me/TomSun666)
 [![WeChat](https://img.shields.io/badge/WeChat-Donate-07C160?logo=wechat&logoColor=FFFFFF)](https://github.com/TOM-BadEN/NX-Mod-Manager/blob/main/images/WeChat%20Pay.png)
 
