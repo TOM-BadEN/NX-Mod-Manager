@@ -1,7 +1,0 @@
-/build
-/lib
-*.xz
-*.pyc
-__pycache__
-/docs/build
-/examples/build

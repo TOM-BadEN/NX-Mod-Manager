@@ -1,9 +1,0 @@
-name: Setup Apple envirionment
-
-runs:
-  using: "composite"
-  steps:
-    # TODO: This and Ruby should be versioned
-    - name: Install Cocoapods
-      shell: bash
-      run: sudo gem install cocoapods
