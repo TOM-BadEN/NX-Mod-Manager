@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/WerWolv/libromfs.git
+	branch = master
+	commit = c8e054909e9c7b09308162f3e3bfef944ce64ea4
+	parent = 151088c0ef9b2766a2013d61b79bcd1b45ee780e
+	method = merge
+	cmdver = 0.4.6

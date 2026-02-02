@@ -1,0 +1,247 @@
+<brls:ScrollingFrame
+        width="auto"
+        height="auto"
+        axis="column"
+        grow="1.0">
+
+    <brls:Box
+            alignItems="center"
+            width="auto"
+            axis="column"
+            marginRight="30"
+            height="auto">
+
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                justifyContent="center"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="70">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="alignItems: center"
+                marginBottom="10px" />
+
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                justifyContent="spaceBetween"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="70">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="alignItems: spaceBetween"
+                marginBottom="10px" />
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                justifyContent="flexStart"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="70">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#FF0000"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#00FF00"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#0000FF"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="alignItems: flexStart"
+                marginBottom="10px" />
+
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                justifyContent="flexEnd"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="70">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#FF0000"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#00FF00"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#0000FF"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="alignItems: flexEnd"
+                marginBottom="10px" />
+
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                justifyContent="flexEnd"
+                direction="rightToLeft"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="70">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#FF0000"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#00FF00"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    cornerRadius="4"
+                    color="#0000FF"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="alignItems: flexEnd; direction: rightToLeft"
+                marginBottom="10px" />
+
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                justifyContent="center"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="70">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    grow="1"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    grow="2"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    grow="1"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="grow: 1 / 2 / 1"
+                marginBottom="10px" />
+
+        <brls:Box
+                backgroundColor="@theme/brls/backdrop"
+                wireframe="true"
+                axis="column"
+                margin="10"
+                width="90%"
+                cornerRadius="4"
+                height="210">
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    grow="1"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    grow="2"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+            <brls:Rectangle
+                    width="50"
+                    height="50"
+                    margin="10"
+                    grow="1"
+                    cornerRadius="4"
+                    color="#50FFDD"/>
+        </brls:Box>
+        <brls:Label
+                width="auto"
+                height="auto"
+                text="axis: column; wireframe: true"
+                marginBottom="10px" />
+
+    </brls:Box>
+
+</brls:ScrollingFrame>

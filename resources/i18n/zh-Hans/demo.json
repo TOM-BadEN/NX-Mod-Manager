@@ -1,0 +1,45 @@
+{
+  "title": "Borealis 演示应用",
+  "tabs": {
+    "components": "基础组件",
+    "scroll": "滚动测试",
+    "layout": "布局与对齐",
+    "pokedex": "宝可梦图鉴",
+    "settings": "设置",
+    "popups": "弹窗、通知和对话框",
+    "hos_layout": "Horizon 布局",
+    "misc_layouts": "其他布局",
+    "misc_components": "其他组件",
+    "misc_tools": "开发工具",
+    "about": "关于 borealis"
+  },
+  "welcome": "欢迎使用 borealis 演示！随意探索，发现这个库的功能。",
+  "components": {
+    "buttons_header": "按钮",
+    "button_primary": "主要按钮",
+    "button_highlight": "\uE13C  高亮按钮",
+    "button_wrapping": "带自动换行的默认按钮",
+    "button_bordered": "带边框按钮",
+    "button_borderless": "无边框按钮",
+    "slider_header": "滑块",
+    "labels_header": "标签",
+    "regular_label": "这是一个标签。默认情况下，标签会自动换行并扩展高度（如果剩余垂直空间允许）。否则，它们会被截断，就像侧边栏中的一些标签页一样。\n这是一个标签。默认情况下，标签会自动换行并扩展高度（如果剩余垂直空间允许）。否则，它们会被截断，就像侧边栏中的一些标签页一样。",
+    "label_left": "这个标签左对齐",
+    "label_center": "这个标签居中对齐",
+    "label_right": "这个标签右对齐",
+    "images_header_title": "图片",
+    "images_header_subtitle": "聚焦查看缩放方式",
+    "images_downscaled": "缩小",
+    "images_original": "原始",
+    "images_upscaled": "放大",
+    "images_stretched": "拉伸",
+    "images_cropped": "裁剪"
+  },
+  "about": {
+    "title": "borealis",
+    "description": "一个硬件加速、面向控制器和电视的 UI 库，支持 PC 和 Nintendo Switch (libnx)。",
+    "github": "项目地址：github.com/natinusala/borealis",
+    "licence": "基于 Apache 2.0 许可证",
+    "logo_credit": "Logo 作者：@MeganRoshelle"
+  }
+}

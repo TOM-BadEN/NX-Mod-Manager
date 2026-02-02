@@ -1,0 +1,243 @@
+name: Build borealis demo
+
+on:
+  push:
+  pull_request:
+jobs:
+  ios:
+    runs-on: macos-13
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: cache
+        id: cache-key
+        run: echo "IOS_CACHE_KEY=ios-cmake-build-dir-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake', '.github/workflows/ci.yaml') }}" >> $GITHUB_OUTPUT
+      - uses: actions/cache/restore@v4
+        id: ios-cache
+        with:
+          path: build
+          key: ${{ steps.cache-key.outputs.IOS_CACHE_KEY }}
+      - name: Build
+        run: |
+          ./build_libromfs_generator.sh
+          cmake -B build -G Xcode -DPLATFORM_IOS=ON -DPLATFORM=OS64 -DDEPLOYMENT_TARGET=13.0
+          cmake --build build
+          ditto -ck --rsrc --sequesterRsrc --keepParent build/Debug-iphoneos/borealis_demo.app borealis_demo.zip
+      - uses: actions/cache/save@v4
+        if: ${{ !steps.ios-cache.outputs.cache-hit }}
+        with:
+          path: build
+          key: ${{ steps.cache-key.outputs.IOS_CACHE_KEY }}
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-ios
+          path: borealis_demo.zip
+
+  ps4:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          docker run --rm -v $(pwd):/src/ xfangfang/pacbrew:latest \
+            "cmake -B build -DPLATFORM_PS4=ON \
+                -DCMAKE_BUILD_TYPE=Release && \
+                make -C build -j$(nproc)"
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-ps4
+          path: build/*.pkg
+
+  psv:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { driver: gxm }
+          - { driver: gles2 }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build GLES2
+        if: ${{ matrix.driver == 'gles2' }}
+        run: |
+          docker run --rm -v $(pwd):/src/ xfangfang/vitasdk_sdl2_gles2:latest \
+            "cmake -B build -G Ninja -DPLATFORM_PSV=ON -DUSE_SYSTEM_SDL2=ON -DCMAKE_BUILD_TYPE=Release && \
+             cmake --build build"
+
+      - name: Build GXM
+        if: ${{ matrix.driver == 'gxm' }}
+        run: |
+          echo "cd /src" > build_gxm.sh
+          echo "cmake -B build -DPLATFORM_PSV=ON -DCMAKE_BUILD_TYPE=Release -DUSE_GXM=ON" >> build_gxm.sh
+          echo "cmake --build build -- -j$(nproc)" >> build_gxm.sh
+          docker run --rm -v $(pwd):/src/ vitasdk/vitasdk:latest sh -C /src/build_gxm.sh
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-psv-${{ matrix.driver }}
+          path: build/*.vpk
+
+  switch:
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64
+    strategy:
+      fail-fast: false
+      matrix:
+        driver: [ glfw, sdl2, deko3d ]
+        include:
+          - { driver: glfw, cmake: "-DUSE_GLFW=ON", ext: "gl3-glfw" }
+          - { driver: sdl2, cmake: "-DUSE_SDL2=ON", ext: "gl3-sdl2" }
+          - { driver: deko3d, cmake: "-DUSE_DEKO3D=ON", ext: "deko3d" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DPLATFORM_SWITCH=ON ${{ matrix.cmake }}
+          make -C build borealis_demo.nro -j$(nproc)
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-switch-${{ matrix.ext }}
+          path: build/borealis_demo.nro
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build pkg-config
+      - name: Build
+        id: build
+        run: |
+          ./build_libromfs_generator.sh
+          cd android-project && ./gradlew assembleDebug
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-android
+          path: android-project/app/build/outputs/apk/debug/*.apk
+
+  macos:
+    runs-on: macos-14
+    name: macos (${{ matrix.window.name }})
+    strategy:
+      matrix:
+        window:
+          - { name: glfw, cmake: "-DUSE_GLFW=ON" }
+          - { name: sdl2, cmake: "-DUSE_SDL2=ON" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DPLATFORM_DESKTOP=ON -DBUNDLE_MACOS_APP=ON ${{ matrix.window.cmake }}
+          make -C build -j$(sysctl -n hw.ncpu)
+          mkdir borealis-macos-${{ matrix.window.name }}
+          mv build/borealis_demo.app borealis-macos-${{ matrix.window.name }}/
+          tar -czvf borealis-macos-${{ matrix.window.name }}.tar.gz borealis-macos-${{ matrix.window.name }}
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-macos-${{ matrix.window.name }}
+          path: borealis-macos-${{ matrix.window.name }}.tar.gz
+
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        driver: [gl, d3d11]
+        include:
+          - { driver: d3d11, cmake: "-DUSE_D3D11=ON" }
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          cache: false
+          release: false
+          path-type: inherit
+          install: >-
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-cc
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          cmake -B build -G Ninja ${{ matrix.cmake }} \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DPLATFORM_DESKTOP=ON \
+            -DWIN32_TERMINAL=OFF \
+            -DUSE_LIBROMFS=ON \
+            -DZLIB_USE_STATIC_LIBS=ON
+          cmake --build build
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-windows-x86_64-${{ matrix.driver }}
+          path: build/borealis_demo.exe
+
+  linux:
+    name: linux (${{ matrix.driver }}${{ matrix.ext }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { driver: gl2, cmake: "-DUSE_GL2=ON" }
+          - { driver: gles2, cmake: "-DUSE_GLES2=ON" }
+          - { driver: gles3, cmake: "-DUSE_GLES3=ON" }
+          - { driver: gl3, cmake: "-DUSE_GLFW=ON", ext: "-glfw" }
+          - { driver: gl3, cmake: "-DUSE_SDL2=ON", ext: "-sdl2" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: |
+          sudo apt update -y
+          sudo apt install -y --no-install-recommends libdbus-1-dev libxkbcommon-dev \
+            libwayland-dev wayland-protocols xorg-dev
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmake }} \
+              -DPLATFORM_DESKTOP=ON \
+              -DUSE_LIBROMFS=ON
+          make -C build -j$(nproc)
+          output_dir=borealis-linux-x86_64-${{ matrix.driver }}${{ matrix.ext }}
+          strip build/borealis_demo
+          mkdir -p ${output_dir}
+          mv build/borealis_demo ${output_dir}
+          tar -czvf ${output_dir}.tar.gz ${output_dir}
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: borealis-linux-x86_64-${{ matrix.driver }}${{ matrix.ext }}
+          path: borealis-linux-x86_64-${{ matrix.driver }}${{ matrix.ext }}.tar.gz

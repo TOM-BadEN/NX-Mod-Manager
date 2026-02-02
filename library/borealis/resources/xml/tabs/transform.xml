@@ -1,0 +1,98 @@
+<brls:Box
+        width="auto"
+        height="auto">
+
+    <brls:ScrollingFrame
+            width="auto"
+            height="auto"
+            marginRight="460"
+            grow="1.0">
+
+        <brls:Box
+                width="auto"
+                height="auto"
+                paddingLeft="@style/brls/tab_frame/content_padding_sides"
+                paddingRight="@style/brls/tab_frame/content_padding_sides"
+                paddingTop="@style/brls/tab_frame/content_padding_top_bottom"
+                paddingBottom="@style/brls/tab_frame/content_padding_top_bottom">
+
+            <brls:Box
+                    grow="1"
+                    axis="column">
+                <brls:Box>
+                    <brls:Button
+                            id="play"
+                            text="Play"
+                            grow="1"
+                            margin="10"
+                            style="primary"/>
+
+                    <brls:Button
+                            id="reset"
+                            grow="1"
+                            margin="10"
+                            text="Reset"/>
+                </brls:Box>
+                <brls:SliderCell
+                        grow="1"
+                        id="transX"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="transY"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="scaleX"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="scaleY"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="skewX"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="skewY"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="rotate"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="width"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="height"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="fontScaleX"/>
+                <brls:SliderCell
+                        grow="1"
+                        id="fontScaleY"/>
+            </brls:Box>
+
+        </brls:Box>
+
+    </brls:ScrollingFrame>
+
+    <brls:Box
+            height="404"
+            width="404"
+            paddingBottom="2"
+            paddingTop="2"
+            paddingLeft="2"
+            paddingRight="2"
+            positionType="absolute"
+            borderThickness="2"
+            cornerRadius="4"
+            borderColor="@theme/brls/header/border"
+            positionTop="64"
+            positionRight="30">
+        <TransformBox
+                id="box"
+                width="100"
+                height="100"
+                cornerRadius="4"
+                clipsToBounds="false"
+                scalingType="stretch"
+                image="@res/img/tiles.png"/>
+    </brls:Box>
+
+</brls:Box>
