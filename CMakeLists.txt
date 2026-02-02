@@ -25,13 +25,13 @@ include(${BOREALIS_LIBRARY}/cmake/toolchain.cmake)
 # ============================================================================
 # 项目信息 (★ 需要修改成你自己的 ★)
 # ============================================================================
-project(borealis_demo)  # 项目名称
-set(VERSION_MAJOR "1")                       # 主版本号
+project(NX-Mod-Manager)  # 项目名称
+set(VERSION_MAJOR "3")                       # 主版本号
 set(VERSION_MINOR "0")                       # 次版本号
 set(VERSION_ALTER "0")                       # 修订版本号
 set(VERSION_BUILD "0")                       # 构建号
-set(PROJECT_AUTHOR "borealis")               # 作者名 (显示在 Switch 主菜单)
-set(PROJECT_ICON ${CMAKE_CURRENT_SOURCE_DIR}/resources/img/demo_icon.jpg)  # Switch 图标 (256x256 JPG)
+set(PROJECT_AUTHOR "TOM")               # 作者名 (显示在 Switch 主菜单)
+set(PROJECT_ICON ${CMAKE_CURRENT_SOURCE_DIR}/resources/img/icon.jpg)  # Switch 图标 (256x256 JPG)
 set(PROJECT_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources)               # 资源目录
 
 # GCC 彩色错误输出
@@ -45,9 +45,9 @@ add_subdirectory(library)
 # ============================================================================
 # 设置代码文件路径
 # 头文件目录
-list(APPEND APP_PLATFORM_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/demo/include)
-# 递归收集 demo 目录下所有 .cpp 源文件
-file(GLOB_RECURSE MAIN_SRC demo/*.cpp)
+list(APPEND APP_PLATFORM_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/src/include)
+# 递归收集 src 目录下所有 .cpp 源文件
+file(GLOB_RECURSE MAIN_SRC src/*.cpp)
 
 # ============================================================================
 # Switch 平台配置
