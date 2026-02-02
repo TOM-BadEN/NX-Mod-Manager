@@ -10,3 +10,15 @@
 [submodule "library/boreali"]
 	path = library/boreali
 	url = https://github.com/xfangfang/borealis.git
+[submodule "reference/NX-Mod-Manager"]
+	path = reference/NX-Mod-Manager
+	url = https://github.com/TOM-BadEN/NX-Mod-Manager.git
+[submodule "reference/willwill"]
+	path = reference/willwill
+	url = https://github.com/xfangfang/wiliwili
+[submodule "reference/borealis_template"]
+	path = reference/borealis_template
+	url = https://github.com/TOM-BadEN/borealis_template
+[submodule "reference/libnx"]
+	path = reference/libnx
+	url = https://github.com/switchbrew/libnx
