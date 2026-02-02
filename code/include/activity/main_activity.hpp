@@ -1,26 +1,27 @@
-/*
-    Copyright 2020-2021 natinusala
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+/**
+ * 主页面（倒计时页面）头文件
+ * 
+ * Activity 是 Borealis 的页面容器，每个页面对应一个 Activity。
+ * 页面的 UI 布局定义在 XML 文件中，通过 CONTENT_FROM_XML_RES 宏绑定。
+ */
 
 #pragma once
-
 #include <borealis.hpp>
 
-class MainActivity : public brls::Activity
+class MainActivity : public brls::Activity  // 继承自 brls::Activity
 {
-  public:
-    // 声明此 Activity 的内容来自指定的 XML 文件
+public:
+    MainActivity();  // 构造函数，在这里初始化逻辑
+    
+    // 声明此 Activity 的 UI 布局来自 XML 文件
+    // 路径相对于 resources/xml/ 目录
     CONTENT_FROM_XML_RES("activity/main.xml");
+    
+    // 绑定 XML 中 id="countdown" 的 Label 控件到 C++ 变量
+    // 这样就可以在代码中通过 countdownLabel 操作这个控件
+    BRLS_BIND(brls::Label, countdownLabel, "countdown");
+    
+private:
+    int countdown = 30;           // 倒计时秒数
+    brls::RepeatingTimer timer;   // 重复定时器，每隔一段时间触发回调
 };
