@@ -1,31 +1,20 @@
 <!--
     主页面布局文件
-    
-    brls:Box 是一个 Flexbox 布局容器，类似 CSS 的 flexbox
-    - axis: 主轴方向 (column=垂直, row=水平)
-    - justifyContent: 主轴对齐方式 (center=居中)
-    - alignItems: 交叉轴对齐方式 (center=居中)
-    
-    brls:Label 是文本标签
-    - id: 用于在 C++ 代码中通过 BRLS_BIND 绑定
-    - text: 显示的文本
-    - fontSize: 字体大小
-    - textColor: 文字颜色
 -->
 
-<brls:Box
-    width="100%"
-    height="100%"
-    axis="column"
-    justifyContent="center"
-    alignItems="center"
-    backgroundColor="#000000">
+<brls:AppletFrame>
+    <brls:Box
+        title="主页面"
+        width="100%"
+        height="100%"
+        axis="column"
+        justifyContent="center"
+        alignItems="center">
 
-    <!-- 倒计时文本，id="countdown" 用于 C++ 绑定 -->
-    <brls:Label
-        id="countdown"
-        text="30"
-        fontSize="72"
-        textColor="#FFFFFF"/>
+        <!-- 按钮：点击跳转到新页面 -->
+        <brls:Button
+            id="btn_new_page"
+            text="新页面"/>
 
-</brls:Box>
+    </brls:Box>
+</brls:AppletFrame>

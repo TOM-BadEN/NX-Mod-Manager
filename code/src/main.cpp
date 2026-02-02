@@ -21,12 +21,21 @@ int main(int argc, char* argv[])
     }
 
     // 2. 创建窗口，参数是窗口标题
-    brls::Application::createWindow("Countdown");
+    brls::Application::createWindow("NX Mod Manager");
     
-    // 3. 禁用全局退出（按 + 键不会直接退出）
+    // 3. 全局主题设置（标题栏和底部栏背景色）
+    brls::Theme::getLightTheme().addColor("brls/applet_frame/header", nvgRGB(0, 0, 0));
+    brls::Theme::getDarkTheme().addColor("brls/applet_frame/header", nvgRGB(0, 0, 0));
+    brls::Theme::getLightTheme().addColor("brls/applet_frame/footer", nvgRGB(0, 0, 0));
+    brls::Theme::getDarkTheme().addColor("brls/applet_frame/footer", nvgRGB(0, 0, 0));
+    
+    // 4. 禁用动画（设为 0 瞬间完成）
+    brls::Application::getStyle().addMetric("brls/animations/show", 0.0f);
+    
+    // 4. 禁用全局退出（按 + 键不会直接退出）
     brls::Application::setGlobalQuit(false);
     
-    // 4. 推送主页面到 Activity 栈
+    // 5. 推送主页面到 Activity 栈
     //    Activity 是页面容器，类似 Android 的 Activity
     brls::Application::pushActivity(new MainActivity());
 
