@@ -44,7 +44,8 @@
                 id="my/title"
                 width="auto"
                 height="auto"
-                fontSize="@style/brls/applet_frame/header_title_font_size" />
+                fontSize="@style/brls/applet_frame/header_title_font_size"
+                />
         </brls:Box>
 
         <!-- 右侧：时间 WiFi xx% 电池 -->

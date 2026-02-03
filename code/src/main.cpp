@@ -10,7 +10,8 @@
 
 #include <borealis.hpp>              // Borealis 框架主头文件
 #include "activity/main_activity.hpp" // 我们的主页面
-#include "view/myframe.hpp" // 自定义应用框架
+#include "view/myframe.hpp"           // 自定义应用框架
+// #include "color/color.hpp"            // 颜色注册
 
 int main(int argc, char* argv[])
 {
@@ -27,14 +28,12 @@ int main(int argc, char* argv[])
     // 注册自定义视图组件
     brls::Application::registerXMLView("MyFrame", MyFrame::create);
     
+    // 暂时不管颜色
+    // // 注册颜色
+    // initColor();
+    
     // 启用屏幕调试视图（Switch 上直接显示日志）
     // brls::Application::enableDebuggingView(true);
-    
-    // 3. 全局主题设置（标题栏和底部栏背景色）
-    brls::Theme::getLightTheme().addColor("brls/applet_frame/header", nvgRGB(0, 0, 0));
-    brls::Theme::getDarkTheme().addColor("brls/applet_frame/header", nvgRGB(0, 0, 0));
-    brls::Theme::getLightTheme().addColor("brls/applet_frame/footer", nvgRGB(0, 0, 0));
-    brls::Theme::getDarkTheme().addColor("brls/applet_frame/footer", nvgRGB(0, 0, 0));
     
     // 4. 禁用动画（设为 0 瞬间完成）
     brls::Application::getStyle().addMetric("brls/animations/show", 0.0f);
