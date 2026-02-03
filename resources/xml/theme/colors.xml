@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <theme>
     <!-- 框架清屏颜色 -->
-    <!-- <color name="brls/clear">#121314</color> -->
+    <color name="brls/clear">#121314</color>
     
     <!-- 背景色 -->
     <color name="app/black">#121314</color>
