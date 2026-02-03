@@ -10,7 +10,7 @@
 
 #include <borealis.hpp>              // Borealis 框架主头文件
 #include "activity/main_activity.hpp" // 我们的主页面
-#include "view/custom_applet_frame.hpp" // 自定义 AppletFrame
+#include "view/myframe.hpp" // 自定义应用框架
 
 int main(int argc, char* argv[])
 {
@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     brls::Application::createWindow("NX Mod Manager");
     
     // 注册自定义视图组件
-    brls::Application::registerXMLView("CustomAppletFrame", CustomAppletFrame::create);
+    brls::Application::registerXMLView("MyFrame", MyFrame::create);
     
     // 启用屏幕调试视图（Switch 上直接显示日志）
     // brls::Application::enableDebuggingView(true);

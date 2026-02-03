@@ -2,7 +2,7 @@
     第二个页面布局文件
 -->
 
-<CustomAppletFrame>
+<MyFrame>
     <brls:Box
         title="第二个页面"
         focusable="true"
@@ -18,4 +18,4 @@
             fontSize="36"/>
 
     </brls:Box>
-</CustomAppletFrame>
+</MyFrame>
