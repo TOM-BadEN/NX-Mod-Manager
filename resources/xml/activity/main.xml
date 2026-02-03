@@ -2,7 +2,7 @@
     主页面布局文件
 -->
 
-<brls:AppletFrame>
+<CustomAppletFrame>
     <brls:Box
         title="主页面"
         width="100%"
@@ -17,4 +17,4 @@
             text="新页面"/>
 
     </brls:Box>
-</brls:AppletFrame>
+</CustomAppletFrame>

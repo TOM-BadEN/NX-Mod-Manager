@@ -10,6 +10,7 @@
 
 #include <borealis.hpp>              // Borealis 框架主头文件
 #include "activity/main_activity.hpp" // 我们的主页面
+#include "view/custom_applet_frame.hpp" // 自定义 AppletFrame
 
 int main(int argc, char* argv[])
 {
@@ -22,6 +23,12 @@ int main(int argc, char* argv[])
 
     // 2. 创建窗口，参数是窗口标题
     brls::Application::createWindow("NX Mod Manager");
+    
+    // 注册自定义视图组件
+    brls::Application::registerXMLView("CustomAppletFrame", CustomAppletFrame::create);
+    
+    // 启用屏幕调试视图（Switch 上直接显示日志）
+    // brls::Application::enableDebuggingView(true);
     
     // 3. 全局主题设置（标题栏和底部栏背景色）
     brls::Theme::getLightTheme().addColor("brls/applet_frame/header", nvgRGB(0, 0, 0));
