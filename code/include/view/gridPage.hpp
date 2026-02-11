@@ -22,6 +22,9 @@ class GridPage : public brls::Box
 public:
     GridPage();
     
+    // 自定义导航（上下左右 + 翻页）
+    brls::View* getNextFocus(brls::FocusDirection direction, brls::View* currentView) override;
+    
     // 设置数据源
     void setGameList(const std::vector<GameInfo>& games);
     
@@ -48,4 +51,6 @@ private:
     std::function<void(int, int)> m_pageChangeCallback;    // 翻页回调
     
     void refreshPage();                                    // 刷新当前页的卡片内容
+    int findFocusedCardIndex();                            // 查找当前聚焦的卡片索引
+    bool isCardVisible(int index);                         // 卡片是否可见
 };
