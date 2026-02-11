@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme>
+    <!-- 卡片背景色 -->
+    <color name="app/cardBg" dark="#00000020" light="#0000000A"/>
+    <!-- 次要文字颜色（版本、数量等） -->
+    <color name="app/textGray" dark="#808080" light="#666666"/>
+</theme>

@@ -13,18 +13,13 @@
 #include "view/myframe.hpp"           // 自定义应用框架
 #include "view/gameCard.hpp"          // 游戏卡片组件
 #include "view/gridPage.hpp"          // 九宫格翻页组件
-// #include "color/color.hpp"            // 颜色注册
+#include "theme/theme.hpp"              // 主题初始化
 
-int main(int argc, char* argv[])
-{
-    // 1. 初始化 Borealis 框架
-    //    这会初始化图形、输入、音频等子系统
-    if (!brls::Application::init())
-    {
-        return EXIT_FAILURE;  // 初始化失败则退出
-    }
+int main(int argc, char* argv[]) {
+    
+    if (!brls::Application::init()) return EXIT_FAILURE;
 
-    // 2. 创建窗口，参数是窗口标题
+    // 创建窗口
     brls::Application::createWindow("NX Mod Manager");
     
     // 注册自定义视图组件
@@ -32,25 +27,22 @@ int main(int argc, char* argv[])
     brls::Application::registerXMLView("GameCard", GameCard::create);
     brls::Application::registerXMLView("GridPage", GridPage::create);
     
-    // 暂时不管颜色
-    // // 注册颜色
-    // initColor();
+    // 初始化主题颜色
+    initTheme();
     
     // 启用屏幕调试视图（Switch 上直接显示日志）
     // brls::Application::enableDebuggingView(true);
     
-    // 4. 禁用动画（设为 0 瞬间完成）
+    // 禁用动画
     brls::Application::getStyle().addMetric("brls/animations/show", 0.0f);
     
-    // 4. 禁用全局退出（按 + 键不会直接退出）
+    // 禁用全局退出
     brls::Application::setGlobalQuit(false);
     
-    // 5. 推送主页面到 Activity 栈
-    //    Activity 是页面容器，类似 Android 的 Activity
+    // 推送主页面
     brls::Application::pushActivity(new MainActivity());
 
-    // 5. 主循环：处理输入、渲染、事件等
-    //    返回 false 时退出循环（程序结束）
+    // 主循环
     while (brls::Application::mainLoop());
 
     return EXIT_SUCCESS;

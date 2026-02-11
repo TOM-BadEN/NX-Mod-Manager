@@ -17,8 +17,7 @@ struct GameInfo {
     int iconId = 0;
 };
 
-class GridPage : public brls::Box
-{
+class GridPage : public brls::Box {
 public:
     GridPage();
     
@@ -32,12 +31,12 @@ public:
     void nextPage();
     void prevPage();
     
-    // 页码信息
-    int getCurrentPage();
-    int getTotalPages();
+    // 索引信息（底部显示用）
+    int getSelectedIndex();
+    int getTotalCount();
     
-    // 设置页码更新回调（通知外部更新 Footer 页码）
-    void setPageChangeCallback(std::function<void(int current, int total)> callback);
+    // 设置索引更新回调（通知外部更新 Footer 索引）
+    void setIndexChangeCallback(std::function<void(int index, int total)> callback);
     
     // 工厂函数
     static brls::View* create();
@@ -48,8 +47,10 @@ private:
     GameCard* m_cards[CARDS_PER_PAGE];                     // 固定 9 张卡片
     std::vector<GameInfo> m_games;                         // 全部游戏数据
     int m_currentPage = 0;                                 // 当前页码（从 0 开始）
-    std::function<void(int, int)> m_pageChangeCallback;    // 翻页回调
+    int m_selectedIndex = 0;                               // 当前选中的全局索引
+    std::function<void(int, int)> m_indexChangeCallback;    // 索引更新回调
     
+    int getTotalPages();                                   // 总页数（内部翻页用）
     void refreshPage();                                    // 刷新当前页的卡片内容
     int findFocusedCardIndex();                            // 查找当前聚焦的卡片索引
     bool isCardVisible(int index);                         // 卡片是否可见

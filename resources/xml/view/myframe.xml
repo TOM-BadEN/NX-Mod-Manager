@@ -93,7 +93,7 @@
         width="auto"
         height="@style/brls/applet_frame/footer_height"
         axis="row"
-        justifyContent="flexEnd"
+        justifyContent="spaceBetween"
         alignItems="center"
         marginLeft="@style/brls/applet_frame/padding_sides"
         marginRight="@style/brls/applet_frame/padding_sides"
@@ -104,6 +104,14 @@
         lineColor="@theme/brls/applet_frame/separator"
         lineTop="1px">
 
+        <!-- 左侧：索引信息 -->
+        <brls:Label
+            id="my/indexLabel"
+            width="auto"
+            height="auto"
+            fontSize="21.5"/>
+
+        <!-- 右侧：按钮提示 -->
         <brls:Hints
             width="auto"
             height="auto"/>

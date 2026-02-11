@@ -2,7 +2,7 @@
     主页面布局文件
 -->
 
-<MyFrame>
+<MyFrame id="main/frame">
     <GridPage
         id="main/gridPage"
         title="主页面"

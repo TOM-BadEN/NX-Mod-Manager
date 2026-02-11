@@ -9,26 +9,31 @@
     axis="row"
     alignItems="center"
     focusable="true"
-    paddingTop="12"
-    paddingBottom="12"
-    paddingLeft="12"
-    paddingRight="16">
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
 
     <!-- 左侧：游戏图标 -->
     <brls:Image
         id="gameCard/icon"
-        width="80"
-        height="80"
-        marginRight="16"
+        width="120"
+        height="120"
+        marginRight="20"
         scalingType="fit"
+        cornerRadius="8"
         image="@res/img/defaultIcon.jpg" />
 
     <!-- 右侧：文本区域 -->
     <brls:Box
         width="auto"
-        height="auto"
+        height="120"
         axis="column"
-        justifyContent="center"
+        justifyContent="spaceEvenly"
         grow="1">
 
         <!-- 游戏名字 -->
@@ -36,26 +41,24 @@
             id="gameCard/name"
             width="auto"
             height="auto"
-            fontSize="18"
-            singleLine="true"
-            marginBottom="6" />
+            fontSize="23"
+            singleLine="true" />
 
         <!-- 版本 -->
         <brls:Label
             id="gameCard/version"
             width="auto"
             height="auto"
-            fontSize="14"
-            textColor="@theme/brls/text_disabled"
-            marginBottom="4" />
+            fontSize="19"
+            textColor="@theme/app/textGray" />
 
         <!-- mod数量 -->
         <brls:Label
             id="gameCard/modCount"
             width="auto"
             height="auto"
-            fontSize="14"
-            textColor="@theme/brls/text_disabled" />
+            fontSize="19"
+            textColor="@theme/app/textGray" />
 
     </brls:Box>
 

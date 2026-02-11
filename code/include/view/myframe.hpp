@@ -6,8 +6,7 @@
 
 #include <borealis.hpp>
 
-class MyFrame : public brls::Box
-{
+class MyFrame : public brls::Box {
 public:
     MyFrame();
     
@@ -16,6 +15,7 @@ public:
     
     void setTitle(std::string title);
     void setIcon(std::string path);
+    void setIndexText(const std::string& text);
     
     static brls::View* create();
     
@@ -27,6 +27,7 @@ private:
     BRLS_BIND(brls::Image, m_iconImage, "my/icon");
     BRLS_BIND(brls::Label, m_timeLabel, "my/time");
     BRLS_BIND(brls::Label, m_batteryPercentLabel, "my/battery_percent");
+    BRLS_BIND(brls::Label, m_indexLabel, "my/indexLabel");
     
     // 成员变量
     brls::View* m_contentView = nullptr;

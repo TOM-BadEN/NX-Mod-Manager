@@ -8,13 +8,14 @@
 #pragma once
 #include <borealis.hpp>
 #include "view/gridPage.hpp"
+#include "view/myframe.hpp"
 
-class MainActivity : public brls::Activity
-{
+class MainActivity : public brls::Activity {
 public:
     CONTENT_FROM_XML_RES("activity/main.xml");
     
-    // 绑定九宫格组件
+    // 绑定组件
+    BRLS_BIND(MyFrame, m_frame, "main/frame");
     BRLS_BIND(GridPage, m_gridPage, "main/gridPage");
     
     // XML 加载完成后调用

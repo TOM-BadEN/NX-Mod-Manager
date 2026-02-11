@@ -11,8 +11,8 @@
     justifyContent="flexStart"
     paddingLeft="40"
     paddingRight="40"
-    paddingTop="20"
-    paddingBottom="20">
+    paddingTop="10"
+    paddingBottom="10">
 
     <!-- 第1行 -->
     <brls:Box
@@ -20,12 +20,11 @@
         height="auto"
         axis="row"
         justifyContent="flexStart"
-        grow="1"
         alignItems="center">
 
-        <GameCard id="gridPage/card0" width="33.33%"/>
-        <GameCard id="gridPage/card1" width="33.33%"/>
-        <GameCard id="gridPage/card2" width="33.33%"/>
+        <GameCard id="gridPage/card0" grow="1" margin="9"/>
+        <GameCard id="gridPage/card1" grow="1" margin="9"/>
+        <GameCard id="gridPage/card2" grow="1" margin="9"/>
 
     </brls:Box>
 
@@ -35,12 +34,11 @@
         height="auto"
         axis="row"
         justifyContent="flexStart"
-        grow="1"
         alignItems="center">
 
-        <GameCard id="gridPage/card3" width="33.33%"/>
-        <GameCard id="gridPage/card4" width="33.33%"/>
-        <GameCard id="gridPage/card5" width="33.33%"/>
+        <GameCard id="gridPage/card3" grow="1" margin="9"/>
+        <GameCard id="gridPage/card4" grow="1" margin="9"/>
+        <GameCard id="gridPage/card5" grow="1" margin="9"/>
 
     </brls:Box>
 
@@ -50,12 +48,11 @@
         height="auto"
         axis="row"
         justifyContent="flexStart"
-        grow="1"
         alignItems="center">
 
-        <GameCard id="gridPage/card6" width="33.33%"/>
-        <GameCard id="gridPage/card7" width="33.33%"/>
-        <GameCard id="gridPage/card8" width="33.33%"/>
+        <GameCard id="gridPage/card6" grow="1" margin="9"/>
+        <GameCard id="gridPage/card7" grow="1" margin="9"/>
+        <GameCard id="gridPage/card8" grow="1" margin="9"/>
 
     </brls:Box>
 

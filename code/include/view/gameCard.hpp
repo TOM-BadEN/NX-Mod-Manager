@@ -7,8 +7,7 @@
 
 #include <borealis.hpp>
 
-class GameCard : public brls::Box
-{
+class GameCard : public brls::Box {
 public:
     GameCard();
     
