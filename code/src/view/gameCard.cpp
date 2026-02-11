@@ -24,7 +24,7 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
 void GameCard::setIcon(int imageId)
 {
     if (imageId > 0) m_icon->innerSetImage(imageId);
-}
+}                                 
 
 // 清空卡片（隐藏，图标恢复默认）
 void GameCard::clear()

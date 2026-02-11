@@ -1,0 +1,62 @@
+<!--
+    GridPage - 九宫格翻页组件
+    3x3 布局，每页显示 9 个 GameCard
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    grow="1"
+    justifyContent="spaceEvenly"
+    paddingLeft="40"
+    paddingRight="40"
+    paddingTop="20"
+    paddingBottom="20">
+
+    <!-- 第1行 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        justifyContent="spaceEvenly"
+        grow="1"
+        alignItems="center">
+
+        <GameCard id="gridPage/card0" grow="1"/>
+        <GameCard id="gridPage/card1" grow="1"/>
+        <GameCard id="gridPage/card2" grow="1"/>
+
+    </brls:Box>
+
+    <!-- 第2行 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        justifyContent="spaceEvenly"
+        grow="1"
+        alignItems="center">
+
+        <GameCard id="gridPage/card3" grow="1"/>
+        <GameCard id="gridPage/card4" grow="1"/>
+        <GameCard id="gridPage/card5" grow="1"/>
+
+    </brls:Box>
+
+    <!-- 第3行 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        justifyContent="spaceEvenly"
+        grow="1"
+        alignItems="center">
+
+        <GameCard id="gridPage/card6" grow="1"/>
+        <GameCard id="gridPage/card7" grow="1"/>
+        <GameCard id="gridPage/card8" grow="1"/>
+
+    </brls:Box>
+
+</brls:Box>
