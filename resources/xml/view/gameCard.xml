@@ -1,0 +1,62 @@
+<!--
+    GameCard - 游戏卡片组件
+    左侧图标 + 右侧文本（游戏名、版本、mod数量）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    focusable="true"
+    paddingTop="12"
+    paddingBottom="12"
+    paddingLeft="12"
+    paddingRight="16">
+
+    <!-- 左侧：游戏图标 -->
+    <brls:Image
+        id="gameCard/icon"
+        width="80"
+        height="80"
+        marginRight="16"
+        scalingType="fit"
+        image="@res/img/defaultIcon.jpg" />
+
+    <!-- 右侧：文本区域 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="column"
+        justifyContent="center"
+        grow="1">
+
+        <!-- 游戏名字 -->
+        <brls:Label
+            id="gameCard/name"
+            width="auto"
+            height="auto"
+            fontSize="18"
+            singleLine="true"
+            marginBottom="6" />
+
+        <!-- 版本 -->
+        <brls:Label
+            id="gameCard/version"
+            width="auto"
+            height="auto"
+            fontSize="14"
+            textColor="@theme/brls/text_disabled"
+            marginBottom="4" />
+
+        <!-- mod数量 -->
+        <brls:Label
+            id="gameCard/modCount"
+            width="auto"
+            height="auto"
+            fontSize="14"
+            textColor="@theme/brls/text_disabled" />
+
+    </brls:Box>
+
+</brls:Box>
