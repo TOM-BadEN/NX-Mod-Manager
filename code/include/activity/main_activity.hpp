@@ -7,14 +7,15 @@
 
 #pragma once
 #include <borealis.hpp>
+#include "view/gridPage.hpp"
 
 class MainActivity : public brls::Activity
 {
 public:
     CONTENT_FROM_XML_RES("activity/main.xml");
     
-    // 绑定按钮
-    BRLS_BIND(brls::Button, btnNewPage, "btn_new_page");
+    // 绑定九宫格组件
+    BRLS_BIND(GridPage, m_gridPage, "main/gridPage");
     
     // XML 加载完成后调用
     void onContentAvailable() override;
