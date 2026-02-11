@@ -20,12 +20,19 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
     setVisibility(brls::Visibility::VISIBLE);
 }
 
-// 清空卡片（隐藏）
+// 设置游戏图标（传入 NVG image ID）
+void GameCard::setIcon(int imageId)
+{
+    if (imageId > 0) m_icon->innerSetImage(imageId);
+}
+
+// 清空卡片（隐藏，图标恢复默认）
 void GameCard::clear()
 {
     m_name->setText("");
     m_version->setText("");
     m_modCount->setText("");
+    m_icon->setImageFromRes("img/defaultIcon.jpg");
     setVisibility(brls::Visibility::GONE);
 }
 

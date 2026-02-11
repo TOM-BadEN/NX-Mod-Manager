@@ -15,7 +15,10 @@ public:
     // 设置卡片数据
     void setGame(const std::string& name, const std::string& version, const std::string& modCount);
     
-    // 清空卡片（隐藏）
+    // 设置游戏图标（传入 NVG image ID）
+    void setIcon(int imageId);
+    
+    // 清空卡片（隐藏，图标恢复默认）
     void clear();
     
     // 工厂函数
