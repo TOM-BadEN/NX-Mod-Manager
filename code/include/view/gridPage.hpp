@@ -8,6 +8,7 @@
 #include <borealis.hpp>
 #include <vector>
 #include "view/gameCard.hpp"
+#include "utils/indexUpdate.hpp"
 
 // 游戏数据
 struct GameInfo {
@@ -31,12 +32,8 @@ public:
     void nextPage();
     void prevPage();
     
-    // 索引信息（底部显示用）
-    int getSelectedIndex();
-    int getTotalCount();
-    
-    // 设置索引更新回调（通知外部更新 Footer 索引）
-    void setIndexChangeCallback(std::function<void(int index, int total)> callback);
+    // 索引更新（通知外部更新 Footer 索引）
+    void setIndexChangeCallback(std::function<void(int, int)> callback);
     
     // 工厂函数
     static brls::View* create();
@@ -47,8 +44,7 @@ private:
     GameCard* m_cards[CARDS_PER_PAGE];                     // 固定 9 张卡片
     std::vector<GameInfo> m_games;                         // 全部游戏数据
     int m_currentPage = 0;                                 // 当前页码（从 0 开始）
-    int m_selectedIndex = 0;                               // 当前选中的全局索引
-    std::function<void(int, int)> m_indexChangeCallback;    // 索引更新回调
+    IndexUpdate m_indexUpdate;                              // 索引更新工具
     
     int getTotalPages();                                   // 总页数（内部翻页用）
     void refreshPage();                                    // 刷新当前页的卡片内容

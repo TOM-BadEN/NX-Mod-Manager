@@ -15,10 +15,7 @@ GridPage::GridPage() {
         m_cards[i] = dynamic_cast<GameCard*>(getView(id));
         
         m_cards[i]->getFocusEvent()->subscribe([this, i](brls::View*) {
-            m_selectedIndex = m_currentPage * CARDS_PER_PAGE + i;
-            if (m_indexChangeCallback) {
-                m_indexChangeCallback(getSelectedIndex(), getTotalCount());
-            }
+            m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
         });
     }
     
@@ -45,10 +42,7 @@ void GridPage::nextPage() {
         for (int i = CARDS_PER_PAGE - 1; i > focused; i--) {
             if (isCardVisible(i)) {
                 brls::Application::giveFocus(m_cards[i]);
-                m_selectedIndex = m_currentPage * CARDS_PER_PAGE + i;
-                if (m_indexChangeCallback) {
-                    m_indexChangeCallback(getSelectedIndex(), getTotalCount());
-                }
+                m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
                 return;
             }
         }
@@ -67,10 +61,7 @@ void GridPage::prevPage() {
         int focused = findFocusedCardIndex();
         if (focused > 0 && isCardVisible(0)) {
             brls::Application::giveFocus(m_cards[0]);
-            m_selectedIndex = m_currentPage * CARDS_PER_PAGE;
-            if (m_indexChangeCallback) {
-                m_indexChangeCallback(getSelectedIndex(), getTotalCount());
-            }
+            m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE, m_games.size());
             return;
         }
         auto* focus = brls::Application::getCurrentFocus();
@@ -83,16 +74,8 @@ int GridPage::getTotalPages() {
     return (m_games.size() + CARDS_PER_PAGE - 1) / CARDS_PER_PAGE;
 }
 
-int GridPage::getSelectedIndex() {
-    return m_selectedIndex + 1;
-}
-
-int GridPage::getTotalCount() {
-    return static_cast<int>(m_games.size());
-}
-
-void GridPage::setIndexChangeCallback(std::function<void(int index, int total)> callback) {
-    m_indexChangeCallback = callback;
+void GridPage::setIndexChangeCallback(std::function<void(int, int)> callback) {
+    m_indexUpdate.setCallback(callback);
 }
 
 // 刷新当前页的 9 张卡片
@@ -123,11 +106,7 @@ void GridPage::refreshPage() {
         }
     }
     if (focusedCard >= 0) {
-        m_selectedIndex = m_currentPage * CARDS_PER_PAGE + focusedCard;
-    }
-    
-    if (m_indexChangeCallback) {
-        m_indexChangeCallback(getSelectedIndex(), getTotalCount());
+        m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + focusedCard, m_games.size());
     }
 }
 
@@ -212,10 +191,7 @@ brls::View* GridPage::getNextFocus(brls::FocusDirection direction, brls::View* c
     
     // 目标卡片有效且可见，更新索引并返回
     if (targetIndex >= 0 && isCardVisible(targetIndex)) {
-        m_selectedIndex = m_currentPage * CARDS_PER_PAGE + targetIndex;
-        if (m_indexChangeCallback) {
-            m_indexChangeCallback(getSelectedIndex(), getTotalCount());
-        }
+        m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + targetIndex, m_games.size());
         return m_cards[targetIndex];
     }
     
@@ -223,10 +199,7 @@ brls::View* GridPage::getNextFocus(brls::FocusDirection direction, brls::View* c
     if (targetIndex >= 0) {
         for (int i = targetIndex - 1; i >= 0; i--) {
             if (isCardVisible(i)) {
-                m_selectedIndex = m_currentPage * CARDS_PER_PAGE + i;
-                if (m_indexChangeCallback) {
-                    m_indexChangeCallback(getSelectedIndex(), getTotalCount());
-                }
+                m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
                 return m_cards[i];
             }
         }
