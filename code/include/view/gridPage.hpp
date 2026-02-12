@@ -46,8 +46,12 @@ private:
     int m_currentPage = 0;                                 // 当前页码（从 0 开始）
     IndexUpdate m_indexUpdate;                              // 索引更新工具
     
-    int getTotalPages();                                   // 总页数（内部翻页用）
-    void refreshPage();                                    // 刷新当前页的卡片内容
+    int getTotalPages();                                   // 总页数
+    void refreshPage();                                    // 刷新卡片数据（不处理焦点）
+    void flipPage(int delta);                              // 纯翻页：改页码 + 刷新数据
+    void focusCard(int cardIndex);                         // 焦点转移 + 索引更新
+    void fixFocusAfterFlip();                              // 翻页后修正不可见焦点
     int findFocusedCardIndex();                            // 查找当前聚焦的卡片索引
     bool isCardVisible(int index);                         // 卡片是否可见
+    int findVisibleCard(int start, int step);              // 从 start 按 step 方向找最近可见卡片
 };

@@ -9,7 +9,9 @@
 
 class IndexUpdate {
 public:
-    void setCallback(std::function<void(int, int)> cb) { m_callback = cb; }
+    void setCallback(std::function<void(int, int)> cb) {
+        m_callback = cb;
+    }
     
     // 更新索引和总数，自动通知（内部 0-based，回调传出 1-based）
     void update(int index, int total) {
@@ -22,8 +24,13 @@ public:
         if (m_callback) m_callback(m_index + 1, m_total);
     }
     
-    int getIndex() const { return m_index + 1; }
-    int getTotal() const { return m_total; }
+    int getIndex() const {
+        return m_index + 1;
+    }
+    
+    int getTotal() const {
+        return m_total;
+    }
 
 private:
     int m_index = 0;

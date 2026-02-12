@@ -8,7 +8,7 @@ void MainActivity::onContentAvailable() {
     std::vector<GameInfo> games;
     for (int i = 0; i < 20; i++) {
         GameInfo info;
-        info.name = "测试游戏 " + std::to_string(i + 1);
+        info.name = "测试游戏这是一个很长的游戏名，用来测试滚动 " + std::to_string(i + 1);
         info.version = "1.0." + std::to_string(i);
         info.modCount = std::to_string(i * 2 + 1);
         games.push_back(info);

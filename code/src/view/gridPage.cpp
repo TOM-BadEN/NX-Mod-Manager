@@ -13,15 +13,22 @@ GridPage::GridPage() {
     for (int i = 0; i < CARDS_PER_PAGE; i++) {
         std::string id = "gridPage/card" + std::to_string(i);
         m_cards[i] = dynamic_cast<GameCard*>(getView(id));
-        
-        m_cards[i]->getFocusEvent()->subscribe([this, i](brls::View*) {
+        auto* focusEvent = m_cards[i]->getFocusEvent();
+        focusEvent->subscribe([this, i](brls::View*) {
             m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
         });
     }
     
     // 注册 LB/RB 翻页
-    registerAction("上一页", brls::BUTTON_LB, [this](...) { prevPage(); return true; }, true, true);
-    registerAction("下一页", brls::BUTTON_RB, [this](...) { nextPage(); return true; }, true, true);
+    registerAction("上一页", brls::BUTTON_LB, [this](...) {
+        prevPage();
+        return true;
+    }, true, true);
+    
+    registerAction("下一页", brls::BUTTON_RB, [this](...) {
+        nextPage();
+        return true;
+    }, true, true);
 }
 
 // 设置数据源
@@ -31,18 +38,17 @@ void GridPage::setGameList(const std::vector<GameInfo>& games) {
     refreshPage();
 }
 
-// 下一页
+// 下一页（LB/RB 调用）
 void GridPage::nextPage() {
     if (m_currentPage < getTotalPages() - 1) {
-        m_currentPage++;
-        refreshPage();
+        flipPage(1);
+        fixFocusAfterFlip();
     } else {
         // 已是最后一页，先跳到最后一个可见卡片，已在则抖动
         int focused = findFocusedCardIndex();
         for (int i = CARDS_PER_PAGE - 1; i > focused; i--) {
             if (isCardVisible(i)) {
-                brls::Application::giveFocus(m_cards[i]);
-                m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
+                focusCard(i);
                 return;
             }
         }
@@ -51,17 +57,16 @@ void GridPage::nextPage() {
     }
 }
 
-// 上一页
+// 上一页（LB/RB 调用）
 void GridPage::prevPage() {
     if (m_currentPage > 0) {
-        m_currentPage--;
-        refreshPage();
+        flipPage(-1);
+        fixFocusAfterFlip();
     } else {
         // 已是第一页，先跳到第一个卡片，已在则抖动
         int focused = findFocusedCardIndex();
         if (focused > 0 && isCardVisible(0)) {
-            brls::Application::giveFocus(m_cards[0]);
-            m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE, m_games.size());
+            focusCard(0);
             return;
         }
         auto* focus = brls::Application::getCurrentFocus();
@@ -78,44 +83,45 @@ void GridPage::setIndexChangeCallback(std::function<void(int, int)> callback) {
     m_indexUpdate.setCallback(callback);
 }
 
-// 刷新当前页的 9 张卡片
+// 刷新当前页的 9 张卡片（只刷数据，不处理焦点）
 void GridPage::refreshPage() {
     int startIndex = m_currentPage * CARDS_PER_PAGE;
-    
     for (int i = 0; i < CARDS_PER_PAGE; i++) {
         int dataIndex = startIndex + i;
         if (dataIndex < static_cast<int>(m_games.size())) {
             auto& game = m_games[dataIndex];
             m_cards[i]->setGame(game.name, game.version, game.modCount);
             if (game.iconId > 0) m_cards[i]->setIcon(game.iconId);
-        }
-        else {
+        } else {
             m_cards[i]->clear();
         }
     }
-    
-    // 翻页后更新索引并处理焦点
-    int focusedCard = findFocusedCardIndex();
-    if (focusedCard >= 0 && !isCardVisible(focusedCard)) {
-        for (int i = focusedCard - 1; i >= 0; i--) {
-            if (isCardVisible(i)) {
-                brls::Application::giveFocus(m_cards[i]);
-                focusedCard = i;
-                break;
-            }
-        }
-    }
-    if (focusedCard >= 0) {
-        m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + focusedCard, m_games.size());
-    }
+}
+
+// 纯翻页：改页码 + 刷新数据
+void GridPage::flipPage(int delta) {
+    m_currentPage += delta;
+    refreshPage();
+}
+
+// 焦点转移 + 索引更新
+void GridPage::focusCard(int cardIndex) {
+    brls::Application::giveFocus(m_cards[cardIndex]);
+    m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + cardIndex, m_games.size());
+}
+
+// 翻页后修正不可见焦点
+void GridPage::fixFocusAfterFlip() {
+    int focused = findFocusedCardIndex();
+    if (focused >= 0 && !isCardVisible(focused)) focused = findVisibleCard(focused - 1, -1);
+    if (focused >= 0) focusCard(focused);
 }
 
 // 查找当前聚焦的卡片索引（0~8），未找到返回 -1
 int GridPage::findFocusedCardIndex() {
     brls::View* focused = brls::Application::getCurrentFocus();
     for (int i = 0; i < CARDS_PER_PAGE; i++) {
-        if (m_cards[i] == focused || m_cards[i]->isChildFocused())
-            return i;
+        if (m_cards[i] == focused || m_cards[i]->isChildFocused()) return i;
     }
     return -1;
 }
@@ -123,9 +129,15 @@ int GridPage::findFocusedCardIndex() {
 // 卡片是否可见
 bool GridPage::isCardVisible(int index) {
     if (index < 0 || index >= CARDS_PER_PAGE) return false;
-    
-    auto visibility = m_cards[index]->getVisibility();
-    return visibility == brls::Visibility::VISIBLE;
+    return m_cards[index]->getVisibility() == brls::Visibility::VISIBLE;
+}
+
+// 从 start 按 step 方向查找最近的可见卡片，未找到返回 -1
+int GridPage::findVisibleCard(int start, int step) {
+    for (int i = start; i >= 0 && i < CARDS_PER_PAGE; i += step) {
+        if (isCardVisible(i)) return i;
+    }
+    return -1;
 }
 
 // 自定义导航逻辑
@@ -139,70 +151,49 @@ brls::View* GridPage::getNextFocus(brls::FocusDirection direction, brls::View* c
     
     switch (direction) {
         case brls::FocusDirection::RIGHT:
-            if (col < 2 && isCardVisible(cardIndex + 1))
-                targetIndex = cardIndex + 1;                    // 同行右移
-            else if (row < 2 && isCardVisible((row + 1) * 3))
-                targetIndex = (row + 1) * 3;                   // 换行到下一行第一个
+            if (col < 2 && isCardVisible(cardIndex + 1)) targetIndex = cardIndex + 1;
+            else if (row < 2 && isCardVisible((row + 1) * 3)) targetIndex = (row + 1) * 3;
             else if (m_currentPage < getTotalPages() - 1) {
-                nextPage();
+                flipPage(1);
                 targetIndex = 0;
             }
             break;
             
         case brls::FocusDirection::LEFT:
-            if (col > 0)
-                targetIndex = cardIndex - 1;                    // 同行左移
-            else if (row > 0)
-                targetIndex = (row - 1) * 3 + 2;               // 换行到上一行最后一个
+            if (col > 0) targetIndex = cardIndex - 1;
+            else if (row > 0) targetIndex = (row - 1) * 3 + 2;
             else if (m_currentPage > 0) {
-                prevPage();
+                flipPage(-1);
                 targetIndex = 8;
             }
             break;
             
         case brls::FocusDirection::DOWN:
-            if (row < 2 && isCardVisible(cardIndex + 3))
-                targetIndex = cardIndex + 3;                    // 同列下移
+            if (row < 2 && isCardVisible(cardIndex + 3)) targetIndex = cardIndex + 3;
             else if (m_currentPage < getTotalPages() - 1) {
-                nextPage();
+                flipPage(1);
                 targetIndex = col;
+                // 翻到不满页时 col 可能不可见，回退找最近可见卡片
+                if (!isCardVisible(targetIndex)) targetIndex = findVisibleCard(targetIndex - 1, -1);
             } else {
-                // 回退：找当前卡片之后最近的可见卡片
-                for (int i = cardIndex + 1; i < CARDS_PER_PAGE; i++) {
-                    if (isCardVisible(i)) { targetIndex = i; break; }
-                }
+                targetIndex = findVisibleCard(cardIndex + 1, 1);
             }
             break;
             
         case brls::FocusDirection::UP:
-            if (row > 0)
-                targetIndex = cardIndex - 3;                    // 同列上移
+            if (row > 0) targetIndex = cardIndex - 3;
             else if (m_currentPage > 0) {
-                prevPage();
+                flipPage(-1);
                 targetIndex = 6 + col;
             } else {
-                // 回退：找当前卡片之前最近的可见卡片
-                for (int i = cardIndex - 1; i >= 0; i--) {
-                    if (isCardVisible(i)) { targetIndex = i; break; }
-                }
+                targetIndex = findVisibleCard(cardIndex - 1, -1);
             }
             break;
     }
     
-    // 目标卡片有效且可见，更新索引并返回
     if (targetIndex >= 0 && isCardVisible(targetIndex)) {
         m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + targetIndex, m_games.size());
         return m_cards[targetIndex];
-    }
-    
-    // 目标卡片不可见（最后一页不满），向左找最近的可见卡片
-    if (targetIndex >= 0) {
-        for (int i = targetIndex - 1; i >= 0; i--) {
-            if (isCardVisible(i)) {
-                m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
-                return m_cards[i];
-            }
-        }
     }
     
     return nullptr;

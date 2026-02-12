@@ -23,7 +23,9 @@ MyFrame::MyFrame() {
         if (!brls::Application::popActivity()) {
             auto dialog = new brls::Dialog("确定要退出吗？");
             dialog->addButton("取消", []() {});
-            dialog->addButton("确定", []() { brls::Application::quit(); });
+            dialog->addButton("确定", []() {
+                brls::Application::quit();
+            });
             dialog->open();
         }
         return true;
