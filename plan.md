@@ -94,8 +94,9 @@ struct AppEntry final {
 
 ```cpp
 struct GameInfo {
-    std::string displayName;  // 显示名（优先 JSON 映射，其次目录名）
-    std::string version;     // 版本号（从 API 获取：先查本地缓存库，再调系统 API）
+    std::string displayName;  // 显示名（回滚链：displayName → gameName → 目录名）
+    std::string gameName;    // API 名缓存（从 JSON 读，第二阶段 API 更新）
+    std::string version;     // 版本号（从 JSON 缓存读，第二阶段 API 更新）
     std::string modCount;    // mod 数量
     int iconId = 0;          // NVG 图标 ID
     u64 appId = 0;           // 游戏唯一 ID
@@ -112,11 +113,12 @@ struct GameInfo {
 {
   "0100A5C00D162000": {
     "displayName": "塞尔达传说",
+    "gameName": "ゼルダの伝説 ティアーズ オブ ザ キングダム",
     "favorite": true,
     "version": "1.2.1"
   },
   "01001A5C00E3A000": {
-    "displayName": "马里奥奥德赛",
+    "gameName": "Super Mario Odyssey",
     "favorite": false,
     "version": "1.0.0"
   }
@@ -124,23 +126,26 @@ struct GameInfo {
 ```
 
 - **根键**：appId（16 位十六进制），永远不变，不受目录重命名影响
-- **displayName**：用户自定义的显示名，没有则用目录名
+- **displayName**：用户手动设置的自定义名，没设过则不存这个字段
+- **gameName**：API 名缓存，第二阶段始终从 API 更新
 - **favorite**：收藏标记，true/false 直接切换
 - **version**：缓存字段，第一阶段快速显示，第二阶段从 API 获取最新值并更新
+- **显示名回滚链**：displayName → gameName → 目录名
 - **不存游戏列表**：游戏列表每次启动重新扫描 `/mods2/` 目录
 
 ### 扫描策略：两阶段扫描
 
 #### 第一阶段：快速扫描（只读目录 + JSON，不调 API）
 
-1. 读 `/mods2/gameInfo.json` → 加载 displayName 和 isFavorite 映射
+1. 读 `/mods2/gameInfo.json` → 加载 displayName、gameName、version、isFavorite 映射
 2. 扫描 `/mods2/` → 拿到所有游戏目录名
 3. 进入每个目录，读 hex 子目录名 → 拿到 appId
 4. 数 appId 目录下的子目录 + zip → 拿到 modCount
-5. 用 appId 查 JSON → 拿到 displayName、isFavorite
-6. 拼 dirPath = `/mods2/目录名/appIdHex`
-7. 排序：收藏在前，按 displayName 拼音排序
-8. 一次性传给 GridPage 显示（版本显示占位符，图标用默认图标）
+5. 用 appId 查 JSON → 拿到 displayName、gameName、version、isFavorite
+6. 确定显示名：displayName → gameName → 目录名
+7. 拼 dirPath = `/mods2/目录名/appIdHex`
+8. 排序：收藏在前，按显示名拼音排序
+9. 一次性传给 GridPage 显示（版本从 JSON 缓存读，图标用默认图标）
 
 #### 第二阶段：逐个调 API（异步，边扫边更新）
 
@@ -307,11 +312,18 @@ while (bytesRemaining > 0) {
 - 调 `GameCard::setIcon(iconId)` 更新卡片
 - 第一阶段不需要处理，GameCard 默认就有占位图标
 
-#### 7. displayName（第一阶段）
+#### 7. displayName（第一阶段 + 第二阶段）
 
-- 用 appId 查 `/mods2/gameInfo.json`
-- 查到 → 用 JSON 里的 `displayName`
-- 查不到 → 用目录名（扫描时的临时变量）
+显示名回滚链：displayName → gameName → 目录名
+
+- **第一阶段**：用 appId 查 gameInfo.json
+  - 有 `displayName`（用户手动设的）→ 用它
+  - 没有 `displayName`，有 `gameName`（API 名缓存）→ 用它
+  - 都没有（首次运行）→ 用目录名
+- **第二阶段**：从 API 获取官方游戏名
+  - 始终更新 JSON 的 `gameName` 字段
+  - 如果当前显示名是目录名（无 displayName 且无旧 gameName）→ 更新卡片显示为 gameName
+  - 如果当前显示名是用户设的 displayName → 不更新卡片显示
 
 #### 8. isFavorite（第一阶段）
 
