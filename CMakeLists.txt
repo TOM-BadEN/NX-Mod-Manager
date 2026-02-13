@@ -46,8 +46,10 @@ add_subdirectory(library)
 # 设置代码文件路径
 # 头文件目录
 list(APPEND APP_PLATFORM_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/code/include)
+list(APPEND APP_PLATFORM_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/library/yyjson)
 # 递归收集 code 目录下所有 .cpp 源文件
 file(GLOB_RECURSE MAIN_SRC code/*.cpp)
+list(APPEND MAIN_SRC ${CMAKE_CURRENT_SOURCE_DIR}/library/yyjson/yyjson.c)
 
 # ============================================================================
 # Switch 平台配置
