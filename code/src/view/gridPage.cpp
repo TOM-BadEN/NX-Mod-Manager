@@ -90,7 +90,7 @@ void GridPage::refreshPage() {
         int dataIndex = startIndex + i;
         if (dataIndex < static_cast<int>(m_games.size())) {
             auto& game = m_games[dataIndex];
-            m_cards[i]->setGame(game.name, game.version, game.modCount);
+            m_cards[i]->setGame(game.displayName, game.version, game.modCount);
             if (game.iconId > 0) m_cards[i]->setIcon(game.iconId);
         } else {
             m_cards[i]->clear();

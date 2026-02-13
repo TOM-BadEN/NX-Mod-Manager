@@ -20,24 +20,24 @@ namespace {
 
 } // namespace
 
-bool dirExists(const std::string& path) {
+bool dirExists(const FsPath& path) {
     FsFileSystem* fs = getSdFs();
     if (!fs) return false;
 
     FsDirEntryType type;
-    Result rc = fsFsGetEntryType(fs, path.c_str(), &type);
+    Result rc = fsFsGetEntryType(fs, path, &type);
     if (R_FAILED(rc)) return false;
 
     return type == FsDirEntryType_Dir;
 }
 
-std::vector<std::string> listSubDirs(const std::string& path) {
+std::vector<std::string> listSubDirs(const FsPath& path) {
     std::vector<std::string> result;
     FsFileSystem* fs = getSdFs();
     if (!fs) return result;
 
     FsDir dir;
-    Result rc = fsFsOpenDirectory(fs, path.c_str(), FsDirOpenMode_ReadDirs, &dir);
+    Result rc = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadDirs, &dir);
     if (R_FAILED(rc)) return result;
 
     // 先获取条目数量
@@ -64,14 +64,14 @@ std::vector<std::string> listSubDirs(const std::string& path) {
     return result;
 }
 
-int countItems(const std::string& path, const std::vector<std::string>& exts) {
+int countItems(const FsPath& path, const std::vector<std::string>& exts) {
     FsFileSystem* fs = getSdFs();
     if (!fs) return 0;
 
     // 快速路径：不过滤，一次拿总数
     if (exts.empty()) {
         FsDir dir;
-        Result rc = fsFsOpenDirectory(fs, path.c_str(),
+        Result rc = fsFsOpenDirectory(fs, path,
             FsDirOpenMode_ReadDirs | FsDirOpenMode_ReadFiles | FsDirOpenMode_NoFileSize, &dir);
         if (R_FAILED(rc)) return 0;
 
@@ -84,7 +84,7 @@ int countItems(const std::string& path, const std::vector<std::string>& exts) {
     // 过滤路径：目录全数 + 匹配扩展名的文件
     s64 dirCount = 0;
     FsDir dirHandle;
-    Result rc1 = fsFsOpenDirectory(fs, path.c_str(), FsDirOpenMode_ReadDirs | FsDirOpenMode_NoFileSize, &dirHandle);
+    Result rc1 = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadDirs | FsDirOpenMode_NoFileSize, &dirHandle);
     if (R_SUCCEEDED(rc1)) {
         fsDirGetEntryCount(&dirHandle, &dirCount);
         fsDirClose(&dirHandle);
@@ -92,7 +92,7 @@ int countItems(const std::string& path, const std::vector<std::string>& exts) {
 
     int fileCount = 0;
     FsDir fileHandle;
-    Result rc2 = fsFsOpenDirectory(fs, path.c_str(), FsDirOpenMode_ReadFiles | FsDirOpenMode_NoFileSize, &fileHandle);
+    Result rc2 = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadFiles | FsDirOpenMode_NoFileSize, &fileHandle);
     if (R_FAILED(rc2)) return static_cast<int>(dirCount);
 
     s64 total = 0;

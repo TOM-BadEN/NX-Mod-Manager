@@ -9,14 +9,7 @@
 #include <vector>
 #include "view/gameCard.hpp"
 #include "utils/indexUpdate.hpp"
-
-// 游戏数据
-struct GameInfo {
-    std::string name;
-    std::string version;
-    std::string modCount;
-    int iconId = 0;
-};
+#include "common/gameInfo.hpp"
 
 class GridPage : public brls::Box {
 public:
