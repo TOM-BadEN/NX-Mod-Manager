@@ -41,15 +41,21 @@ add_compile_options(-fdiagnostics-color=always)
 add_subdirectory(library)
 
 # ============================================================================
-# 源文件配置
+# 项目源文件
 # ============================================================================
-# 设置代码文件路径
-# 头文件目录
 list(APPEND APP_PLATFORM_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/code/include)
-list(APPEND APP_PLATFORM_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/library/yyjson)
-# 递归收集 code 目录下所有 .cpp 源文件
 file(GLOB_RECURSE MAIN_SRC code/*.cpp)
-list(APPEND MAIN_SRC ${CMAKE_CURRENT_SOURCE_DIR}/library/yyjson/yyjson.c)
+
+# ============================================================================
+# 第三方库源文件
+# ============================================================================
+list(APPEND APP_PLATFORM_INCLUDE
+    ${CMAKE_CURRENT_SOURCE_DIR}/library/yyjson
+    ${CMAKE_CURRENT_SOURCE_DIR}/library/libnxtc-add-version/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/library/libnxtc-add-version/source
+)
+file(GLOB_RECURSE LIB_SRC library/yyjson/*.c library/libnxtc-add-version/source/*.c)
+list(APPEND MAIN_SRC ${LIB_SRC})
 
 # ============================================================================
 # Switch 平台配置
