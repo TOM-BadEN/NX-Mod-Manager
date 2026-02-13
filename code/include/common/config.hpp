@@ -5,9 +5,14 @@
 
 #pragma once
 
+#include <vector>
+#include <string>
+
 namespace config {
 
     constexpr const char* modsRoot     = "/mods2/";
     constexpr const char* gameInfoPath = "/mods2/gameInfo.json";
+
+    inline const std::vector<std::string> modFileExts = {".zip"};
 
 } // namespace config
