@@ -1,3 +1,8 @@
+/**
+ * AsyncFurture - 异步任务封装
+ * 来源项目：https://github.com/ITotalJustice/untitled
+ */
+
 #pragma once
 
 #include <future>
