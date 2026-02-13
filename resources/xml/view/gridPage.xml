@@ -18,13 +18,14 @@
     <brls:Box
         width="auto"
         height="auto"
+        grow="1"
         axis="row"
         justifyContent="flexStart"
         alignItems="center">
 
-        <GameCard id="gridPage/card0" grow="1" margin="9"/>
-        <GameCard id="gridPage/card1" grow="1" margin="9"/>
-        <GameCard id="gridPage/card2" grow="1" margin="9"/>
+        <GameCard id="gridPage/card0" width="0" grow="1" shrink="1" margin="9"/>
+        <GameCard id="gridPage/card1" width="0" grow="1" shrink="1" margin="9"/>
+        <GameCard id="gridPage/card2" width="0" grow="1" shrink="1" margin="9"/>
 
     </brls:Box>
 
@@ -32,13 +33,14 @@
     <brls:Box
         width="auto"
         height="auto"
+        grow="1"
         axis="row"
         justifyContent="flexStart"
         alignItems="center">
 
-        <GameCard id="gridPage/card3" grow="1" margin="9"/>
-        <GameCard id="gridPage/card4" grow="1" margin="9"/>
-        <GameCard id="gridPage/card5" grow="1" margin="9"/>
+        <GameCard id="gridPage/card3" width="0" grow="1" shrink="1" margin="9"/>
+        <GameCard id="gridPage/card4" width="0" grow="1" shrink="1" margin="9"/>
+        <GameCard id="gridPage/card5" width="0" grow="1" shrink="1" margin="9"/>
 
     </brls:Box>
 
@@ -46,13 +48,14 @@
     <brls:Box
         width="auto"
         height="auto"
+        grow="1"
         axis="row"
         justifyContent="flexStart"
         alignItems="center">
 
-        <GameCard id="gridPage/card6" grow="1" margin="9"/>
-        <GameCard id="gridPage/card7" grow="1" margin="9"/>
-        <GameCard id="gridPage/card8" grow="1" margin="9"/>
+        <GameCard id="gridPage/card6" width="0" grow="1" shrink="1" margin="9"/>
+        <GameCard id="gridPage/card7" width="0" grow="1" shrink="1" margin="9"/>
+        <GameCard id="gridPage/card8" width="0" grow="1" shrink="1" margin="9"/>
 
     </brls:Box>
 
