@@ -16,6 +16,7 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
     m_name->setText(name);
     m_version->setText("版本：" + version);
     m_modCount->setText("数量：" + modCount);
+    m_icon->setImageFromRes("img/defaultIcon.jpg");
     setVisibility(brls::Visibility::VISIBLE);
     setFocusable(true);
 }

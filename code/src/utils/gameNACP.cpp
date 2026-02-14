@@ -13,11 +13,14 @@ extern "C" {
 }
 
 GameNACP::GameNACP() {
+    nsInitialize();
     nxtcInitialize();
 }
 
 GameNACP::~GameNACP() {
+    nxtcFlushCacheFile();
     nxtcExit();
+    nsExit();
 }
 
 GameMetadata GameNACP::getGameNACP(uint64_t appId) {
