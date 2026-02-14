@@ -17,6 +17,7 @@ public:
     // 绑定组件
     BRLS_BIND(MyFrame, m_frame, "main/frame");
     BRLS_BIND(GridPage, m_gridPage, "main/gridPage");
+    BRLS_BIND(brls::Label, m_noModHint, "main/noModHint");
     
     // XML 加载完成后调用
     void onContentAvailable() override;

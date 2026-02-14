@@ -8,4 +8,14 @@
         title="主页面"
         width="100%"
         height="100%"/>
+    <brls:Label
+        id="main/noModHint"
+        width="auto"
+        height="auto"
+        visibility="gone"
+        fontSize="24"
+        text="暂无 MOD，请将 MOD 放入 SD 卡"
+        textColor="@theme/app/textGray"
+        horizontalAlign="center"
+        verticalAlign="center"/>
 </MyFrame>
