@@ -12,6 +12,9 @@ void MainActivity::onContentAvailable() {
     if (games.empty()) {
         m_gridPage->setVisibility(brls::Visibility::GONE);
         m_noModHint->setVisibility(brls::Visibility::VISIBLE);
+        m_noModHint->setFocusable(true);
+        m_noModHint->setHideHighlight(true);
+        brls::Application::giveFocus(m_noModHint);
         return;
     }
     
