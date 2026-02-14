@@ -8,6 +8,7 @@
 // 构造函数：加载 XML 布局
 GameCard::GameCard() {
     inflateFromXMLRes("xml/view/gameCard.xml");
+    m_icon->setFreeTexture(false);
 }
 
 // 设置卡片数据
@@ -22,7 +23,6 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
 // 设置游戏图标（传入 NVG 纹理 ID）
 void GameCard::setIcon(int iconId) {
     if (iconId <= 0) return;
-    m_icon->setFreeTexture(false);
     m_icon->innerSetImage(iconId);
 }                                 
 
