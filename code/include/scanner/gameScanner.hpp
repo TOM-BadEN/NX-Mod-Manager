@@ -9,10 +9,11 @@
 #include <vector>
 #include <string>
 #include "common/gameInfo.hpp"
+#include "utils/jsonFile.hpp"
 
 class GameScanner {
 public:
-    std::vector<GameInfo> scanGames();
+    std::vector<GameInfo> scanGames(JsonFile& jsonCache);
 
 private:
     void sortGames(std::vector<GameInfo>& games);

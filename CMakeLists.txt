@@ -73,7 +73,7 @@ list(APPEND MAIN_SRC ${BOREALIS_LIBRARY}/lib/platforms/switch/switch_wrapper.c)
 # 构建目标
 # ============================================================================
 program_target(${PROJECT_NAME} "${MAIN_SRC}")
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)  # 使用 C++17 标准
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20)  # 使用 C++20 标准
 
 # ============================================================================
 # 构建 Switch .nro 文件

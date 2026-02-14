@@ -19,11 +19,17 @@ public:
     brls::View* getNextFocus(brls::FocusDirection direction, brls::View* currentView) override;
     
     // 设置数据源
-    void setGameList(const std::vector<GameInfo>& games);
+    void setGameList(std::vector<GameInfo>& games);
     
     // 翻页
     void nextPage();
     void prevPage();
+    
+    // 获取当前页码
+    int getCurrentPage() const;
+    
+    // 更新指定全局索引的卡片（如果在当前页则刷新）
+    void updateCard(int globalIndex);
     
     // 索引更新（通知外部更新 Footer 索引）
     void setIndexChangeCallback(std::function<void(int, int)> callback);
@@ -35,7 +41,7 @@ private:
     static constexpr int CARDS_PER_PAGE = 9;               // 每页卡片数
     
     GameCard* m_cards[CARDS_PER_PAGE];                     // 固定 9 张卡片
-    std::vector<GameInfo> m_games;                         // 全部游戏数据
+    std::vector<GameInfo>* m_games = nullptr;               // 指向外部数据（不拥有）
     int m_currentPage = 0;                                 // 当前页码（从 0 开始）
     IndexUpdate m_indexUpdate;                              // 索引更新工具
     

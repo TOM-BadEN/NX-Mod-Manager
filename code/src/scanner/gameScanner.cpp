@@ -10,15 +10,11 @@
 #include <cstdlib>
 #include <cstdio>
 
-std::vector<GameInfo> GameScanner::scanGames() {
+std::vector<GameInfo> GameScanner::scanGames(JsonFile& jsonCache) {
     std::vector<GameInfo> games;
 
     // 确保 mods 目录存在
     fs::ensureDir(config::modsRoot);
-
-    // 加载 JSON 缓存
-    JsonFile jsonCache;
-    jsonCache.load(config::gameInfoPath);
 
     // 扫描 /mods2/ 获取所有游戏目录名
     auto dirs = fs::listSubDirs(config::modsRoot);

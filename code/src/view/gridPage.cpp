@@ -15,7 +15,7 @@ GridPage::GridPage() {
         m_cards[i] = dynamic_cast<GameCard*>(getView(id));
         auto* focusEvent = m_cards[i]->getFocusEvent();
         focusEvent->subscribe([this, i](brls::View*) {
-            m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games.size());
+            m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games->size());
         });
     }
     
@@ -32,8 +32,8 @@ GridPage::GridPage() {
 }
 
 // 设置数据源
-void GridPage::setGameList(const std::vector<GameInfo>& games) {
-    m_games = games;
+void GridPage::setGameList(std::vector<GameInfo>& games) {
+    m_games = &games;
     m_currentPage = 0;
     refreshPage();
 }
@@ -75,8 +75,8 @@ void GridPage::prevPage() {
 }
 
 int GridPage::getTotalPages() {
-    if (m_games.empty()) return 1;
-    return (m_games.size() + CARDS_PER_PAGE - 1) / CARDS_PER_PAGE;
+    if (!m_games || m_games->empty()) return 1;
+    return (m_games->size() + CARDS_PER_PAGE - 1) / CARDS_PER_PAGE;
 }
 
 void GridPage::setIndexChangeCallback(std::function<void(int, int)> callback) {
@@ -88,8 +88,8 @@ void GridPage::refreshPage() {
     int startIndex = m_currentPage * CARDS_PER_PAGE;
     for (int i = 0; i < CARDS_PER_PAGE; i++) {
         int dataIndex = startIndex + i;
-        if (dataIndex < static_cast<int>(m_games.size())) {
-            auto& game = m_games[dataIndex];
+        if (m_games && dataIndex < static_cast<int>(m_games->size())) {
+            auto& game = (*m_games)[dataIndex];
             m_cards[i]->setGame(game.displayName, game.version, game.modCount);
             if (game.iconId > 0) m_cards[i]->setIcon(game.iconId);
         } else {
@@ -107,7 +107,7 @@ void GridPage::flipPage(int delta) {
 // 焦点转移 + 索引更新
 void GridPage::focusCard(int cardIndex) {
     brls::Application::giveFocus(m_cards[cardIndex]);
-    m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + cardIndex, m_games.size());
+    m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + cardIndex, m_games->size());
 }
 
 // 翻页后修正不可见焦点
@@ -192,11 +192,25 @@ brls::View* GridPage::getNextFocus(brls::FocusDirection direction, brls::View* c
     }
     
     if (targetIndex >= 0 && isCardVisible(targetIndex)) {
-        m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + targetIndex, m_games.size());
+        m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + targetIndex, m_games->size());
         return m_cards[targetIndex];
     }
     
     return nullptr;
+}
+
+int GridPage::getCurrentPage() const {
+    return m_currentPage;
+}
+
+// 更新指定全局索引的卡片（如果在当前页则刷新）
+void GridPage::updateCard(int globalIndex) {
+    int cardIndex = globalIndex - m_currentPage * CARDS_PER_PAGE;
+    if (cardIndex < 0 || cardIndex >= CARDS_PER_PAGE) return;
+    
+    auto& game = (*m_games)[globalIndex];
+    m_cards[cardIndex]->setGame(game.displayName, game.version, game.modCount);
+    if (game.iconId > 0) m_cards[cardIndex]->setIcon(game.iconId);
 }
 
 // 工厂函数：用于 XML 注册

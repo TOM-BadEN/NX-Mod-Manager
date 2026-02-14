@@ -19,9 +19,11 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
     setFocusable(true);
 }
 
-// 设置游戏图标（传入 NVG image ID）
-void GameCard::setIcon(int imageId) {
-    if (imageId > 0) m_icon->innerSetImage(imageId);
+// 设置游戏图标（传入 NVG 纹理 ID）
+void GameCard::setIcon(int iconId) {
+    if (iconId <= 0) return;
+    m_icon->setFreeTexture(false);
+    m_icon->innerSetImage(iconId);
 }                                 
 
 // 清空卡片（隐藏，图标恢复默认）

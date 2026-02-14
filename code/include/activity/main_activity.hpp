@@ -7,8 +7,13 @@
 
 #pragma once
 #include <borealis.hpp>
+#include <vector>
+#include <atomic>
 #include "view/gridPage.hpp"
 #include "view/myframe.hpp"
+#include "common/gameInfo.hpp"
+#include "utils/jsonFile.hpp"
+#include "utils/async.hpp"
 
 class MainActivity : public brls::Activity {
 public:
@@ -21,4 +26,14 @@ public:
     
     // XML 加载完成后调用
     void onContentAvailable() override;
+
+private:
+    struct LoadTask { int idx; uint64_t appId; };
+
+    std::vector<GameInfo> m_games;
+    JsonFile m_jsonCache;
+    util::AsyncFurture<void> m_phase2Task;
+    std::atomic<int> m_currentPage{0};
+
+    void startPhase2();
 };
