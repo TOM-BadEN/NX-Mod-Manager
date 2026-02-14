@@ -13,6 +13,9 @@
 std::vector<GameInfo> GameScanner::scanGames() {
     std::vector<GameInfo> games;
 
+    // 确保 mods 目录存在
+    fs::ensureDir(config::modsRoot);
+
     // 加载 JSON 缓存
     JsonFile jsonCache;
     jsonCache.load(config::gameInfoPath);

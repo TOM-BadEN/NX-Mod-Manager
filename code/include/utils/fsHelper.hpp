@@ -25,6 +25,9 @@ namespace fs {
 
     // 目录是否存在
     bool dirExists(const FsPath& path);
+
+    // 确保目录存在，不存在则创建
+    bool ensureDir(const FsPath& path);
               
     // 列出指定目录下的所有子目录名（不递归）
     std::vector<std::string> listSubDirs(const FsPath& path);

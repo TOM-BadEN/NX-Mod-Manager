@@ -31,6 +31,13 @@ bool dirExists(const FsPath& path) {
     return type == FsDirEntryType_Dir;
 }
 
+bool ensureDir(const FsPath& path) {
+    if (dirExists(path)) return true;
+    FsFileSystem* fs = getSdFs();
+    if (!fs) return false;
+    return R_SUCCEEDED(fsFsCreateDirectory(fs, path));
+}
+
 std::vector<std::string> listSubDirs(const FsPath& path) {
     std::vector<std::string> result;
     FsFileSystem* fs = getSdFs();
