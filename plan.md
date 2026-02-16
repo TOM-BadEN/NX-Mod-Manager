@@ -1,100 +1,214 @@
-# 第二阶段：异步加载 NACP 数据
+# Mod 页面设计
 
-## 触发时机
+## 页面结构
 
-第一阶段结束后（`setGameList` 完成，九宫格已显示）
-
-## 数据存储
-
-| 数据 | 存储位置 | 说明 |
-|---|---|---|
-| version / displayName | `m_games[idx]`（GameInfo） | 直接更新结构体字段 |
-| NVG 纹理 ID | `m_games[idx].iconId` | `0`=无纹理，`>0`=有效纹理，常驻不释放 |
-| JSON 缓存 | `JsonFile` 对象 | 内存中，更新后写回文件 |
-| 当前页码 | `atomic<int> currentPage` | 后台线程读，主线程写 |
-| 待加载任务 | `vector<LoadTask>` | 后台线程内部，执行完就删除 |
-
-## 图标策略（简化版）
-
-- API 返回 JPEG → 立即 `nvgCreateImageMem` 转成 NVG 纹理 → JPEG 丢弃
-- NVG 纹理常驻内存，不释放（参考项目也是这么做的）
-- 翻页时不需要特殊处理图标，`refreshPage()` 现有逻辑已覆盖
-- 不需要 JPEG 缓存 map，不需要 `loaded` 字段
-
-## 后台线程（util::async）
+复用 MyFrame 框架，左右分栏布局。
 
 ```
-启动前：从 m_games 提取 LoadTask 列表（idx + appId）
-
-循环 {
-    1. 检查 stop_token，被请求停止则 break
-    2. tasks 为空 → 全部加载完 → break，线程自然结束
-
-    3. 读取 atomic<int> currentPage
-    4. 从 tasks 中找离 currentPage 最近的任务
-    5. 从 tasks 中删除该任务（不会重复加载）
-
-    6. 调 GameNACP::getGameNACP(appId)
-       → 一次拿到 name + version + icon JPEG
-
-    7. JPEG 非空 → nvgCreateImageMem(vg, ...) → 得到 iconId（后台线程执行）
-       JPEG 用完即丢，不缓存
-
-    8. brls::sync 回主线程 {
-       a. 更新 version:
-          - API 返回的 version 非空 → 更新 m_games[idx].version
-          - 写回 JSON
-
-       b. 更新 displayName:
-          - JSON 里有 displayName → 不动（用户自定义优先）
-          - JSON 里没有 displayName → 更新 m_games[idx].displayName 为 API 名
-          - 始终写 gameName 到 JSON
-
-       c. m_games[idx].iconId = iconId
-
-       d. 调 gridPage->updateCard(idx) 刷新卡片
-
-       e. 写回 JSON
-    }
-}
+┌─────────────────────────────────────────────────┐
+│  MyFrame Header: 游戏名 + 图标                   │
+├──────────────────┬──────────────────────────────┤
+│                  │                              │
+│  ModList         │   ModDetail                  │
+│  (卡片列表)      │   (文本排版详情，暂占位)       │
+│                  │                              │
+│  ┌────────────┐ │                              │
+│  │🎮 mod-A    │ │                              │
+│  │  文件夹 ✅ │ │                              │
+│  └────────────┘ │                              │
+│  ┌────────────┐ │                              │
+│  │🎮 mod-B    │ │                              │
+│  │  ZIP   ❌  │ │                              │
+│  └────────────┘ │                              │
+│  ┌────────────┐ │                              │
+│  │🎮 mod-C    │ │                              │
+│  │  文件夹 ✅ │ │                              │
+│  └────────────┘ │                              │
+│  ┌────────────┐ │                              │
+│  │🎮 xx.zip   │ │                              │
+│  │  ZIP   ❌  │ │                              │
+│  └────────────┘ │                              │
+│                  │                              │
+├──────────────────┴──────────────────────────────┤
+│  3/12                             B返回  A确认   │
+└─────────────────────────────────────────────────┘
 ```
 
-## 翻页时（主线程）
+- Footer 左下角索引：`当前选中 / 总 mod 数`
+- Footer 右侧：按键提示（由 MyFrame 的 brls::Hints 自动管理）
+
+## ModItem 组件
+
+### 卡片外壳
+
+复用 GameCard 的视觉样式：
+- `backgroundColor="@theme/app/cardBg"`
+- `cornerRadius="8"`, `highlightCornerRadius="8"`
+- `shadowType="generic"`
+- `focusable="true"`
+- padding 四周 20px
+
+### 内部布局（水平排列）
 
 ```
-1. 更新 atomic<int> currentPage
-2. refreshPage() 自动用 m_games 里的最新数据刷新卡片
-   - version/displayName 用最新值
-   - iconId > 0 则显示图标
-   - 不需要额外处理
+┌───────┬──────────────────────┬──────────┐
+│ Icon  │  mod名称（22号）      │ 安装状态  │
+│ 48x48 │  类型（17号，灰色）   │          │
+└───────┴──────────────────────┴──────────┘
+  左对齐     中间 grow=1          右对齐
 ```
 
-## 线程终止
+- **左**：mod 图标（brls::Image，48x48）
+- **中**：名称 + 类型（brls::Box 纵向，名称 fontSize=22，类型 fontSize=17 灰色）
+- **右**：安装状态文本
 
-- **正常完成**：tasks 为空，循环 break，线程自然结束
-- **外部取消**：AsyncFurture 析构时自动 request_stop() + get()
-- MainActivity 是主页面不会被 pop，实际上线程都是正常跑完的
+### 公开接口
 
-## 动态优先级
-
-后台线程不是从头到尾顺序加载，而是每次找离当前页最近的未加载游戏：
-
-```
-用户在第 5 页 → 加载顺序：
-第5页(9个) → 第4页 → 第6页 → 第3页 → 第7页 → ...
-
-用户翻页 → atomic<int> currentPage 更新
-→ 后台线程下一轮循环自动切到新页附近
+```cpp
+void setMod(const std::string& name, const std::string& type, bool installed);
+void clear();  // 隐藏卡片
+static brls::View* create();  // XML 工厂
 ```
 
-## 已完成的修改
+### 文件
 
-1. **gameInfo.hpp** — 加 `bool loaded = false`（待移除，不再需要）
-2. **main_activity.hpp** — `m_games` 改为成员变量（✅ 已完成）
-3. **gridPage.hpp/cpp** — `m_games` 改为指针不拷贝（✅ 已完成）
-4. **gridPage.hpp/cpp** — 加 `getCurrentPage()` + `updateCard(int globalIndex)`（✅ 已完成）
+- `include/view/modItem.hpp`
+- `src/view/modItem.cpp`
+- `resources/xml/view/modItem.xml`
 
-## 待实现
+## ModList 组件
 
-1. **gameInfo.hpp** — 移除 `bool loaded` 字段
-2. **main_activity.hpp/cpp** — 加 `AsyncFurture` + `atomic<int>` + `JsonFile`，启动异步任务
+### 设计模式
+
+复用 GridPage 的实现模式：
+- XML 预定义 4 个 ModItem 槽位（纵向排列，margin 间距）
+- 构造函数通过 getView 获取槽位引用
+- 外部数据指针 `std::vector<ModInfo>*`
+- 逐行滚动通过 scrollOffset + refreshItems
+
+### 核心成员
+
+```cpp
+class ModList : public brls::Box {
+public:
+    ModList();
+    brls::View* getNextFocus(brls::FocusDirection direction, brls::View* currentView) override;
+
+    void setModList(std::vector<ModInfo>& mods);
+    void reloadData();
+    void setIndexChangeCallback(std::function<void(int, int)> callback);
+
+    static brls::View* create();
+
+private:
+    static constexpr int ITEMS_PER_PAGE = 4;
+
+    ModItem* m_items[ITEMS_PER_PAGE];
+    std::vector<ModInfo>* m_mods = nullptr;
+    int m_scrollOffset = 0;
+    IndexUpdate m_indexUpdate;
+
+    void refreshItems();
+    int findFocusedItemIndex();
+    bool isItemVisible(int index);
+};
+```
+
+### 逐行滚动逻辑（getNextFocus）
+
+```
+items[i] 显示 mods[m_scrollOffset + i]
+
+DOWN:
+  i < 3 且 items[i+1] 可见 → 返回 items[i+1]
+  i == 3 且 scrollOffset + 4 < total → scrollOffset++, refreshItems(), 返回 items[3]
+  否则 → nullptr（到底了）
+
+UP:
+  i > 0 → 返回 items[i-1]
+  i == 0 且 scrollOffset > 0 → scrollOffset--, refreshItems(), 返回 items[0]
+  否则 → nullptr（到顶了）
+```
+
+滚动时焦点不移动（停留在边界槽位），数据刷新。用户感觉列表在滚动。
+
+### 焦点变化回调
+
+焦点变化时通知外部（ModActivity）当前选中的全局索引和总数。
+用于更新右侧 ModDetail + 底部索引文本。
+复用 IndexUpdate 工具类。
+
+### 文件
+
+- `include/view/modList.hpp`
+- `src/view/modList.cpp`
+- `resources/xml/view/modList.xml`
+
+## ModDetail 组件（暂占位）
+
+- 纯展示，不可聚焦
+- 各种 Label 文本排版
+- 由 ModList 焦点变化驱动内容更新
+- 后续补充具体字段
+
+### 文件
+
+- `include/view/modDetail.hpp`
+- `src/view/modDetail.cpp`
+- `resources/xml/view/modDetail.xml`
+
+## 页面 Activity
+
+### ModActivity
+
+- 替代现有 SecondActivity
+- onContentAvailable 中：扫描 mod 目录 → 设置 ModList → 设置回调
+- 接收 GameInfo 数据（从主页传入）
+
+### 文件
+
+- `include/activity/mod_activity.hpp`
+- `src/activity/mod_activity.cpp`
+- `resources/xml/activity/mod.xml`（左右分栏布局）
+
+## 数据结构
+
+```cpp
+struct ModInfo {
+    std::string name;       // mod 名（目录名或文件名）
+    std::string type;       // 类型描述
+    bool isInstalled;       // 是否已安装
+    std::string path;       // 完整路径
+};
+```
+
+### 文件
+
+- `include/common/modInfo.hpp`
+
+## 新增文件清单
+
+| 文件 | 说明 |
+|---|---|
+| include/view/modItem.hpp | 单个卡片组件 |
+| src/view/modItem.cpp | 卡片组件实现 |
+| resources/xml/view/modItem.xml | 卡片布局 |
+| include/view/modList.hpp | 列表组件 |
+| src/view/modList.cpp | 列表组件实现 |
+| resources/xml/view/modList.xml | 列表布局（4 个 ModItem） |
+| include/view/modDetail.hpp | 详情组件（占位） |
+| src/view/modDetail.cpp | 详情组件实现（占位） |
+| resources/xml/view/modDetail.xml | 详情布局（占位） |
+| include/activity/mod_activity.hpp | Mod 页面 Activity |
+| src/activity/mod_activity.cpp | Mod 页面实现 |
+| resources/xml/activity/mod.xml | 页面布局（左右分栏） |
+| include/common/modInfo.hpp | ModInfo 数据结构 |
+
+## 待确认（后续）
+
+1. mod 启用/禁用判断机制
+2. 用户可执行的操作（启用/禁用/删除等）
+3. GameCard 点击跳转到 Mod 页面的实现
+4. ModDetail 具体显示哪些字段
+5. Mod 类型图标资源
+6. L/R 翻页是否需要

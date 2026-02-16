@@ -71,6 +71,20 @@ std::vector<std::string> listSubDirs(const FsPath& path) {
     return result;
 }
 
+int countDirs(const FsPath& path) {
+    FsFileSystem* fs = getSdFs();
+    if (!fs) return 0;
+
+    FsDir dir;
+    Result rc = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadDirs, &dir);
+    if (R_FAILED(rc)) return 0;
+
+    s64 count = 0;
+    fsDirGetEntryCount(&dir, &count);
+    fsDirClose(&dir);
+    return static_cast<int>(count);
+}
+
 int countItems(const FsPath& path, const std::vector<std::string>& exts) {
     FsFileSystem* fs = getSdFs();
     if (!fs) return 0;

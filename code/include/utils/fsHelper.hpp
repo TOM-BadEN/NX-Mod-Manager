@@ -32,6 +32,9 @@ namespace fs {
     // 列出指定目录下的所有子目录名（不递归）
     std::vector<std::string> listSubDirs(const FsPath& path);
 
+    // 只数子目录数量
+    int countDirs(const FsPath& path);
+
     // 数指定目录下的条目数（子目录 + 文件）
     // exts 为空：数所有条目（快速路径）
     // exts 非空：数所有子目录 + 匹配扩展名的文件（exts 需小写，如 {".zip"}）

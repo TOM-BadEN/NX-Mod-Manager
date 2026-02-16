@@ -17,6 +17,11 @@ GridPage::GridPage() {
         focusEvent->subscribe([this, i](brls::View*) {
             m_indexUpdate.update(m_currentPage * CARDS_PER_PAGE + i, m_games->size());
         });
+        m_cards[i]->registerClickAction([this, i](brls::View*) {
+            int globalIndex = m_currentPage * CARDS_PER_PAGE + i;
+            if (m_clickCallback && isCardVisible(i)) m_clickCallback(globalIndex);
+            return true;
+        });
     }
     
     // 注册 LB/RB 翻页
@@ -216,6 +221,10 @@ void GridPage::updateCard(int globalIndex) {
 // 数据源已变更，重新加载当前页（不重置页码）
 void GridPage::reloadData() {
     refreshPage();
+}
+
+void GridPage::setClickCallback(std::function<void(int)> callback) {
+    m_clickCallback = callback;
 }
 
 // 工厂函数：用于 XML 注册

@@ -1,0 +1,62 @@
+<!--
+    ModCard - Mod 卡片组件
+    左侧图标 + 中间名称/类型 + 右侧安装状态
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    focusable="true"
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 左侧：mod 图标 -->
+    <brls:Image
+        id="modCard/icon"
+        width="48"
+        height="48"
+        marginRight="16"
+        scalingType="fit"/>
+
+    <!-- 中间：名称 + 类型（纵向） -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="column"
+        justifyContent="center"
+        grow="1">
+
+        <brls:Label
+            id="modCard/name"
+            width="auto"
+            height="auto"
+            fontSize="22"
+            singleLine="true"/>
+
+        <brls:Label
+            id="modCard/type"
+            width="auto"
+            height="auto"
+            fontSize="17"
+            textColor="@theme/app/textGray"
+            marginTop="4"/>
+
+    </brls:Box>
+
+    <!-- 右侧：安装状态 -->
+    <brls:Label
+        id="modCard/status"
+        width="auto"
+        height="auto"
+        fontSize="19"
+        marginLeft="16"/>
+
+</brls:Box>

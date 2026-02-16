@@ -1,0 +1,26 @@
+<!--
+    Mod 管理页面布局
+    左侧 ModList + 右侧 ModDetail
+-->
+
+<MyFrame id="modManager/frame">
+    <brls:Box
+        id="modManager/content"
+        width="100%"
+        height="100%"
+        axis="row">
+
+        <!-- 左侧：Mod 列表 -->
+        <ModList
+            id="modManager/modList"
+            width="45%"
+            height="100%"/>
+
+        <!-- 右侧：Mod 详情（占位） -->
+        <ModDetail
+            id="modManager/modDetail"
+            width="55%"
+            height="100%"/>
+
+    </brls:Box>
+</MyFrame>

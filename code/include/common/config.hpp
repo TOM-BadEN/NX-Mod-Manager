@@ -12,6 +12,7 @@ namespace config {
 
     constexpr const char* modsRoot     = "/mods2/";
     constexpr const char* gameInfoPath = "/mods2/gameInfo.json";
+    constexpr const char* modInfoFile  = "/modInfo.json";
 
     inline const std::vector<std::string> modFileExts = {".zip"};
 

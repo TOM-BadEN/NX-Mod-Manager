@@ -37,6 +37,9 @@ public:
     // 索引更新（通知外部更新 Footer 索引）
     void setIndexChangeCallback(std::function<void(int, int)> callback);
     
+    // 卡片点击回调（传出全局索引）
+    void setClickCallback(std::function<void(int)> callback);
+    
     // 工厂函数
     static brls::View* create();
 
@@ -47,6 +50,7 @@ private:
     std::vector<GameInfo>* m_games = nullptr;               // 指向外部数据（不拥有）
     int m_currentPage = 0;                                 // 当前页码（从 0 开始）
     IndexUpdate m_indexUpdate;                              // 索引更新工具
+    std::function<void(int)> m_clickCallback;                 // 卡片点击回调
     
     int getTotalPages();                                   // 总页数
     void refreshPage();                                    // 刷新卡片数据（不处理焦点）

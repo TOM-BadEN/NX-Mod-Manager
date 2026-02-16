@@ -13,6 +13,9 @@
 #include "view/myframe.hpp"           // 自定义应用框架
 #include "view/gameCard.hpp"          // 游戏卡片组件
 #include "view/gridPage.hpp"          // 九宫格翻页组件
+#include "view/modCard.hpp"           // Mod 卡片组件
+#include "view/modList.hpp"           // Mod 列表组件
+#include "view/modDetail.hpp"         // Mod 详情组件（占位）
 #include "theme/theme.hpp"              // 主题初始化
 #include "utils/pinYinCvt.hpp"          // 拼音工具
 #ifdef NXLINK
@@ -37,6 +40,9 @@ int main(int argc, char* argv[]) {
     brls::Application::registerXMLView("MyFrame", MyFrame::create);
     brls::Application::registerXMLView("GameCard", GameCard::create);
     brls::Application::registerXMLView("GridPage", GridPage::create);
+    brls::Application::registerXMLView("ModCard", ModCard::create);
+    brls::Application::registerXMLView("ModList", ModList::create);
+    brls::Application::registerXMLView("ModDetail", ModDetail::create);
     
     // 初始化主题颜色
     initTheme();

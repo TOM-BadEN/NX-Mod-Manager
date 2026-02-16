@@ -1,0 +1,22 @@
+<!--
+    ModList - Mod 列表组件
+    4 个 ModCard 纵向排列，逐行滚动
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    grow="1"
+    justifyContent="flexStart"
+    paddingLeft="40"
+    paddingRight="40"
+    paddingTop="20"
+    paddingBottom="20">
+
+    <ModCard id="modList/card0" width="auto" margin="8"/>
+    <ModCard id="modList/card1" width="auto" margin="8"/>
+    <ModCard id="modList/card2" width="auto" margin="8"/>
+    <ModCard id="modList/card3" width="auto" margin="8"/>
+
+</brls:Box>

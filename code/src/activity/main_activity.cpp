@@ -7,6 +7,7 @@
 #include "common/config.hpp"
 #include "utils/gameNACP.hpp"
 #include "utils/strSort.hpp"
+#include "activity/modManager.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -45,6 +46,10 @@ void MainActivity::setupGridPage() {
     m_gridPage->setIndexChangeCallback([this](int index, int total) {
         m_frame->setIndexText(std::to_string(index) + " / " + std::to_string(total));
         m_currentPage.store(m_gridPage->getCurrentPage());
+    });
+    m_gridPage->setClickCallback([this](int index) {
+        auto& game = m_games[index];
+        brls::Application::pushActivity(new ModManager(game.dirPath, game.displayName));
     });
 }
 
