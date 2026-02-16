@@ -1,15 +1,15 @@
 /**
- * pinyinHelper - 通用拼音工具实现
+ * pinYinCvt - 通用拼音工具实现
  */
 
-#include "utils/pinyinHelper.hpp"
+#include "utils/pinYinCvt.hpp"
 #include <cpp-pinyin/Pinyin.h>
 #include <cpp-pinyin/G2pglobal.h>
 #include <memory>
 #include <algorithm>
 #include <cctype>
 
-namespace pinyinHelper {
+namespace pinYinCvt {
 
 static std::unique_ptr<Pinyin::Pinyin> s_pinyin;
 
