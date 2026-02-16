@@ -6,6 +6,7 @@
 #include "utils/fsHelper.hpp"
 #include "utils/jsonFile.hpp"
 #include "common/config.hpp"
+#include "utils/strSort.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <cstdio>
@@ -82,6 +83,6 @@ void GameScanner::sortGames(std::vector<GameInfo>& games) {
         // 收藏在前
         if (a.isFavorite != b.isFavorite) return a.isFavorite > b.isFavorite;
         // 按显示名排序
-        return a.displayName < b.displayName;
+        return strSort::compareAZ(a.displayName, b.displayName);
     });
 }
