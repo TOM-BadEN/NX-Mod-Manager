@@ -14,10 +14,14 @@
 #include "view/gameCard.hpp"          // 游戏卡片组件
 #include "view/gridPage.hpp"          // 九宫格翻页组件
 #include "theme/theme.hpp"              // 主题初始化
+#include "utils/pinyinHelper.hpp"       // 拼音工具
 
 int main(int argc, char* argv[]) {
     
     if (!brls::Application::init()) return EXIT_FAILURE;
+
+    // 初始化拼音引擎（加载字典）
+    pinyinHelper::init();
 
     // 创建窗口
     brls::Application::createWindow("NX Mod Manager");
