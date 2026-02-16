@@ -26,7 +26,8 @@ all:
 # 调试编译 + nxlink 发送
 debug:
 	cmake -B $(BUILD_DIR) -G Ninja -DNXLINK=ON
-	ninja -C $(BUILD_DIR) $(PROJECT_NAME).nro && /opt/devkitpro/tools/bin/nxlink -s -a $(SWITCH_IP) $(BUILD_DIR)/$(PROJECT_NAME).nro || (echo -e "\033[31m编译失败\033[0m" && false)
+	ninja -C $(BUILD_DIR) $(PROJECT_NAME).nro && echo -e "\033[32m编译成功！\n软件包体积：$$(du -h $(BUILD_DIR)/$(PROJECT_NAME).nro | cut -f1)\033[0m" || (echo -e "\033[31m编译失败\033[0m" && false)
+	/opt/devkitpro/tools/bin/nxlink -s -a $(SWITCH_IP) $(BUILD_DIR)/$(PROJECT_NAME).nro; true
 
 # 清理
 clean:
