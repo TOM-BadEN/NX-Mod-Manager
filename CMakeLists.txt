@@ -3,10 +3,16 @@
 # ============================================================================
 
 # 要求 CMake 最低版本 3.10
-cmake_minimum_required(VERSION 3.10)  
+cmake_minimum_required(VERSION 3.10)
+# 兼容高版本 CMake，避免旧代码 policy 报错
+cmake_policy(VERSION 3.5)  
 
 # Borealis 库路径
 set(BOREALIS_LIBRARY ${CMAKE_CURRENT_SOURCE_DIR}/library/borealis/library)
+
+# Switch 平台固定配置（纯 Switch 项目，无需从命令行传入）
+set(PLATFORM_SWITCH ON CACHE BOOL "" FORCE)
+set(USE_DEKO3D ON CACHE BOOL "" FORCE)
 
 # 引入 Borealis 通用构建选项
 include(${BOREALIS_LIBRARY}/cmake/commonOption.cmake)
@@ -77,6 +83,11 @@ list(APPEND MAIN_SRC ${BOREALIS_LIBRARY}/lib/platforms/switch/switch_wrapper.c)
 # ============================================================================
 program_target(${PROJECT_NAME} "${MAIN_SRC}")
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20)  # 使用 C++20 标准
+
+# nxlink 调试开关（make debug 时启用）
+if (NXLINK)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE NXLINK)
+endif()
 
 # ============================================================================
 # 构建 Switch .nro 文件

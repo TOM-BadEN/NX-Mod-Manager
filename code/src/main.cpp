@@ -15,10 +15,17 @@
 #include "view/gridPage.hpp"          // 九宫格翻页组件
 #include "theme/theme.hpp"              // 主题初始化
 #include "utils/pinYinCvt.hpp"          // 拼音工具
+#ifdef NXLINK
+#include <switch.h>
+#endif
 
 int main(int argc, char* argv[]) {
     
     if (!brls::Application::init()) return EXIT_FAILURE;
+
+#ifdef NXLINK
+    nxlinkStdio();
+#endif
 
     // 初始化拼音引擎（加载字典）
     pinYinCvt::init();
