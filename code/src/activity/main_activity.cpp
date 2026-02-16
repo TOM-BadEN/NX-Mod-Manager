@@ -6,6 +6,7 @@
 #include "scanner/gameScanner.hpp"
 #include "common/config.hpp"
 #include "utils/gameNACP.hpp"
+#include "utils/strSort.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -20,6 +21,14 @@ void MainActivity::onContentAvailable() {
     }
 
     setupGridPage();
+
+    // X 键：切换排序方向（页面级操作，NACP 加载完成前禁用）
+    m_frame->registerAction("排序：升", brls::BUTTON_X, [this](...) {
+        toggleSort();
+        return true;
+    });
+    m_frame->setActionAvailable(brls::BUTTON_X, false);
+
     startNacpLoader();
 }
 
@@ -37,6 +46,14 @@ void MainActivity::setupGridPage() {
         m_frame->setIndexText(std::to_string(index) + " / " + std::to_string(total));
         m_currentPage.store(m_gridPage->getCurrentPage());
     });
+}
+
+void MainActivity::toggleSort() {
+    m_sortAsc = !m_sortAsc;
+    strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
+    m_gridPage->reloadData();
+    m_frame->updateActionHint(brls::BUTTON_X, m_sortAsc ? "排序：升" : "排序：降");
+    brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
 
 void MainActivity::startNacpLoader() {
@@ -79,9 +96,10 @@ void MainActivity::startNacpLoader() {
             svcSleepThread(1000000ULL);  // 1ms
         }
 
-        // 全部加载完后统一写回 JSON
+        // 全部加载完后统一写回 JSON，并启用排序按钮
         brls::sync([this]() {
             m_jsonCache.save();
+            m_frame->setActionAvailable(brls::BUTTON_X, true);
         });
     });
 }

@@ -213,6 +213,11 @@ void GridPage::updateCard(int globalIndex) {
     if (game.iconId > 0) m_cards[cardIndex]->setIcon(game.iconId);
 }
 
+// 数据源已变更，重新加载当前页（不重置页码）
+void GridPage::reloadData() {
+    refreshPage();
+}
+
 // 工厂函数：用于 XML 注册
 brls::View* GridPage::create() {
     return new GridPage();

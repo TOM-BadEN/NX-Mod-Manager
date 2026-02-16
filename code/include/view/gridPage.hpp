@@ -31,6 +31,9 @@ public:
     // 更新指定全局索引的卡片（如果在当前页则刷新）
     void updateCard(int globalIndex);
     
+    // 数据源已变更，重新加载当前页（不重置页码）
+    void reloadData();
+    
     // 索引更新（通知外部更新 Footer 索引）
     void setIndexChangeCallback(std::function<void(int, int)> callback);
     

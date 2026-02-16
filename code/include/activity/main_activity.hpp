@@ -34,9 +34,11 @@ private:
     JsonFile m_jsonCache;                                       // JSON 缓存（gameInfo.json）
     util::AsyncFurture<void> m_nacpLoader;                      // 异步 NACP 加载任务
     std::atomic<int> m_currentPage{0};                          // 当前页码（后台线程读，主线程写）
+    bool m_sortAsc = true;                                      // 排序方向（true=升序）
 
     void showEmptyHint();                                       // 显示空列表提示
     void setupGridPage();                                       // 初始化九宫格 + 注册回调
     void startNacpLoader();                                     // 启动异步 NACP 加载
+    void toggleSort();                                          // 切换排序方向
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 };
