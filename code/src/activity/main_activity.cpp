@@ -23,11 +23,11 @@ void MainActivity::onContentAvailable() {
     setupGridPage();
 
     // X 键：切换排序方向（页面级操作，NACP 加载完成前禁用）
-    m_frame->registerAction("排序：升", brls::BUTTON_X, [this](...) {
+    m_frame->registerAction("排序：升", brls::BUTTON_Y, [this](...) {
         toggleSort();
         return true;
     });
-    m_frame->setActionAvailable(brls::BUTTON_X, false);
+    m_frame->setActionAvailable(brls::BUTTON_Y, false);
 
     startNacpLoader();
 }
@@ -99,7 +99,7 @@ void MainActivity::startNacpLoader() {
         // 全部加载完后统一写回 JSON，并启用排序按钮
         brls::sync([this]() {
             m_jsonCache.save();
-            m_frame->setActionAvailable(brls::BUTTON_X, true);
+            m_frame->setActionAvailable(brls::BUTTON_Y, true);
         });
     });
 }
