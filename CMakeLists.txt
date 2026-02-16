@@ -53,8 +53,11 @@ list(APPEND APP_PLATFORM_INCLUDE
     ${CMAKE_CURRENT_SOURCE_DIR}/library/yyjson
     ${CMAKE_CURRENT_SOURCE_DIR}/library/libnxtc-add-version/include
     ${CMAKE_CURRENT_SOURCE_DIR}/library/libnxtc-add-version/source
+    ${CMAKE_CURRENT_SOURCE_DIR}/library/cpp-pinyin/include       # 拼音库
+    ${CMAKE_CURRENT_SOURCE_DIR}/library/cpp-pinyin/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/library/cpp-pinyin/src/toneUtil
 )
-file(GLOB_RECURSE LIB_SRC library/yyjson/*.c library/libnxtc-add-version/source/*.c)
+file(GLOB_RECURSE LIB_SRC library/yyjson/*.c library/libnxtc-add-version/source/*.c library/cpp-pinyin/src/*.cpp)
 list(APPEND MAIN_SRC ${LIB_SRC})
 
 # ============================================================================
@@ -91,6 +94,7 @@ endif ()
 add_custom_target(${PROJECT_NAME}.nro DEPENDS ${PROJECT_NAME}
     COMMAND ${NX_NACPTOOL_EXE} --create "${PROJECT_NAME}" "${PROJECT_AUTHOR}" "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_ALTER}" ${PROJECT_NAME}.nacp --titleid=${PROJECT_TITLEID}
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_RESOURCES} ${CMAKE_BINARY_DIR}/resources
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/library/cpp-pinyin/res/dict/mandarin ${CMAKE_BINARY_DIR}/resources/dict/mandarin
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_BINARY_DIR}/resources/font
     COMMAND ${NX_ELF2NRO_EXE} ${PROJECT_NAME}.elf ${PROJECT_NAME}.nro --icon=${PROJECT_ICON} --nacp=${PROJECT_NAME}.nacp --romfsdir=${CMAKE_BINARY_DIR}/resources
 )

@@ -18,12 +18,12 @@ PROJECT_NAME = $(shell grep "^project(" CMakeLists.txt | sed 's/project(\([^)]*\
 # 编译 (deko3d 渲染器，默认)
 all:
 	cmake -B $(BUILD_DIR)_D3D -G Ninja -DPLATFORM_SWITCH=ON -DUSE_DEKO3D=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-	ninja -C $(BUILD_DIR)_D3D $(PROJECT_NAME).nro && echo -e "\033[32m编译成功\033[0m" || (echo -e "\033[31m编译失败\033[0m" && false)
+	ninja -C $(BUILD_DIR)_D3D $(PROJECT_NAME).nro && echo -e "\033[32m编译成功！\n软件包体积：$$(du -h $(BUILD_DIR)_D3D/$(PROJECT_NAME).nro | cut -f1)\033[0m" || (echo -e "\033[31m编译失败\033[0m" && false)
 
 # 编译 (OpenGL 渲染器)
 OGL:
 	cmake -B $(BUILD_DIR)_OGL -G Ninja -DPLATFORM_SWITCH=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-	ninja -C $(BUILD_DIR)_OGL $(PROJECT_NAME).nro && echo -e "\033[32m编译成功\033[0m" || (echo -e "\033[31m编译失败\033[0m" && false)
+	ninja -C $(BUILD_DIR)_OGL $(PROJECT_NAME).nro && echo -e "\033[32m编译成功！\n软件包体积：$$(du -h $(BUILD_DIR)_OGL/$(PROJECT_NAME).nro | cut -f1)\033[0m" || (echo -e "\033[31m编译失败\033[0m" && false)
 
 # 清理
 clean:
