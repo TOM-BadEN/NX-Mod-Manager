@@ -76,5 +76,6 @@ std::vector<GameInfo> GameScanner::scanGames(JsonFile& jsonCache) {
 
     // 首次预排序（支持拼音）
     strSort::sortAZ(games, &GameInfo::displayName, &GameInfo::isFavorite);
+
     return games;
 }

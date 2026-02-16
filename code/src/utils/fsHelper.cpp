@@ -88,48 +88,44 @@ int countItems(const FsPath& path, const std::vector<std::string>& exts) {
         return static_cast<int>(count);
     }
 
-    // 过滤路径：目录全数 + 匹配扩展名的文件
-    s64 dirCount = 0;
-    FsDir dirHandle;
-    Result rc1 = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadDirs | FsDirOpenMode_NoFileSize, &dirHandle);
-    if (R_SUCCEEDED(rc1)) {
-        fsDirGetEntryCount(&dirHandle, &dirCount);
-        fsDirClose(&dirHandle);
-    }
-
-    int fileCount = 0;
-    FsDir fileHandle;
-    Result rc2 = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadFiles | FsDirOpenMode_NoFileSize, &fileHandle);
-    if (R_FAILED(rc2)) return static_cast<int>(dirCount);
+    // 合并路径：一次打开，内存中区分目录和文件
+    FsDir dir;
+    Result rc = fsFsOpenDirectory(fs, path,
+        FsDirOpenMode_ReadDirs | FsDirOpenMode_ReadFiles | FsDirOpenMode_NoFileSize, &dir);
+    if (R_FAILED(rc)) return 0;
 
     s64 total = 0;
-    fsDirGetEntryCount(&fileHandle, &total);
+    fsDirGetEntryCount(&dir, &total);
     if (total <= 0) {
-        fsDirClose(&fileHandle);
-        return static_cast<int>(dirCount);
+        fsDirClose(&dir);
+        return 0;
     }
 
     std::vector<FsDirectoryEntry> entries(total);
     s64 readCount = 0;
-    rc2 = fsDirRead(&fileHandle, &readCount, entries.size(), entries.data());
-    fsDirClose(&fileHandle);
-    if (R_FAILED(rc2)) return static_cast<int>(dirCount);
+    rc = fsDirRead(&dir, &readCount, entries.size(), entries.data());
+    fsDirClose(&dir);
+    if (R_FAILED(rc)) return 0;
 
+    int count = 0;
     for (s64 i = 0; i < readCount; i++) {
+        if (entries[i].type == FsDirEntryType_Dir) { 
+            count++; 
+            continue; 
+        }
+
         std::string name(entries[i].name);
-        std::transform(name.begin(), name.end(), name.begin(),
-            [](unsigned char c) { return std::tolower(c); });
+        std::transform(name.begin(), name.end(), name.begin(),[](unsigned char c) { return std::tolower(c); });
 
         for (const auto& ext : exts) {
-            if (name.size() >= ext.size() &&
-                name.compare(name.size() - ext.size(), ext.size(), ext) == 0) {
-                fileCount++;
+            if (name.size() >= ext.size() && name.compare(name.size() - ext.size(), ext.size(), ext) == 0) {
+                count++;
                 break;
             }
         }
     }
 
-    return static_cast<int>(dirCount) + fileCount;
+    return count;
 }
 
 } // namespace fs
