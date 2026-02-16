@@ -14,7 +14,4 @@
 class GameScanner {
 public:
     std::vector<GameInfo> scanGames(JsonFile& jsonCache);
-
-private:
-    void sortGames(std::vector<GameInfo>& games);
 };

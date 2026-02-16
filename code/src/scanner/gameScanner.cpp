@@ -74,15 +74,7 @@ std::vector<GameInfo> GameScanner::scanGames(JsonFile& jsonCache) {
         games.push_back(std::move(info));
     }
 
-    sortGames(games);
+    // 首次预排序（支持拼音）
+    strSort::sortAZ(games, &GameInfo::displayName, &GameInfo::isFavorite);
     return games;
-}
-
-void GameScanner::sortGames(std::vector<GameInfo>& games) {
-    std::sort(games.begin(), games.end(), [](const GameInfo& a, const GameInfo& b) {
-        // 收藏在前
-        if (a.isFavorite != b.isFavorite) return a.isFavorite > b.isFavorite;
-        // 按显示名排序
-        return strSort::compareAZ(a.displayName, b.displayName);
-    });
 }

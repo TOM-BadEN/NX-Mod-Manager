@@ -15,7 +15,7 @@ static std::unique_ptr<Pinyin::Pinyin> s_pinyin;
 
 void init() {
     if (s_pinyin) return;
-    Pinyin::setDictionaryPath("romfs:/dict/mandarin");
+    Pinyin::setDictionaryPath("romfs:/dict");
     s_pinyin = std::make_unique<Pinyin::Pinyin>();
 }
 
