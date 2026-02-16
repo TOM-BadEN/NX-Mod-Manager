@@ -22,3 +22,6 @@
 [submodule "reference/sphaira"]
 	path = reference/sphaira
 	url = https://github.com/ITotalJustice/sphaira.git
+[submodule "library/cpp-pinyin"]
+	path = library/cpp-pinyin
+	url = https://github.com/wolfgitpr/cpp-pinyin.git
