@@ -15,6 +15,8 @@
 #include "utils/jsonFile.hpp"
 #include "utils/async.hpp"
 
+struct GameMetadata;
+
 class MainActivity : public brls::Activity {
 public:
     CONTENT_FROM_XML_RES("activity/main.xml");
@@ -28,12 +30,13 @@ public:
     void onContentAvailable() override;
 
 private:
-    struct LoadTask { int idx; uint64_t appId; };
+    std::vector<GameInfo> m_games;                              // 游戏列表（第一阶段填充，第二阶段更新）
+    JsonFile m_jsonCache;                                       // JSON 缓存（gameInfo.json）
+    util::AsyncFurture<void> m_nacpLoader;                      // 异步 NACP 加载任务
+    std::atomic<int> m_currentPage{0};                          // 当前页码（后台线程读，主线程写）
 
-    std::vector<GameInfo> m_games;
-    JsonFile m_jsonCache;
-    util::AsyncFurture<void> m_phase2Task;
-    std::atomic<int> m_currentPage{0};
-
-    void startPhase2();
+    void showEmptyHint();                                       // 显示空列表提示
+    void setupGridPage();                                       // 初始化九宫格 + 注册回调
+    void startNacpLoader();                                     // 启动异步 NACP 加载
+    void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 };
