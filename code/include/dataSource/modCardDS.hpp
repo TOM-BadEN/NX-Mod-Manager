@@ -23,7 +23,7 @@ public:
     RecyclingGridItem* cellForRow(RecyclingGrid* grid, size_t index) override {
         auto* card = static_cast<ModCard*>(grid->dequeueReusableCell("ModCard"));
         auto& mod = m_mods[index];
-        card->setMod(mod.displayName, modTypeText(mod.type), mod.isInstalled);
+        card->setMod(mod.displayName, mod.type, mod.isInstalled);
         return card;
     }
 

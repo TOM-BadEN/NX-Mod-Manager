@@ -4,15 +4,16 @@
  */
 
 #include "view/modCard.hpp"
+#include "common/modInfo.hpp"
 
 ModCard::ModCard() {
     inflateFromXMLRes("xml/view/modCard.xml");
 }
 
 void ModCard::setMod(const std::string& name, const std::string& type, bool installed) {
-    m_icon->setImageFromRes("img/defaultIcon.jpg");
+    m_icon->setImageFromRes("img/modType/" + type + ".jpg");
     m_name->setText(name);
-    m_type->setText("类型：" + type);
+    m_type->setText("类型：" + std::string(modTypeText(type)));
     m_status->setText(installed ? "模组已安装" : "模组未安装");
     auto theme = brls::Application::getTheme();
     m_status->setTextColor(theme.getColor(installed ? "app/textHighlight" : "app/textSecondary"));
