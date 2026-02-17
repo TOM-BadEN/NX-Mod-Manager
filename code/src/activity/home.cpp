@@ -73,7 +73,13 @@ void Home::toggleSort() {
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
     m_grid->reloadData();
     auto* cell = m_grid->getGridItemByIndex(0);
-    if (cell) brls::Application::giveFocus(cell);
+    if (cell) {
+        auto style = brls::Application::getStyle();
+        float saved = style["brls/animations/highlight"];
+        style.addMetric("brls/animations/highlight", 1.0f);
+        brls::Application::giveFocus(cell);
+        style.addMetric("brls/animations/highlight", saved);
+    }
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
