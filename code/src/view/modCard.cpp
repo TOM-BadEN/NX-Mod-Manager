@@ -13,19 +13,15 @@ void ModCard::setMod(const std::string& name, const std::string& type, bool inst
     m_icon->setImageFromRes("img/defaultIcon.jpg");
     m_name->setText(name);
     m_type->setText(type);
-    m_status->setText(installed ? "已安装" : "未安装");
-    setVisibility(brls::Visibility::VISIBLE);
-    setFocusable(true);
+    m_status->setText(installed ? "模组已安装" : "模组未安装");
 }
 
-void ModCard::clear() {
+void ModCard::prepareForReuse() {
     m_name->setText("");
     m_type->setText("");
     m_status->setText("");
-    setVisibility(brls::Visibility::INVISIBLE);
-    setFocusable(false);
 }
 
-brls::View* ModCard::create() {
+RecyclingGridItem* ModCard::create() {
     return new ModCard();
 }

@@ -1,6 +1,6 @@
 /**
  * ModInfo - Mod 信息结构体
- * 用于 ModList 显示、ModDetail 展示等模块共享
+ * 用于 Mod 列表（RecyclingGrid）和详情面板等模块共享
  */
 
 #pragma once

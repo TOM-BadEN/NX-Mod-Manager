@@ -5,20 +5,20 @@
 
 #pragma once
 
-#include <borealis.hpp>
+#include "view/recyclingGrid.hpp"
 
-class ModCard : public brls::Box {
+class ModCard : public RecyclingGridItem {
 public:
     ModCard();
     
     // 设置卡片数据
     void setMod(const std::string& name, const std::string& type, bool installed);
     
-    // 清空卡片（隐藏）
-    void clear();
-    
+    // 回收复用时重置内容
+    void prepareForReuse() override;
+
     // 工厂函数
-    static brls::View* create();
+    static RecyclingGridItem* create();
 
 private:
     BRLS_BIND(brls::Image, m_icon, "modCard/icon");
