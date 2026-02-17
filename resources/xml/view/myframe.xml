@@ -63,6 +63,14 @@
                 marginRight="20"
                 fontSize="21.5"/>
 
+            <brls:Label
+                id="my/fps"
+                width="auto"
+                height="auto"
+                marginRight="20"
+                fontSize="21.5"
+                visibility="gone"/>
+
             <brls:Wireless
                 marginRight="20"
                 marginBottom="5"/>

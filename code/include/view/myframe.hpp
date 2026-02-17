@@ -25,6 +25,7 @@ private:
     BRLS_BIND(brls::Box, m_contentBox, "my/content");
     BRLS_BIND(brls::Label, m_titleLabel, "my/title");
     BRLS_BIND(brls::Image, m_iconImage, "my/icon");
+    BRLS_BIND(brls::Label, m_fpsLabel, "my/fps");
     BRLS_BIND(brls::Label, m_timeLabel, "my/time");
     BRLS_BIND(brls::Label, m_batteryPercentLabel, "my/battery_percent");
     BRLS_BIND(brls::Label, m_indexLabel, "my/indexLabel");
@@ -32,6 +33,7 @@ private:
     // 成员变量
     brls::View* m_contentView = nullptr;
     std::string m_timeText;
+    size_t m_lastFps = 0;
     
     void setContentView(brls::View* view);
     void updateFrameItem();

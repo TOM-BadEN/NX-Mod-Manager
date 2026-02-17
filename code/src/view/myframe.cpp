@@ -31,6 +31,11 @@ MyFrame::MyFrame() {
         return true;
     };
     registerAction("返回", brls::BUTTON_B, backAction);
+
+#ifdef NXLINK
+    brls::Application::setFPSStatus(true);
+    m_fpsLabel->setVisibility(brls::Visibility::VISIBLE);
+#endif
 }
 
 // 框架自动调用：处理 <MyFrame> 标签内的子元素
@@ -112,6 +117,14 @@ void MyFrame::updateStatusText() {
             m_batteryPercentLabel->setText(std::to_string(level) + "%");
         }
     }
+
+#ifdef NXLINK
+    size_t fps = brls::Application::getFPS();
+    if (fps != m_lastFps) {
+        m_lastFps = fps;
+        m_fpsLabel->setText("FPS:" + std::to_string(fps));
+    }
+#endif
 }
 
 // 工厂函数：用于 XML 注册，让框架能通过 <MyFrame> 标签创建实例
