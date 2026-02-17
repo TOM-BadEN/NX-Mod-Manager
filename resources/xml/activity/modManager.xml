@@ -13,7 +13,7 @@
         <!-- 左侧：Mod 列表 -->
         <RecyclingGrid
             id="modManager/grid"
-            width="55%"
+            width="50%"
             height="100%"
             spanCount="1"
             itemHeight="110"

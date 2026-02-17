@@ -58,6 +58,8 @@
         width="auto"
         height="auto"
         fontSize="22"
-        marginLeft="16"/>
+        singleLine="true"
+        shrink="0"
+        marginLeft="60"/>
 
 </brls:Box>
