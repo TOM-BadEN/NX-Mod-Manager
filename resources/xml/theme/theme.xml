@@ -3,5 +3,7 @@
     <!-- 卡片背景色 -->
     <color name="app/cardBg" dark="#00000020" light="#0000000A"/>
     <!-- 次要文字颜色（版本、数量等） -->
-    <color name="app/textGray" dark="#808080" light="#666666"/>
+    <color name="app/textSecondary" dark="#808080" light="#666666"/>
+    <!-- 高亮文字颜色（已安装等状态） -->
+    <color name="app/textHighlight" dark="#00FFC8" light="#00CC9E"/>
 </theme>

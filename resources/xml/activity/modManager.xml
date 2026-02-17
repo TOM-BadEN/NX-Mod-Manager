@@ -22,13 +22,22 @@
         <!-- 右侧：Mod 详情（占位，后续补充） -->
         <brls:Box
             id="modManager/detail"
-            width="45%"
-            height="100%"
+            width="auto"
+            height="auto"
+            grow="1"
             axis="column"
+            marginTop="25"
+            marginBottom="25"
+            marginLeft="0"
+            marginRight="40"
             paddingTop="20"
             paddingBottom="20"
             paddingLeft="20"
-            paddingRight="40"/>
+            paddingRight="20"
+            backgroundColor="@theme/app/cardBg"
+            cornerRadius="8"
+            highlightCornerRadius="8"
+            shadowType="generic"/>
 
     </brls:Box>
 </MyFrame>

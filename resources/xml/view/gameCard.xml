@@ -50,7 +50,7 @@
             width="auto"
             height="auto"
             fontSize="19"
-            textColor="@theme/app/textGray" />
+            textColor="@theme/app/textSecondary" />
 
         <!-- mod数量 -->
         <brls:Label
@@ -58,7 +58,7 @@
             width="auto"
             height="auto"
             fontSize="19"
-            textColor="@theme/app/textGray" />
+            textColor="@theme/app/textSecondary" />
 
     </brls:Box>
 

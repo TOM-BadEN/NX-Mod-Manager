@@ -18,7 +18,7 @@
             visibility="gone"
             fontSize="32"
             text="未找到模组，请将模组放入 /mods2 目录"
-            textColor="@theme/app/textGray"
+            textColor="@theme/app/textSecondary"
             horizontalAlign="center"
             verticalAlign="center"/>
     </brls:Box>

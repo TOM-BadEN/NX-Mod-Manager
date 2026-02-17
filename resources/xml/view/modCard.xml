@@ -21,9 +21,10 @@
     <!-- 左侧：mod 图标 -->
     <brls:Image
         id="modCard/icon"
-        width="48"
-        height="48"
-        marginRight="16"
+        width="70"
+        height="70"
+        marginRight="20"
+        cornerRadius="8"
         scalingType="fit"/>
 
     <!-- 中间：名称 + 类型（纵向） -->
@@ -38,16 +39,16 @@
             id="modCard/name"
             width="auto"
             height="auto"
-            fontSize="22"
+            fontSize="24"
             singleLine="true"/>
 
         <brls:Label
             id="modCard/type"
             width="auto"
             height="auto"
-            fontSize="17"
-            textColor="@theme/app/textGray"
-            marginTop="4"/>
+            fontSize="20"
+            textColor="@theme/app/textSecondary"
+            marginTop="12"/>
 
     </brls:Box>
 
@@ -56,7 +57,7 @@
         id="modCard/status"
         width="auto"
         height="auto"
-        fontSize="19"
+        fontSize="22"
         marginLeft="16"/>
 
 </brls:Box>
