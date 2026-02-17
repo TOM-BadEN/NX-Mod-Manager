@@ -8,6 +8,7 @@
 #include "utils/gameNACP.hpp"
 #include "utils/strSort.hpp"
 #include "activity/modManager.hpp"
+#include "view/gameCard.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -42,7 +43,13 @@ void MainActivity::showEmptyHint() {
 }
 
 void MainActivity::setupGridPage() {
-    m_gridPage->setGameList(m_games);
+    m_gridPage->setGrid(3, 3, GameCard::create);
+    m_gridPage->setData(m_games.size(), [this](brls::View* slot, int index) {
+        auto* card = static_cast<GameCard*>(slot);
+        auto& game = m_games[index];
+        card->setGame(game.displayName, game.version, game.modCount);
+        if (game.iconId > 0) card->setIcon(game.iconId);
+    });
     m_gridPage->setIndexChangeCallback([this](int index, int total) {
         m_frame->setIndexText(std::to_string(index) + " / " + std::to_string(total));
         m_currentPage.store(m_gridPage->getCurrentPage());
@@ -138,5 +145,5 @@ void MainActivity::applyMetadata(int gameIdx, const GameMetadata& meta) {
     }
 
     // 刷新卡片
-    m_gridPage->updateCard(gameIdx);
+    m_gridPage->updateSlot(gameIdx);
 }
