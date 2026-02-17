@@ -33,7 +33,7 @@ private:
     std::vector<GameInfo> m_games;                              // 游戏列表（第一阶段填充，第二阶段更新）
     JsonFile m_jsonCache;                                       // JSON 缓存（gameInfo.json）
     util::AsyncFurture<void> m_nacpLoader;                      // 异步 NACP 加载任务
-    std::atomic<int> m_currentPage{0};                          // 当前页码（后台线程读，主线程写）
+    std::atomic<int> m_focusedIndex{0};                          // 当前焦点索引（后台线程读，主线程写）
     bool m_sortAsc = true;                                      // 排序方向（true=升序）
 
     void showEmptyHint();                                       // 显示空列表提示

@@ -43,7 +43,7 @@ void MainActivity::showEmptyHint() {
 }
 
 void MainActivity::setupGridPage() {
-    m_gridPage->setGrid(3, 3, GameCard::create);
+    m_gridPage->setGrid(3, GameCard::create);
     m_gridPage->setData(m_games.size(), [this](brls::View* slot, int index) {
         auto* card = static_cast<GameCard*>(slot);
         auto& game = m_games[index];
@@ -52,7 +52,7 @@ void MainActivity::setupGridPage() {
     });
     m_gridPage->setIndexChangeCallback([this](int index, int total) {
         m_frame->setIndexText(std::to_string(index) + " / " + std::to_string(total));
-        m_currentPage.store(m_gridPage->getCurrentPage());
+        m_focusedIndex.store(index - 1);
     });
     m_gridPage->setClickCallback([this](int index) {
         auto& game = m_games[index];
@@ -79,9 +79,8 @@ void MainActivity::startNacpLoader() {
         GameNACP nacp;
 
         while (!tasks.empty() && !token.stop_requested()) {
-            // 找离当前页最近的任务
-            int page = m_currentPage.load();
-            int center = page * 9 + 4;
+            // 找离当前焦点最近的任务
+            int center = m_focusedIndex.load();
             int bestIdx = 0;
             int bestDist = INT_MAX;
             for (int i = 0; i < static_cast<int>(tasks.size()); i++) {

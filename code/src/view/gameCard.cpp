@@ -9,6 +9,7 @@
 GameCard::GameCard() {
     inflateFromXMLRes("xml/view/gameCard.xml");
     m_icon->setFreeTexture(false);
+    m_defaultIconId = m_icon->getTexture();
 }
 
 // 设置卡片数据
@@ -16,7 +17,6 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
     m_name->setText(name);
     m_version->setText("版本：" + version);
     m_modCount->setText("数量：" + modCount);
-    m_icon->setImageFromRes("img/defaultIcon.jpg");
     setVisibility(brls::Visibility::VISIBLE);
     setFocusable(true);
 }
@@ -32,9 +32,13 @@ void GameCard::clear() {
     m_name->setText("");
     m_version->setText("");
     m_modCount->setText("");
-    m_icon->setImageFromRes("img/defaultIcon.jpg");
+    resetIcon();
     setVisibility(brls::Visibility::INVISIBLE);
     setFocusable(false);
+}
+
+void GameCard::resetIcon() {
+    m_icon->innerSetImage(m_defaultIconId);
 }
 
 // 工厂函数：用于 XML 注册

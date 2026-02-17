@@ -1,167 +1,143 @@
 /**
- * GridPage - 通用网格翻页组件
- * 参数化行列数 + 工厂函数动态创建元素，支持 LB/RB 翻页
- * 零业务依赖，数据绑定通过回调实现
+ * GridPage - 通用滚动网格组件
+ * 继承 ScrollingFrame（CENTERED），支持触屏滑动 + 方向键滚动 + LB/RB 快速翻屏
+ * 导航采用 index±cols 数学保列，零业务依赖，数据绑定通过回调实现
  */
 
 #include "view/gridPage.hpp"
 
-// 构造函数：加载布局 + 注册翻页按键
+// ── GridContentBox ──────────────────────────────────────────────
+
+GridContentBox::GridContentBox(GridPage* grid) : Box(brls::Axis::COLUMN), m_grid(grid) {}
+
+brls::View* GridContentBox::getNextFocus(brls::FocusDirection direction, brls::View* currentView) {
+    return m_grid->getNextCellFocus(direction, currentView);
+}
+
+// ── GridPage ────────────────────────────────────────────────────
+
 GridPage::GridPage() {
-    inflateFromXMLRes("xml/view/gridPage.xml");
+    setScrollingBehavior(brls::ScrollingBehavior::CENTERED);
 
-    registerAction("上一页", brls::BUTTON_LB, [this](...) {
-        prevPage();
+    m_contentBox = new GridContentBox(this);
+    m_contentBox->setGrow(1);
+    m_contentBox->setPadding(10, 40, 10, 40);
+    setContentView(m_contentBox);
+
+    registerAction("上翻", brls::BUTTON_LB, [this](...) {
+        flipScreen(-1);
         return true;
     }, true, true);
 
-    registerAction("下一页", brls::BUTTON_RB, [this](...) {
-        nextPage();
+    registerAction("下翻", brls::BUTTON_RB, [this](...) {
+        flipScreen(1);
         return true;
     }, true, true);
 }
 
-// 初始化网格：动态创建行容器 + 元素
-void GridPage::setGrid(int rows, int cols, std::function<brls::View*()> factory) {
-    m_rows = rows;
+void GridPage::setGrid(int cols, std::function<brls::View*()> factory) {
     m_cols = cols;
-    m_itemsPerPage = rows * cols;
-    m_items.resize(m_itemsPerPage);
-
-    for (int r = 0; r < rows; r++) {
-        auto* row = new brls::Box();
-        row->setAxis(brls::Axis::ROW);
-        row->setGrow(1);
-        row->setJustifyContent(brls::JustifyContent::FLEX_START);
-        row->setAlignItems(brls::AlignItems::CENTER);
-        addView(row);
-
-        for (int c = 0; c < cols; c++) {
-            int i = r * cols + c;
-            m_items[i] = factory();
-            m_items[i]->setWidth(0);
-            m_items[i]->setGrow(1);
-            m_items[i]->setShrink(1);
-            m_items[i]->setMargins(9, 9, 9, 9);
-            row->addView(m_items[i]);
-
-            m_items[i]->getFocusEvent()->subscribe([this, i](brls::View*) {
-                if (m_totalItems > 0) m_indexUpdate.update(m_currentPage * m_itemsPerPage + i, m_totalItems);
-            });
-
-            m_items[i]->registerClickAction([this, i](brls::View*) {
-                int globalIndex = m_currentPage * m_itemsPerPage + i;
-                if (m_clickCallback && isItemVisible(i)) m_clickCallback(globalIndex);
-                return true;
-            });
-
-            m_items[i]->addGestureRecognizer(new brls::TapGestureRecognizer(m_items[i]));
-        }
-    }
+    m_factory = factory;
 }
 
-// 设置数据（合并 setItemCount + setBindCallback + reloadData）
 void GridPage::setData(int count, std::function<void(brls::View*, int)> bind) {
     m_totalItems = count;
     m_bindCallback = bind;
-    int maxPage = getTotalPages() - 1;
-    if (m_currentPage > maxPage) m_currentPage = maxPage;
-    refreshPage();
+    rebuild();
+    bindAll();
+    if (m_totalItems > 0) m_indexUpdate.update(0, m_totalItems);
 }
 
-// 设置数据总数
 void GridPage::setItemCount(int count) {
+    if (count == m_totalItems) return;
+    int savedIndex = findFocusedIndex();
     m_totalItems = count;
-    int maxPage = getTotalPages() - 1;
-    if (m_currentPage > maxPage) m_currentPage = maxPage;
-}
-
-// 下一页
-void GridPage::nextPage() {
-    if (m_currentPage < getTotalPages() - 1) {
-        flipPage(1);
-        fixFocusAfterFlip();
-    } else {
-        int focused = findFocusedIndex();
-        for (int i = m_itemsPerPage - 1; i > focused; i--) {
-            if (isItemVisible(i)) {
-                focusItem(i);
-                return;
-            }
-        }
-        auto* focus = brls::Application::getCurrentFocus();
-        if (focus) focus->shakeHighlight(brls::FocusDirection::RIGHT);
+    rebuild();
+    bindAll();
+    if (m_totalItems > 0) {
+        int restoreIndex = std::clamp(savedIndex, 0, m_totalItems - 1);
+        brls::Application::giveFocus(m_items[restoreIndex]);
     }
 }
 
-// 上一页
-void GridPage::prevPage() {
-    if (m_currentPage > 0) {
-        flipPage(-1);
-        fixFocusAfterFlip();
-    } else {
-        int focused = findFocusedIndex();
-        if (focused > 0 && isItemVisible(0)) {
-            focusItem(0);
-            return;
-        }
-        auto* focus = brls::Application::getCurrentFocus();
-        if (focus) focus->shakeHighlight(brls::FocusDirection::LEFT);
-    }
+void GridPage::reloadData() {
+    bindAll();
 }
 
-int GridPage::getTotalPages() {
-    if (m_totalItems <= 0 || m_itemsPerPage <= 0) return 1;
-    return (m_totalItems + m_itemsPerPage - 1) / m_itemsPerPage;
-}
-
-void GridPage::setIndexChangeCallback(std::function<void(int, int)> callback) {
-    m_indexUpdate.setCallback(callback);
+void GridPage::updateSlot(int globalIndex) {
+    if (globalIndex < 0 || globalIndex >= static_cast<int>(m_items.size())) return;
+    if (m_bindCallback) m_bindCallback(m_items[globalIndex], globalIndex);
 }
 
 void GridPage::setClickCallback(std::function<void(int)> callback) {
     m_clickCallback = callback;
 }
 
-// 刷新当前页元素（只刷数据，不处理焦点）
-void GridPage::refreshPage() {
-    if (!m_bindCallback) return;
-    int startIndex = m_currentPage * m_itemsPerPage;
-    for (int i = 0; i < m_itemsPerPage; i++) {
-        int dataIndex = startIndex + i;
-        if (dataIndex < m_totalItems) {
-            m_items[i]->setVisibility(brls::Visibility::VISIBLE);
-            m_bindCallback(m_items[i], dataIndex);
-        } else {
-            m_items[i]->setVisibility(brls::Visibility::INVISIBLE);
-        }
+void GridPage::setIndexChangeCallback(std::function<void(int, int)> callback) {
+    m_indexUpdate.setCallback(callback);
+    m_indexUpdate.notify();
+}
+
+// 导航：index±cols 保列，index±1 左右移动
+brls::View* GridPage::getNextCellFocus(brls::FocusDirection direction, brls::View* currentView) {
+    int idx = findFocusedIndex();
+    if (idx < 0) return Box::getNextFocus(direction, currentView);
+
+    int target = -1;
+    switch (direction) {
+        case brls::FocusDirection::DOWN:
+            target = idx + m_cols;
+            if (target >= m_totalItems) target = -1;
+            break;
+        case brls::FocusDirection::UP:
+            target = idx - m_cols;
+            if (target < 0) target = -1;
+            break;
+        case brls::FocusDirection::RIGHT:
+            if ((idx + 1) % m_cols != 0 && idx + 1 < m_totalItems) target = idx + 1;
+            break;
+        case brls::FocusDirection::LEFT:
+            if (idx % m_cols != 0) target = idx - 1;
+            break;
     }
+
+    if (target >= 0 && target < m_totalItems) return m_items[target];
+
+    // 边界：交给父级处理（退出网格）
+    brls::View* next = getParentNavigationDecision(this, nullptr, direction);
+    if (!next && hasParent()) next = getParent()->getNextFocus(direction, this);
+    return next;
 }
 
-// 纯翻页：改页码 + 刷新数据
-void GridPage::flipPage(int delta) {
-    m_currentPage += delta;
-    refreshPage();
+// LB/RB 翻屏：临时将动画时长设为 1ms，走框架正常的 giveFocus 路径
+// giveFocus 内部触发 onFocusLost(旧高亮渐隐1ms) + onFocusGained(新高亮渐入1ms) + updateScrolling(滚动动画1ms)
+// updateTickings 的 16ms delta 远大于 1ms，三个动画在渲染前全部完成，消除高亮逃逸闪烁
+void GridPage::flipScreen(int direction) {
+    int idx = findFocusedIndex();
+    if (idx < 0 || m_items.empty()) return;
+    auto& rows = m_contentBox->getChildren();
+    if (rows.empty()) return;
+
+    float rowH = rows[0]->getHeight();
+    int rowsPerScreen = (rowH > 0) ? std::max(1, static_cast<int>(getHeight() / rowH)) : 3;
+    int target = idx + direction * m_cols * rowsPerScreen;
+    target = std::clamp(target, 0, m_totalItems - 1);
+    if (target == idx) return;
+
+    auto style = brls::Application::getStyle();
+    float saved = style["brls/animations/highlight"];
+    style.addMetric("brls/animations/highlight", 1.0f);
+
+    brls::Application::giveFocus(m_items[target]);
+
+    style.addMetric("brls/animations/highlight", saved);
 }
 
-// 焦点转移 + 索引更新
-void GridPage::focusItem(int itemIndex) {
-    brls::Application::giveFocus(m_items[itemIndex]);
-    m_indexUpdate.update(m_currentPage * m_itemsPerPage + itemIndex, m_totalItems);
-}
-
-// 翻页后修正不可见焦点
-void GridPage::fixFocusAfterFlip() {
-    int focused = findFocusedIndex();
-    if (focused >= 0 && !isItemVisible(focused)) focused = findVisibleItem(focused - 1, -1);
-    if (focused >= 0) focusItem(focused);
-}
-
-// 查找当前聚焦的元素索引，沿 parent 链向上匹配，未找到返回 -1
+// 查找当前聚焦元素的全局索引，沿 parent 链匹配 m_items
 int GridPage::findFocusedIndex() {
     auto* v = brls::Application::getCurrentFocus();
     while (v) {
-        for (int i = 0; i < m_itemsPerPage; i++) {
+        for (int i = 0; i < static_cast<int>(m_items.size()); i++) {
             if (v == m_items[i]) return i;
         }
         v = v->getParent();
@@ -169,95 +145,65 @@ int GridPage::findFocusedIndex() {
     return -1;
 }
 
-// 元素是否可见
-bool GridPage::isItemVisible(int index) {
-    if (index < 0 || index >= m_itemsPerPage) return false;
-    return m_items[index]->getVisibility() == brls::Visibility::VISIBLE;
-}
+void GridPage::rebuild() {
+    if (!m_factory || m_cols <= 0) return;
 
-// 从 start 按 step 方向查找最近的可见元素，未找到返回 -1
-int GridPage::findVisibleItem(int start, int step) {
-    for (int i = start; i >= 0 && i < m_itemsPerPage; i += step) {
-        if (isItemVisible(i)) return i;
+    m_contentBox->clearViews();
+    m_items.clear();
+
+    int totalRows = (m_totalItems + m_cols - 1) / m_cols;
+
+    for (int r = 0; r < totalRows; r++) {
+        auto* row = new brls::Box();
+        row->setAxis(brls::Axis::ROW);
+        row->setJustifyContent(brls::JustifyContent::FLEX_START);
+        row->setAlignItems(brls::AlignItems::CENTER);
+        m_contentBox->addView(row);
+
+        int itemsInRow = std::min(m_cols, m_totalItems - r * m_cols);
+
+        for (int c = 0; c < itemsInRow; c++) {
+            int i = r * m_cols + c;
+            auto* item = m_factory();
+            item->setWidth(0);
+            item->setGrow(1);
+            item->setShrink(1);
+            item->setMargins(9, 9, 9, 9);
+            row->addView(item);
+            m_items.push_back(item);
+
+            item->getFocusEvent()->subscribe([this, i](brls::View*) {
+                if (m_totalItems > 0) m_indexUpdate.update(i, m_totalItems);
+            });
+
+            item->registerClickAction([this, i](brls::View*) {
+                if (m_clickCallback) m_clickCallback(i);
+                return true;
+            });
+
+            item->addGestureRecognizer(new brls::TapGestureRecognizer(item));
+        }
+
+        // 最后一行不满时补不可见占位，保持均分布局
+        for (int c = itemsInRow; c < m_cols; c++) {
+            auto* placeholder = m_factory();
+            placeholder->setVisibility(brls::Visibility::INVISIBLE);
+            placeholder->setWidth(0);
+            placeholder->setGrow(1);
+            placeholder->setShrink(1);
+            placeholder->setMargins(9, 9, 9, 9);
+            row->addView(placeholder);
+        }
     }
-    return -1;
 }
 
-// 焦点导航
-brls::View* GridPage::getNextFocus(brls::FocusDirection direction, brls::View* currentView) {
-    int itemIndex = findFocusedIndex();
-    if (itemIndex == -1) return brls::Box::getNextFocus(direction, currentView);
-
-    int row = itemIndex / m_cols;
-    int col = itemIndex % m_cols;
-    int targetIndex = -1;
-
-    switch (direction) {
-        case brls::FocusDirection::RIGHT:
-            if (col < m_cols - 1 && isItemVisible(itemIndex + 1)) targetIndex = itemIndex + 1;
-            else if (row < m_rows - 1 && isItemVisible((row + 1) * m_cols)) targetIndex = (row + 1) * m_cols;
-            else if (m_currentPage < getTotalPages() - 1) {
-                flipPage(1);
-                targetIndex = 0;
-            }
-            break;
-
-        case brls::FocusDirection::LEFT:
-            if (col > 0) targetIndex = itemIndex - 1;
-            else if (row > 0) targetIndex = (row - 1) * m_cols + (m_cols - 1);
-            else if (m_currentPage > 0) {
-                flipPage(-1);
-                targetIndex = m_itemsPerPage - 1;
-            }
-            break;
-
-        case brls::FocusDirection::DOWN:
-            if (row < m_rows - 1 && isItemVisible(itemIndex + m_cols)) targetIndex = itemIndex + m_cols;
-            else if (m_currentPage < getTotalPages() - 1) {
-                flipPage(1);
-                targetIndex = col;
-                if (!isItemVisible(targetIndex)) targetIndex = findVisibleItem(targetIndex - 1, -1);
-            } else {
-                targetIndex = findVisibleItem(itemIndex + 1, 1);
-            }
-            break;
-
-        case brls::FocusDirection::UP:
-            if (row > 0) targetIndex = itemIndex - m_cols;
-            else if (m_currentPage > 0) {
-                flipPage(-1);
-                targetIndex = (m_rows - 1) * m_cols + col;
-            } else {
-                targetIndex = findVisibleItem(itemIndex - 1, -1);
-            }
-            break;
+void GridPage::bindAll() {
+    if (!m_bindCallback) return;
+    for (int i = 0; i < static_cast<int>(m_items.size()); i++) {
+        m_bindCallback(m_items[i], i);
     }
-
-    if (targetIndex >= 0 && isItemVisible(targetIndex)) {
-        m_indexUpdate.update(m_currentPage * m_itemsPerPage + targetIndex, m_totalItems);
-        return m_items[targetIndex];
-    }
-
-    return nullptr;
 }
 
-int GridPage::getCurrentPage() const {
-    return m_currentPage;
-}
-
-// 更新指定全局索引的槽位
-void GridPage::updateSlot(int globalIndex) {
-    int itemIndex = globalIndex - m_currentPage * m_itemsPerPage;
-    if (itemIndex < 0 || itemIndex >= m_itemsPerPage) return;
-    if (m_bindCallback) m_bindCallback(m_items[itemIndex], globalIndex);
-}
-
-// 数据变更后重刷当前页（不重置页码）
-void GridPage::reloadData() {
-    refreshPage();
-}
-
-// 工厂函数：用于 XML 注册
 brls::View* GridPage::create() {
     return new GridPage();
 }

@@ -17,6 +17,9 @@ public:
     // 设置游戏图标（传入 NVG 纹理 ID）
     void setIcon(int iconId);
     
+    // 恢复默认图标（不走缓存计数）
+    void resetIcon();
+    
     // 清空卡片（隐藏，图标恢复默认）
     void clear();
     
@@ -24,6 +27,8 @@ public:
     static brls::View* create();
 
 private:
+    int m_defaultIconId = 0;
+
     // XML 绑定的组件
     BRLS_BIND(brls::Image, m_icon, "gameCard/icon");
     BRLS_BIND(brls::Label, m_name, "gameCard/name");
