@@ -9,6 +9,7 @@
 #include "utils/strSort.hpp"
 #include "activity/modManager.hpp"
 #include "view/gameCard.hpp"
+#include "dataSource/gameCardDS.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -35,7 +36,7 @@ void MainActivity::onContentAvailable() {
 }
 
 void MainActivity::showEmptyHint() {
-    m_gridPage->setVisibility(brls::Visibility::GONE);
+    m_grid->setVisibility(brls::Visibility::GONE);
     m_noModHint->setVisibility(brls::Visibility::VISIBLE);
     m_noModHint->setFocusable(true);
     m_noModHint->setHideHighlight(true);
@@ -43,29 +44,62 @@ void MainActivity::showEmptyHint() {
 }
 
 void MainActivity::setupGridPage() {
-    m_gridPage->setGrid(3, GameCard::create);
-    m_gridPage->setData(m_games.size(), [this](brls::View* slot, int index) {
-        auto* card = static_cast<GameCard*>(slot);
-        auto& game = m_games[index];
-        card->setGame(game.displayName, game.version, game.modCount);
-        if (game.iconId > 0) card->setIcon(game.iconId);
-    });
-    m_gridPage->setIndexChangeCallback([this](int index, int total) {
-        m_frame->setIndexText(std::to_string(index) + " / " + std::to_string(total));
-        m_focusedIndex.store(index - 1);
-    });
-    m_gridPage->setClickCallback([this](int index) {
+    m_grid->setPadding(20, 40, 20, 40);
+    m_grid->registerCell("GameCard", GameCard::create);
+
+    auto* ds = new GameCardDS(m_games, [this](size_t index) {
         auto& game = m_games[index];
         brls::Application::pushActivity(new ModManager(game.dirPath, game.displayName));
     });
+    m_grid->setDataSource(ds);
+
+    m_grid->setFocusChangeCallback([this](size_t index) {
+        m_focusedIndex.store(index);
+        m_frame->setIndexText(std::to_string(index + 1) + " / " + std::to_string(m_games.size()));
+    });
+
+    m_grid->registerAction("上翻", brls::BUTTON_LB, [this](...) {
+        flipScreen(-1);
+        return true;
+    }, true, true);
+    m_grid->registerAction("下翻", brls::BUTTON_RB, [this](...) {
+        flipScreen(1);
+        return true;
+    }, true, true);
 }
 
 void MainActivity::toggleSort() {
     m_sortAsc = !m_sortAsc;
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
-    m_gridPage->reloadData();
+    m_grid->reloadData();
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
+}
+
+void MainActivity::flipScreen(int direction) {
+    auto* focus = brls::Application::getCurrentFocus();
+    if (!focus) return;
+    while (focus && !dynamic_cast<RecyclingGridItem*>(focus))
+        focus = focus->getParent();
+    if (!focus) return;
+    size_t idx = static_cast<RecyclingGridItem*>(focus)->getIndex();
+
+    int rowsPerScreen = std::max(1, static_cast<int>(m_grid->getHeight() / m_grid->estimatedRowHeight));
+    int target = static_cast<int>(idx) + direction * m_grid->spanCount * rowsPerScreen;
+    target = std::clamp(target, 0, static_cast<int>(m_grid->getDataSource()->getItemCount()) - 1);
+    if (static_cast<size_t>(target) == idx) return;
+
+    // selectRowAt 确保 target Cell 在 contentBox 中
+    m_grid->selectRowAt(target, false);
+    auto* cell = m_grid->getGridItemByIndex(target);
+    if (!cell) return;
+
+    // 1ms 动画 trick 防高亮闪烁
+    auto style = brls::Application::getStyle();
+    float saved = style["brls/animations/highlight"];
+    style.addMetric("brls/animations/highlight", 1.0f);
+    brls::Application::giveFocus(cell);
+    style.addMetric("brls/animations/highlight", saved);
 }
 
 void MainActivity::startNacpLoader() {
@@ -143,6 +177,11 @@ void MainActivity::applyMetadata(int gameIdx, const GameMetadata& meta) {
         }
     }
 
-    // 刷新卡片
-    m_gridPage->updateSlot(gameIdx);
+    // 刷新可见 Cell（不可见的下次 cellForRow 自然绑定）
+    auto* cell = m_grid->getGridItemByIndex(gameIdx);
+    if (cell) {
+        auto* card = static_cast<GameCard*>(cell);
+        card->setGame(m_games[gameIdx].displayName, m_games[gameIdx].version, m_games[gameIdx].modCount);
+        if (m_games[gameIdx].iconId > 0) card->setIcon(m_games[gameIdx].iconId);
+    }
 }

@@ -17,8 +17,6 @@ void GameCard::setGame(const std::string& name, const std::string& version, cons
     m_name->setText(name);
     m_version->setText("版本：" + version);
     m_modCount->setText("数量：" + modCount);
-    setVisibility(brls::Visibility::VISIBLE);
-    setFocusable(true);
 }
 
 // 设置游戏图标（传入 NVG 纹理 ID）
@@ -27,21 +25,17 @@ void GameCard::setIcon(int iconId) {
     m_icon->innerSetImage(iconId);
 }                                 
 
-// 清空卡片（隐藏，图标恢复默认）
-void GameCard::clear() {
-    m_name->setText("");
-    m_version->setText("");
-    m_modCount->setText("");
-    resetIcon();
-    setVisibility(brls::Visibility::INVISIBLE);
-    setFocusable(false);
-}
-
 void GameCard::resetIcon() {
     m_icon->innerSetImage(m_defaultIconId);
 }
 
-// 工厂函数：用于 XML 注册
-brls::View* GameCard::create() {
+void GameCard::prepareForReuse() {
+    resetIcon();
+    m_name->setText("");
+    m_version->setText("");
+    m_modCount->setText("");
+}
+
+RecyclingGridItem* GameCard::create() {
     return new GameCard();
 }

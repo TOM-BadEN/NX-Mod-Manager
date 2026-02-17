@@ -6,8 +6,9 @@
 #pragma once
 
 #include <borealis.hpp>
+#include "view/recyclingGrid.hpp"
 
-class GameCard : public brls::Box {
+class GameCard : public RecyclingGridItem {
 public:
     GameCard();
     
@@ -19,12 +20,12 @@ public:
     
     // 恢复默认图标（不走缓存计数）
     void resetIcon();
-    
-    // 清空卡片（隐藏，图标恢复默认）
-    void clear();
+
+    // 回收时重置状态
+    void prepareForReuse() override;
     
     // 工厂函数
-    static brls::View* create();
+    static RecyclingGridItem* create();
 
 private:
     int m_defaultIconId = 0;

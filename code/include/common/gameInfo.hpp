@@ -1,6 +1,6 @@
 /**
  * GameInfo - 游戏信息结构体
- * 用于扫描阶段填充、GridPage 显示、JSON 读写等多个模块共享
+ * 用于扫描阶段填充、RecyclingGrid 显示、JSON 读写等多个模块共享
  */
 
 #pragma once

@@ -12,7 +12,7 @@
 #include "activity/main_activity.hpp" // 我们的主页面
 #include "view/myframe.hpp"           // 自定义应用框架
 #include "view/gameCard.hpp"          // 游戏卡片组件
-#include "view/gridPage.hpp"          // 九宫格翻页组件
+#include "view/recyclingGrid.hpp"     // 回收网格组件
 #include "view/modCard.hpp"           // Mod 卡片组件
 #include "view/modList.hpp"           // Mod 列表组件
 #include "view/modDetail.hpp"         // Mod 详情组件（占位）
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
     // 注册自定义视图组件
     brls::Application::registerXMLView("MyFrame", MyFrame::create);
     brls::Application::registerXMLView("GameCard", GameCard::create);
-    brls::Application::registerXMLView("GridPage", GridPage::create);
+    brls::Application::registerXMLView("RecyclingGrid", RecyclingGrid::create);
     brls::Application::registerXMLView("ModCard", ModCard::create);
     brls::Application::registerXMLView("ModList", ModList::create);
     brls::Application::registerXMLView("ModDetail", ModDetail::create);

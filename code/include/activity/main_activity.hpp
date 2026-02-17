@@ -9,7 +9,7 @@
 #include <borealis.hpp>
 #include <vector>
 #include <atomic>
-#include "view/gridPage.hpp"
+#include "view/recyclingGrid.hpp"
 #include "view/myframe.hpp"
 #include "common/gameInfo.hpp"
 #include "utils/jsonFile.hpp"
@@ -23,7 +23,7 @@ public:
     
     // 绑定组件
     BRLS_BIND(MyFrame, m_frame, "main/frame");
-    BRLS_BIND(GridPage, m_gridPage, "main/gridPage");
+    BRLS_BIND(RecyclingGrid, m_grid, "main/grid");
     BRLS_BIND(brls::Label, m_noModHint, "main/noModHint");
     
     // XML 加载完成后调用
@@ -37,8 +37,9 @@ private:
     bool m_sortAsc = true;                                      // 排序方向（true=升序）
 
     void showEmptyHint();                                       // 显示空列表提示
-    void setupGridPage();                                       // 初始化九宫格 + 注册回调
+    void setupGridPage();                                       // 初始化网格 + 注册回调
     void startNacpLoader();                                     // 启动异步 NACP 加载
     void toggleSort();                                          // 切换排序方向
+    void flipScreen(int direction);                             // LB/RB 翻页
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 };
