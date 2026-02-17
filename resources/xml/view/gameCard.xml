@@ -26,7 +26,7 @@
         marginRight="20"
         scalingType="fit"
         cornerRadius="8"
-        image="@res/img/defaultIcon.jpg" />
+        image="@res/img/game/defaultIcon.jpg" />
 
     <!-- 右侧：文本区域 -->
     <brls:Box
