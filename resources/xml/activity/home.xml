@@ -2,17 +2,17 @@
     主页面布局文件
 -->
 
-<MyFrame id="main/frame">
-    <brls:Box id="main/content" width="100%" height="100%" title="模组管理器">
+<MyFrame id="home/frame">
+    <brls:Box id="home/content" width="100%" height="100%" title="模组管理器">
         <RecyclingGrid
-            id="main/grid"
+            id="home/grid"
             width="100%"
             height="100%"
             spanCount="3"
             itemHeight="160"
             itemSpace="18"/>
         <brls:Label
-            id="main/noModHint"
+            id="home/noModHint"
             width="100%"
             height="100%"
             visibility="gone"

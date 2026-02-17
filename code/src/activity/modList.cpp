@@ -1,18 +1,18 @@
 /**
- * ModManager - Mod 管理页面
+ * ModList - Mod 列表页面
  * 左侧 RecyclingGrid（单列 Mod 列表） + 右侧 Mod 详情
  */
 
-#include "activity/modManager.hpp"
+#include "activity/modList.hpp"
 #include "scanner/modScanner.hpp"
 #include "view/modCard.hpp"
 #include "dataSource/modCardDS.hpp"
 #include "utils/strSort.hpp"
 
-ModManager::ModManager(const std::string& dirPath, const std::string& gameName)
+ModList::ModList(const std::string& dirPath, const std::string& gameName)
     : m_dirPath(dirPath), m_gameName(gameName) {}
 
-void ModManager::onContentAvailable() {
+void ModList::onContentAvailable() {
     m_frame->setTitle(m_gameName);
     m_mods = ModScanner().scanMods(m_dirPath);
 
@@ -24,7 +24,7 @@ void ModManager::onContentAvailable() {
     });
 }
 
-void ModManager::setupModGrid() {
+void ModList::setupModGrid() {
     m_grid->setPadding(25, 0, 20, 40);
     m_grid->setScrollingIndicatorVisible(false);
     m_grid->registerCell("ModCard", ModCard::create);
@@ -48,7 +48,7 @@ void ModManager::setupModGrid() {
     }, true, true);
 }
 
-void ModManager::toggleSort() {
+void ModList::toggleSort() {
     m_sortAsc = !m_sortAsc;
     strSort::sortAZ(m_mods, &ModInfo::displayName, &ModInfo::isInstalled, &ModInfo::type, m_sortAsc);
     m_grid->reloadData();
@@ -58,7 +58,7 @@ void ModManager::toggleSort() {
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
 
-void ModManager::flipScreen(int direction) {
+void ModList::flipScreen(int direction) {
     auto* focus = brls::Application::getCurrentFocus();
     if (!focus) return;
     while (focus && !dynamic_cast<RecyclingGridItem*>(focus))

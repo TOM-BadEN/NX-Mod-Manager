@@ -1,18 +1,18 @@
 <!--
-    Mod 管理页面布局
+    Mod 列表页面布局
     左侧 RecyclingGrid（单列 Mod 列表） + 右侧 Mod 详情
 -->
 
-<MyFrame id="modManager/frame">
+<MyFrame id="modList/frame">
     <brls:Box
-        id="modManager/content"
+        id="modList/content"
         width="100%"
         height="100%"
         axis="row">
 
         <!-- 左侧：Mod 列表 -->
         <RecyclingGrid
-            id="modManager/grid"
+            id="modList/grid"
             width="50%"
             height="100%"
             spanCount="1"
@@ -21,7 +21,7 @@
 
         <!-- 右侧：Mod 详情（占位，后续补充） -->
         <brls:Box
-            id="modManager/detail"
+            id="modList/detail"
             width="auto"
             height="auto"
             grow="1"

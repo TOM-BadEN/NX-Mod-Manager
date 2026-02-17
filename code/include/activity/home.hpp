@@ -1,5 +1,5 @@
 /**
- * 主页面（倒计时页面）头文件
+ * Home - 主页面
  * 
  * Activity 是 Borealis 的页面容器，每个页面对应一个 Activity。
  * 页面的 UI 布局定义在 XML 文件中，通过 CONTENT_FROM_XML_RES 宏绑定。
@@ -17,14 +17,14 @@
 
 struct GameMetadata;
 
-class MainActivity : public brls::Activity {
+class Home : public brls::Activity {
 public:
-    CONTENT_FROM_XML_RES("activity/main.xml");
+    CONTENT_FROM_XML_RES("activity/home.xml");
     
     // 绑定组件
-    BRLS_BIND(MyFrame, m_frame, "main/frame");
-    BRLS_BIND(RecyclingGrid, m_grid, "main/grid");
-    BRLS_BIND(brls::Label, m_noModHint, "main/noModHint");
+    BRLS_BIND(MyFrame, m_frame, "home/frame");
+    BRLS_BIND(RecyclingGrid, m_grid, "home/grid");
+    BRLS_BIND(brls::Label, m_noModHint, "home/noModHint");
     
     // XML 加载完成后调用
     void onContentAvailable() override;

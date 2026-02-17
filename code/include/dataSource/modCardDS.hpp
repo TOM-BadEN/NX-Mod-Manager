@@ -36,6 +36,6 @@ public:
     void clearData() override {}
 
 private:
-    std::vector<ModInfo>& m_mods;                    // mod 列表引用（与 ModManager 共享）
+    std::vector<ModInfo>& m_mods;                    // mod 列表引用（与 ModList 共享）
     std::function<void(size_t)> m_clickCallback;     // 卡片点击回调
 };

@@ -9,7 +9,7 @@
  */
 
 #include <borealis.hpp>              // Borealis 框架主头文件
-#include "activity/main_activity.hpp" // 我们的主页面
+#include "activity/home.hpp"          // 主页面
 #include "view/myframe.hpp"           // 自定义应用框架
 #include "view/gameCard.hpp"          // 游戏卡片组件
 #include "view/recyclingGrid.hpp"     // 回收网格组件
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
     brls::Application::setGlobalQuit(false);
     
     // 推送主页面
-    brls::Application::pushActivity(new MainActivity());
+    brls::Application::pushActivity(new Home());
 
     // 主循环
     while (brls::Application::mainLoop());

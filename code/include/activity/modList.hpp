@@ -1,5 +1,5 @@
 /**
- * ModManager - Mod 管理页面
+ * ModList - Mod 列表页面
  * 左侧 RecyclingGrid（单列 Mod 列表） + 右侧 Mod 详情
  */
 
@@ -11,15 +11,15 @@
 #include "view/recyclingGrid.hpp"
 #include "common/modInfo.hpp"
 
-class ModManager : public brls::Activity {
+class ModList : public brls::Activity {
 public:
-    ModManager(const std::string& dirPath, const std::string& gameName);
+    ModList(const std::string& dirPath, const std::string& gameName);
 
-    CONTENT_FROM_XML_RES("activity/modManager.xml");
+    CONTENT_FROM_XML_RES("activity/modList.xml");
 
-    BRLS_BIND(MyFrame, m_frame, "modManager/frame");
-    BRLS_BIND(RecyclingGrid, m_grid, "modManager/grid");
-    BRLS_BIND(brls::Box, m_detail, "modManager/detail");
+    BRLS_BIND(MyFrame, m_frame, "modList/frame");
+    BRLS_BIND(RecyclingGrid, m_grid, "modList/grid");
+    BRLS_BIND(brls::Box, m_detail, "modList/detail");
 
     void onContentAvailable() override;
 

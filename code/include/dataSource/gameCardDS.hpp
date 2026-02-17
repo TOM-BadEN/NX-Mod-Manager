@@ -40,6 +40,6 @@ public:
     void clearData() override {}
 
 private:
-    std::vector<GameInfo>& m_games;                  // 游戏列表引用（与 MainActivity 共享）
+    std::vector<GameInfo>& m_games;                  // 游戏列表引用（与 Home 共享）
     std::function<void(size_t)> m_clickCallback;     // 卡片点击回调
 };

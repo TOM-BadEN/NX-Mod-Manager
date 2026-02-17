@@ -2,18 +2,18 @@
  * 主页面实现文件
  */
 
-#include "activity/main_activity.hpp"
+#include "activity/home.hpp"
 #include "scanner/gameScanner.hpp"
 #include "common/config.hpp"
 #include "utils/gameNACP.hpp"
 #include "utils/strSort.hpp"
-#include "activity/modManager.hpp"
+#include "activity/modList.hpp"
 #include "view/gameCard.hpp"
 #include "dataSource/gameCardDS.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
-void MainActivity::onContentAvailable() {
+void Home::onContentAvailable() {
     m_jsonCache.load(config::gameInfoPath);
     m_games = GameScanner().scanGames(m_jsonCache);
 
@@ -35,7 +35,7 @@ void MainActivity::onContentAvailable() {
     startNacpLoader();
 }
 
-void MainActivity::showEmptyHint() {
+void Home::showEmptyHint() {
     m_grid->setVisibility(brls::Visibility::GONE);
     m_noModHint->setVisibility(brls::Visibility::VISIBLE);
     m_noModHint->setFocusable(true);
@@ -43,13 +43,13 @@ void MainActivity::showEmptyHint() {
     brls::Application::giveFocus(m_noModHint);
 }
 
-void MainActivity::setupGridPage() {
+void Home::setupGridPage() {
     m_grid->setPadding(20, 40, 20, 40);
     m_grid->registerCell("GameCard", GameCard::create);
 
     auto* ds = new GameCardDS(m_games, [this](size_t index) {
         auto& game = m_games[index];
-        brls::Application::pushActivity(new ModManager(game.dirPath, game.displayName));
+        brls::Application::pushActivity(new ModList(game.dirPath, game.displayName));
     });
     m_grid->setDataSource(ds);
 
@@ -68,7 +68,7 @@ void MainActivity::setupGridPage() {
     }, true, true);
 }
 
-void MainActivity::toggleSort() {
+void Home::toggleSort() {
     m_sortAsc = !m_sortAsc;
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
     m_grid->reloadData();
@@ -78,7 +78,7 @@ void MainActivity::toggleSort() {
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
 
-void MainActivity::flipScreen(int direction) {
+void Home::flipScreen(int direction) {
     auto* focus = brls::Application::getCurrentFocus();
     if (!focus) return;
     while (focus && !dynamic_cast<RecyclingGridItem*>(focus))
@@ -108,7 +108,7 @@ void MainActivity::flipScreen(int direction) {
     style.addMetric("brls/animations/highlight", saved);
 }
 
-void MainActivity::startNacpLoader() {
+void Home::startNacpLoader() {
     m_nacpLoader = util::async([this](std::stop_token token) {
         // 构建任务列表（存索引，appId 通过 m_games 取）
         std::vector<int> tasks;
@@ -155,7 +155,7 @@ void MainActivity::startNacpLoader() {
     });
 }
 
-void MainActivity::applyMetadata(int gameIdx, const GameMetadata& meta) {
+void Home::applyMetadata(int gameIdx, const GameMetadata& meta) {
     char appIdKey[17];
     std::snprintf(appIdKey, sizeof(appIdKey), "%016lX", m_games[gameIdx].appId);
 
