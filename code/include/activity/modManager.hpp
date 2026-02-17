@@ -29,4 +29,5 @@ private:
     std::vector<ModInfo> m_mods;            // mod 列表数据
 
     void setupModGrid();                    // 初始化网格（注册 Cell、绑定数据源、设置回调）
+    void flipScreen(int direction);            // LB/RB 翻页
 };

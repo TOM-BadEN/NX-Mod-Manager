@@ -87,7 +87,11 @@ void MainActivity::flipScreen(int direction) {
     int rowsPerScreen = std::max(1, static_cast<int>(m_grid->getHeight() / m_grid->estimatedRowHeight));
     int target = static_cast<int>(idx) + direction * m_grid->spanCount * rowsPerScreen;
     target = std::clamp(target, 0, static_cast<int>(m_grid->getDataSource()->getItemCount()) - 1);
-    if (static_cast<size_t>(target) == idx) return;
+    if (static_cast<size_t>(target) == idx) {
+        auto* cur = brls::Application::getCurrentFocus();
+        if (cur) cur->shakeHighlight(direction > 0 ? brls::FocusDirection::DOWN : brls::FocusDirection::UP);
+        return;
+    }
 
     // selectRowAt 确保 target Cell 在 contentBox 中
     m_grid->selectRowAt(target, false);

@@ -42,4 +42,42 @@ void ModManager::setupModGrid() {
     m_grid->setFocusChangeCallback([this](size_t index) {
         m_frame->setIndexText(std::to_string(index + 1) + " / " + std::to_string(m_mods.size()));
     });
+
+    m_grid->registerAction("上翻", brls::BUTTON_LB, [this](...) {
+        flipScreen(-1);
+        return true;
+    }, true, true);
+    m_grid->registerAction("下翻", brls::BUTTON_RB, [this](...) {
+        flipScreen(1);
+        return true;
+    }, true, true);
+}
+
+void ModManager::flipScreen(int direction) {
+    auto* focus = brls::Application::getCurrentFocus();
+    if (!focus) return;
+    while (focus && !dynamic_cast<RecyclingGridItem*>(focus))
+        focus = focus->getParent();
+    if (!focus) return;
+    size_t idx = static_cast<RecyclingGridItem*>(focus)->getIndex();
+
+    int rowsPerScreen = std::max(1, static_cast<int>(m_grid->getHeight() / (m_grid->estimatedRowHeight + m_grid->estimatedRowSpace)));
+    int target = static_cast<int>(idx) + direction * m_grid->spanCount * rowsPerScreen;
+    target = std::clamp(target, 0, static_cast<int>(m_grid->getDataSource()->getItemCount()) - 1);
+
+    if (static_cast<size_t>(target) == idx) {
+        auto* cur = brls::Application::getCurrentFocus();
+        if (cur) cur->shakeHighlight(direction > 0 ? brls::FocusDirection::DOWN : brls::FocusDirection::UP);
+        return;
+    }
+
+    m_grid->selectRowAt(target, false);
+    auto* cell = m_grid->getGridItemByIndex(target);
+    if (!cell) return;
+
+    auto style = brls::Application::getStyle();
+    float saved = style["brls/animations/highlight"];
+    style.addMetric("brls/animations/highlight", 1.0f);
+    brls::Application::giveFocus(cell);
+    style.addMetric("brls/animations/highlight", saved);
 }
