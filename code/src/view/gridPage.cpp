@@ -54,6 +54,8 @@ void GridPage::setGrid(int rows, int cols, std::function<brls::View*()> factory)
                 if (m_clickCallback && isItemVisible(i)) m_clickCallback(globalIndex);
                 return true;
             });
+
+            m_items[i]->addGestureRecognizer(new brls::TapGestureRecognizer(m_items[i]));
         }
     }
 }
