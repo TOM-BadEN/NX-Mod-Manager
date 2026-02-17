@@ -53,4 +53,29 @@ namespace strSort {
         });
     }
 
+    // 三级排序：bool 分组 + 可比较分组 + 拼音
+    // group1 为 true 的排在前面，group2 相同的聚集，组内按拼音排序
+    // 示例: strSort::sortAZ(mods, &ModInfo::displayName, &ModInfo::isInstalled, &ModInfo::type);
+    template<typename T, typename GetName, typename Group1, typename Group2,
+             typename = std::enable_if_t<!std::is_same_v<std::decay_t<Group2>, bool>>>
+    void sortAZ(std::vector<T>& items, GetName getName, Group1 group1, Group2 group2,
+                bool ascending = true) {
+        std::unordered_map<std::string, std::string> cache;
+        for (const auto& item : items) {
+            const auto& name = std::invoke(getName, item);
+            cache.emplace(name, pinYinCvt::getSortKey(name));
+        }
+        std::sort(items.begin(), items.end(), [&](const T& a, const T& b) {
+            auto ga = std::invoke(group1, a);
+            auto gb = std::invoke(group1, b);
+            if (ga != gb) return ga > gb;
+            auto sa = std::invoke(group2, a);
+            auto sb = std::invoke(group2, b);
+            if (sa != sb) return sa < sb;
+            return ascending
+                ? cache[std::invoke(getName, a)] < cache[std::invoke(getName, b)]
+                : cache[std::invoke(getName, a)] > cache[std::invoke(getName, b)];
+        });
+    }
+
 }

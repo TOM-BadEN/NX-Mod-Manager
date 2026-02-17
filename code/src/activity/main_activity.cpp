@@ -72,6 +72,8 @@ void MainActivity::toggleSort() {
     m_sortAsc = !m_sortAsc;
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
     m_grid->reloadData();
+    auto* cell = m_grid->getGridItemByIndex(0);
+    if (cell) brls::Application::giveFocus(cell);
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
