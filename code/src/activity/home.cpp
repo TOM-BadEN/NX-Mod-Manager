@@ -49,7 +49,7 @@ void Home::setupGridPage() {
 
     auto* ds = new GameCardDS(m_games, [this](size_t index) {
         auto& game = m_games[index];
-        brls::Application::pushActivity(new ModList(game.dirPath, game.displayName));
+        brls::Application::pushActivity(new ModList(game.dirPath, game.displayName, game.appId));
     });
     m_grid->setDataSource(ds);
 

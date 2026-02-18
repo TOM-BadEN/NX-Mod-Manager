@@ -29,42 +29,30 @@ std::vector<ModInfo> ModScanner::scanMods(const std::string& tidPath) {
         // 元数据
         info.type        = json.getString(dirName, "type", "other");
         info.description = json.getString(dirName, "description");
-        info.modVersion  = json.getString(dirName, "modVersion", "版本未知");
+        info.modVersion  = json.getString(dirName, "modVersion");
         info.author      = json.getString(dirName, "author");
-        info.size        = json.getString(dirName, "size", "...");
+        info.size        = json.getString(dirName, "size");
         info.isInstalled = json.getBool(dirName, "installed", false);
         info.isZip       = false;
         info.path        = tidPath + "/" + dirName;
 
-        // gameVersion 有特殊值处理
-        std::string gameVer = json.getString(dirName, "gameVersion","适配版本未知");
-        if (gameVer == "0") info.gameVersion = "游戏版本通用";
-        else info.gameVersion = gameVer;
+        info.gameVersion = json.getString(dirName, "gameVersion");
 
         mods.push_back(std::move(info));
     }
 
     // ===== 测试用虚拟数据（上线前删除）=====
-    mods.push_back({"60FPS 解锁补丁",     "performance",  "解锁游戏帧率至60FPS",         "1.0", "1.2.0", "FPSMaster",  "1.2 MB", true,  false, ""});
-    mods.push_back({"4K 高清材质包",       "graphics",     "替换所有材质为4K分辨率",       "2.1", "1.2.0", "HDPack",     "256 MB", false, true,  ""});
-    mods.push_back({"完整中文汉化",        "translation",  "全文本中文化，含剧情对话",     "3.0", "1.1.0", "CNTeam",     "18 MB",  true,  false, ""});
-    mods.push_back({"全角色解锁",          "feature",      "开局解锁全部可玩角色",         "1.5", "1.2.0", "UnlockAll",  "0.5 MB", false, false, ""});
-    mods.push_back({"极简 HUD 界面",       "ui",           "精简界面元素，沉浸体验",       "1.0", "1.0.0", "CleanUI",    "3.2 MB", true,  false, ""});
-    mods.push_back({"原声音乐替换",        "music",        "替换BGM为管弦乐重编版",        "1.2", "1.2.0", "OST_Remix",  "89 MB",  false, true,  ""});
-    mods.push_back({"暗黑骑士皮肤",        "skin",         "主角全套暗黑风格外观替换",     "2.0", "1.1.0", "SkinMod",    "45 MB",  true,  false, ""});
-    mods.push_back({"无限金币金手指",      "cheat",        "金币数量锁定为999999",         "1.0", "1.2.0", "CheatKing",  "0.1 MB", false, false, ""});
-    mods.push_back({"动态分辨率优化",      "performance",  "根据场景自动调节分辨率",       "1.3", "1.2.0", "DynRes",     "0.8 MB", false, false, ""});
-    mods.push_back({"光影增强包",          "graphics",     "增强全局光照和阴影质量",       "1.5", "1.1.0", "LightFX",    "128 MB", true,  false, ""});
-    mods.push_back({"日语语音包",          "translation",  "替换语音为日语原版配音",       "2.0", "1.2.0", "JPVoice",    "340 MB", false, false, ""});
-    mods.push_back({"新游戏+模式",         "feature",      "通关后解锁二周目增强模式",     "1.0", "1.2.0", "NGPlus",     "2.1 MB", true,  false, ""});
-    mods.push_back({"复古像素风 UI",       "ui",           "将界面替换为像素复古风格",     "1.1", "1.0.0", "PixelUI",    "5.6 MB", false, false, ""});
-    mods.push_back({"战斗音乐增强",        "music",        "高燃战斗BGM替换合集",          "1.0", "1.1.0", "BattleBGM",  "67 MB",  true,  false, ""});
-    mods.push_back({"夏日泳装皮肤",        "skin",         "全角色夏日泳装外观包",         "1.0", "1.2.0", "SummerSkin", "38 MB",  false, false, ""});
-    mods.push_back({"经验值翻倍",          "cheat",        "战斗获取经验值翻倍",           "1.0", "1.2.0", "EXPx2",      "0.1 MB", true,  false, ""});
-    mods.push_back({"帧率稳定补丁",        "performance",  "减少掉帧和卡顿现象",          "2.0", "1.1.0", "StableFPS",  "0.5 MB", true,  false, ""});
-    mods.push_back({"HDR 色彩增强",        "graphics",     "启用HDR色彩映射增强画面",      "1.0", "1.2.0", "HDRColor",   "15 MB",  false, false, ""});
-    mods.push_back({"繁体中文补丁",        "translation",  "简体转繁体全文本替换",         "1.2", "1.2.0", "TWChinese",  "8 MB",   true,  false, ""});
-    mods.push_back({"快速旅行扩展",        "feature",      "增加更多快速旅行传送点",       "1.0", "1.1.0", "FastTravel",  "1.5 MB", false, false, ""});
+    mods.push_back({"光影增强包",          "graphics",     "全面增强游戏的全局光照和阴影渲染质量，支持动态光源和环境光遮蔽效果",       "1.5", "1.1.0", "LightFX",    "128 MB", true,  false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"日语语音包",          "translation",  "将全部角色语音替换为日语原版配音，包含战斗语音、剧情对话和系统提示音",       "2.0", "1.2.0", "JPVoice",    "340 MB", false, false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"新游戏+模式",         "feature",      "通关后解锁二周目增强模式，保留全部装备和技能，敌人强度提升至两倍",     "1.0", "1.2.0", "NGPlus",     "2.1 MB", true,  false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"复古像素风 UI",       "ui",           "将全部菜单界面和HUD替换为复古像素艺术风格，包含自定义字体和图标",     "1.1", "1.0.0", "PixelUI",    "5.6 MB", false, false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"战斗音乐增强",        "music",        "替换全部战斗场景的背景音乐为高燃原创配乐，支持Boss战和普通战斗分别配置",          "1.0", "1.1.0", "BattleBGM",  "67 MB",  true,  false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"夏日泳装皮肤",        "skin",         "包含全部可玩角色的夏日泳装外观替换，附带新的待机动作和特效",         "1.0", "1.2.0", "SummerSkin", "38 MB",  false, false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"经验值翻倍",          "cheat",        "战斗结束后获取的经验值和金币数量翻倍，适合快速练级和后期刷装备",           "1.0", "1.2.0", "EXPx2",      "0.1 MB", true,  false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"帧率稳定补丁",        "performance",  "优化游戏引擎的渲染管线，大幅减少场景切换和战斗中的掉帧卡顿现象",          "2.0", "1.1.0", "StableFPS",  "0.5 MB", true,  false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"HDR 色彩增强",        "graphics",     "启用HDR色彩映射技术增强画面表现力，提升暗部细节和高光对比度",      "1.0", "1.2.0", "HDRColor",   "15 MB",  false, false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"繁体中文补丁",        "translation",  "将游戏内全部简体中文文本转换为繁体中文，包含菜单、对话和系统提示",         "1.2", "1.2.0", "TWChinese",  "8 MB",   true,  false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
+    mods.push_back({"快速旅行扩展",        "feature",      "在地图各区域增加更多快速旅行传送点，减少跑图时间提升探索效率",       "1.0", "1.1.0", "FastTravel",  "1.5 MB", false, false, "/mods2/Chained Echoes[1.31]/0100C510166F0000/testMod"});
     // ===== 测试用虚拟数据结束 =====
 
     // 三级排序：已安装 > 未安装 → 类型分组 → 拼音

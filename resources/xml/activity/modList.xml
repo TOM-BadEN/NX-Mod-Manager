@@ -19,7 +19,7 @@
             itemHeight="110"
             itemSpace="18"/>
 
-        <!-- 右侧：Mod 详情（占位，后续补充） -->
+        <!-- 右侧：Mod 详情 -->
         <brls:Box
             id="modList/detail"
             width="auto"
@@ -37,7 +37,102 @@
             backgroundColor="@theme/app/cardBg"
             cornerRadius="8"
             highlightCornerRadius="8"
-            shadowType="generic"/>
+            shadowType="generic">
+
+            <!-- 顶部：游戏图标 + 游戏名/TID -->
+            <brls:Box
+                width="auto"
+                height="auto"
+                axis="row"
+                alignItems="center">
+
+                <brls:Image
+                    id="modList/gameIcon"
+                    width="80"
+                    height="80"
+                    marginRight="16"
+                    cornerRadius="8"
+                    scalingType="fit"
+                    image="@res/img/game/defaultIcon.jpg"/>
+
+                <brls:Box
+                    width="auto"
+                    height="auto"
+                    axis="column"
+                    justifyContent="center"
+                    grow="1">
+
+                    <brls:Label
+                        id="modList/gameName"
+                        width="auto"
+                        height="auto"
+                        fontSize="24"
+                        singleLine="true"/>
+
+                    <brls:Label
+                        id="modList/gameTid"
+                        width="auto"
+                        height="auto"
+                        fontSize="18"
+                        textColor="@theme/app/textSecondary"
+                        marginTop="11"
+                        singleLine="true"/>
+
+                </brls:Box>
+            </brls:Box>
+
+            <!-- 标签区域：圆角胶囊，自动换行 -->
+            <brls:Box
+                id="modList/tagRow"
+                width="auto"
+                height="auto"
+                axis="row"
+                marginTop="20">
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagAuthor" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagType" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagFormat" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagVersion" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagGameVer" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagSize" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+            </brls:Box>
+
+            <!-- MOD 描述 -->
+            <brls:Label
+                id="modList/descTitle"
+                width="auto"
+                height="auto"
+                fontSize="22"
+                marginTop="20"
+                text="MOD描述"/>
+
+            <brls:Label
+                id="modList/descBody"
+                width="auto"
+                height="auto"
+                fontSize="20"
+                textColor="@theme/app/textSecondary"
+                marginTop="20"/>
+
+        </brls:Box>
 
     </brls:Box>
 </MyFrame>

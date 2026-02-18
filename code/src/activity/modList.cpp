@@ -8,15 +8,22 @@
 #include "view/modCard.hpp"
 #include "dataSource/modCardDS.hpp"
 #include "utils/strSort.hpp"
+#include <borealis/core/cache_helper.hpp>
+#include <yoga/Yoga.h>
 
-ModList::ModList(const std::string& dirPath, const std::string& gameName)
-    : m_dirPath(dirPath), m_gameName(gameName) {}
+ModList::ModList(const std::string& dirPath, const std::string& gameName, uint64_t appId)
+    : m_dirPath(dirPath), m_gameName(gameName), m_appId(appId) {
+
+}
 
 void ModList::onContentAvailable() {
     m_frame->setTitle(m_gameName);
     m_mods = ModScanner().scanMods(m_dirPath);
 
+    setupDetail();
     setupModGrid();
+
+    if (!m_mods.empty()) updateDetail(0);
 
     m_frame->registerAction("排序：升", brls::BUTTON_Y, [this](...) {
         toggleSort();
@@ -36,6 +43,7 @@ void ModList::setupModGrid() {
 
     m_grid->setFocusChangeCallback([this](size_t index) {
         m_frame->setIndexText(std::to_string(index + 1) + " / " + std::to_string(m_mods.size()));
+        updateDetail(index);
     });
 
     m_grid->registerAction("上翻", brls::BUTTON_LB, [this](...) {
@@ -62,6 +70,35 @@ void ModList::toggleSort() {
     }
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
+}
+
+void ModList::setupDetail() {
+    // 标签区域启用自动换行（Borealis XML 不支持 flexWrap 属性，直接调 Yoga API）
+    YGNodeStyleSetFlexWrap(m_tagRow->getYGNode(), YGWrapWrap);
+
+    // 游戏名和 TID
+    m_gameNameLabel->setText(m_gameName);
+    char tid[17];
+    std::snprintf(tid, sizeof(tid), "%016lX", m_appId);
+    m_gameTid->setText(tid);
+
+    // 从缓存取游戏图标
+    int iconId = brls::TextureCache::instance().getCache(tid);
+    if (iconId > 0) m_gameIcon->innerSetImage(iconId);
+}
+
+void ModList::updateDetail(size_t index) {
+    if (index >= m_mods.size()) return;
+    auto& mod = m_mods[index];
+    m_tagType->setText(modTypeText(mod.type));
+    m_tagVersion->setText(mod.modVersion.empty() ? "MOD 版本：未知" : "MOD 版本：" + mod.modVersion);
+    m_tagAuthor->setText(mod.author.empty() ? "未知作者" : "By " + mod.author);
+    if (mod.gameVersion.empty()) m_tagGameVer->setText("适配游戏：未知");
+    else if (mod.gameVersion == "0") m_tagGameVer->setText("适配游戏：通用");
+    else m_tagGameVer->setText("适配游戏：" + mod.gameVersion);
+    m_tagSize->setText("正在计算体积...");
+    m_tagFormat->setText(mod.isZip ? "压缩包类型" : "文件类型");
+    m_descBody->setText(mod.description.empty() ? "暂无描述" : mod.description);
 }
 
 void ModList::flipScreen(int direction) {
