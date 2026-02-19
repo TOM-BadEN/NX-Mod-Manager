@@ -142,4 +142,41 @@ int countItems(const FsPath& path, const std::vector<std::string>& exts) {
     return count;
 }
 
+int64_t calcDirSize(const FsPath& path) {
+    FsFileSystem* sdFs = getSdFs();
+    if (!sdFs) return 0;
+
+    int64_t totalSize = 0;
+    std::vector<std::string> dirStack;
+    dirStack.push_back(std::string(path));
+
+    FsDirectoryEntry batch[64];
+
+    while (!dirStack.empty()) {
+        std::string curPath = std::move(dirStack.back());
+        dirStack.pop_back();
+
+        FsDir dir;
+        Result rc = fsFsOpenDirectory(sdFs, FsPath(curPath),
+            FsDirOpenMode_ReadDirs | FsDirOpenMode_ReadFiles, &dir);
+        if (R_FAILED(rc)) continue;
+
+        s64 readCount = 0;
+
+        do {
+            rc = fsDirRead(&dir, &readCount, 64, batch);
+            if (R_FAILED(rc)) break;
+
+            for (s64 i = 0; i < readCount; i++) {
+                if (batch[i].type == FsDirEntryType_File) totalSize += batch[i].file_size;
+                else dirStack.push_back(curPath + "/" + batch[i].name);
+            }
+        } while (readCount > 0);
+
+        fsDirClose(&dir);
+    }
+
+    return totalSize;
+}
+
 } // namespace fs

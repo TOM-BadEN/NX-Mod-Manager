@@ -40,4 +40,7 @@ namespace fs {
     // exts 非空：数所有子目录 + 匹配扩展名的文件（exts 需小写，如 {".zip"}）
     int countItems(const FsPath& path, const std::vector<std::string>& exts = {});
 
+    // 递归统计目录总大小（字节），分批读取，返回精确值
+    int64_t calcDirSize(const FsPath& path);
+
 } // namespace fs
