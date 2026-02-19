@@ -99,15 +99,15 @@
                 </brls:Box>
 
                 <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
-                    <brls:Label id="modList/tagFormat" width="auto" height="auto" fontSize="18"/>
-                </brls:Box>
-
-                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
                     <brls:Label id="modList/tagVersion" width="auto" height="auto" fontSize="18"/>
                 </brls:Box>
 
                 <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
                     <brls:Label id="modList/tagGameVer" width="auto" height="auto" fontSize="18"/>
+                </brls:Box>
+
+                <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
+                    <brls:Label id="modList/tagFormat" width="auto" height="auto" fontSize="18"/>
                 </brls:Box>
 
                 <brls:Box width="auto" height="auto" cornerRadius="12" backgroundColor="@theme/app/tagBg" paddingTop="6" paddingBottom="6" paddingLeft="12" paddingRight="12" marginRight="8" marginBottom="8">
