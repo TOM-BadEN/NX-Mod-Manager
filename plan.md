@@ -1,58 +1,94 @@
-# 异步体积计算方案
+# nxtc 缓存版本过期修复方案
 
-## 1. JsonFile 提升为 ModList 成员
+## 问题
 
-- ModList 新增 `JsonFile m_modJson` 成员（参考主页 `m_jsonCache`）
-- `onContentAvailable` 中 `m_modJson.load(m_dirPath + config::modInfoFile)`
-- ModScanner::scanMods 改为接收 `JsonFile&` 参数，不再自己创建局部 JsonFile
-- 体积算完后通过 `m_modJson.setString()` 写入内存，全部完成后 `m_modJson.save()` 写回文件
+`gameNACP.cpp` 读取 nxtc 缓存时，不比对游戏版本号。用户更新游戏后，缓存里的版本号、游戏名、图标仍是旧数据，永远不会刷新。
 
-## 2. 后台线程 startSizeLoader()
+## 原因
 
-- 使用 `util::async`（AsyncFurture），参考主页 `startNacpLoader` 的模式
-- 回调接收 `std::stop_token`，析构时自动 request_stop + 等待完成
-- 构建任务列表：遍历 `m_mods`，`size` 为空的索引加入 `std::vector<int> tasks`
-- **焦点优先**：每次选下一个任务时，找离 `m_focusedIndex.load()` 最近的
-- **不打断**：正在 `calcDirSize` 的不中断，算完后才选下一个
-- 逐个计算：`fs::calcDirSize(mod.path)` → `format::fileSize(bytes)` → 可读字符串
-- 每个算完后 `brls::sync` 回主线程更新
+1. 读缓存时只检查 `if (cached)`，不比对 `cached->version_info` 与系统实时版本
+2. 写缓存时 `nxtcAddEntry(..., 0)` 传了 `0` 作为版本号，没有存入实时版本
 
-## 3. 主线程更新（brls::sync）
+## 参考项目的做法
 
-- 每个 mod 算完后 `brls::sync` 回主线程：
-  - `m_mods[i].size = 格式化字符串`
-  - 如果 `i == m_lastFocusIndex` → `m_tagSize->setText(...)`（实时更新详情面板）
-  - `m_modJson.setString(dirName, "size", 格式化字符串)`（写入 JSON 内存）
-- 全部完成后 `brls::sync` → `m_modJson.save()`（统一写回文件）
+- 用 `avmGetVersionListEntry(appId)` 获取系统实时版本号（`u32`）
+- 读缓存时：`if (cached && live_version == cached->version_info)` 才命中
+- 写缓存时：`nxtcAddEntry(..., live_version)` 存入实时版本
 
-## 4. 焦点追踪
+## 修复方案
 
-- ModList 新增 `std::atomic<size_t> m_focusedIndex{0}`
-- `focusChangeCallback` 中 `m_focusedIndex.store(index)`
+### 涉及文件
 
-## 5. fs::calcDirSize() ✅ 已完成
+- `gameNACP.cpp`（主要改动）
+- `gameNACP.hpp`（如需新增私有方法）
 
-- 非递归迭代，堆上 vector 做目录栈
-- 分批读 64 条/批，固定 49KB 栈空间
-- 返回 `int64_t` 精确字节数，格式化由调用者负责
+### 具体步骤
 
-## 6. format::fileSize() ✅ 已完成
+**步骤1：新增 AVM 服务初始化/退出**
 
-- `format.hpp` 中 inline 函数
-- 按 B / KB / MB / GB 格式化
+在 `GameNACP` 构造函数中加 `avmInitialize()`，析构函数中加 `avmExit()`。
+AVM 服务提供 `avmGetVersionListEntry`，需要先初始化。
 
-## 7. updateDetail 改动
+```cpp
+GameNACP::GameNACP() {
+    nsInitialize();
+    avmInitialize();
+    nxtcInitialize();
+}
 
-- 当前硬编码 `"正在计算体积..."`
-- 改为：`mod.size.empty() ? "正在计算体积..." : mod.size`
+GameNACP::~GameNACP() {
+    nxtcFlushCacheFile();
+    nxtcExit();
+    avmExit();
+    nsExit();
+}
+```
 
-## 改动文件清单
+**步骤2：新增获取实时版本的静态函数**
 
-| 文件 | 改动 |
-|------|------|
-| `modList.hpp` | 新增 `JsonFile m_modJson`、`util::AsyncFurture<void> m_sizeLoader`、`std::atomic<size_t> m_focusedIndex{0}`、`void startSizeLoader()` |
-| `modList.cpp` | onContentAvailable 中 load modJson + 传给 scanner + 调 startSizeLoader；focusChangeCallback 更新 m_focusedIndex；实现 startSizeLoader；updateDetail 改 tagSize 逻辑 |
-| `modScanner.hpp` | scanMods 签名改为 `scanMods(const std::string& tidPath, JsonFile& json)` |
-| `modScanner.cpp` | 删除局部 JsonFile 创建和 load，改用传入的引用 |
-| `fsHelper.hpp/cpp` | ✅ 已完成 calcDirSize |
-| `format.hpp` | ✅ 已完成 fileSize |
+```cpp
+static uint32_t getGameVersion(uint64_t appId) {
+    AvmVersionListEntry entry;
+    Result rc = avmGetVersionListEntry(appId, &entry);
+    return R_SUCCEEDED(rc) ? entry.version : 0xFFFFFFFE;
+}
+```
+
+返回 `0xFFFFFFFE` 作为失败标记（和参考项目一致），确保不会意外匹配到缓存中的任何真实版本。
+
+**步骤3：修改 getGameNACP 的缓存读取逻辑**
+
+```cpp
+GameMetadata GameNACP::getGameNACP(uint64_t appId) {
+    GameMetadata meta;
+    uint32_t liveVersion = getGameVersion(appId);
+
+    // 查缓存 + 比对版本
+    NxTitleCacheApplicationMetadata* cached = nxtcGetApplicationMetadataEntryById(appId);
+    if (cached && liveVersion == cached->version_info) {
+        // 版本匹配，用缓存
+        ...
+        return meta;
+    }
+    if (cached) nxtcFreeApplicationMetadata(&cached);
+
+    // 缓存未命中或版本不匹配，走 NS 服务
+    ...
+}
+```
+
+关键变化：`if (cached)` → `if (cached && liveVersion == cached->version_info)`
+
+**步骤4：修改写缓存时传入实时版本**
+
+```cpp
+nxtcAddEntry(appId, &controlData->nacp, iconSize, controlData->icon, false, liveVersion);
+```
+
+`0` → `liveVersion`
+
+### 注意事项
+
+- `avmInitialize()` 可能失败（某些自制系统固件），需要容错处理
+- 失败时 `getGameVersion` 返回 `0xFFFFFFFE`，永远不匹配缓存 → 每次都走 NS 服务（退化为无缓存模式，功能不受影响，只是慢一点）
+- 改动只在 `gameNACP.cpp` 内部，对外接口 `getGameNACP(appId)` 不变，`home.cpp` 无需改动

@@ -14,21 +14,31 @@ extern "C" {
 
 GameNACP::GameNACP() {
     nsInitialize();
+    avmInitialize();
     nxtcInitialize();
 }
 
 GameNACP::~GameNACP() {
     nxtcFlushCacheFile();
     nxtcExit();
+    avmExit();
     nsExit();
+}
+
+static uint32_t getGameVersion(uint64_t appId) {
+    AvmVersionListEntry entry;
+    Result rc = avmGetVersionListEntry(appId, &entry);
+    return R_SUCCEEDED(rc) ? entry.version : 0xFFFFFFFE;
 }
 
 GameMetadata GameNACP::getGameNACP(uint64_t appId) {
     GameMetadata meta;
 
-    // 先查 libnxtc 缓存
+    uint32_t liveVersion = getGameVersion(appId);
+
+    // 查缓存 + 比对版本
     NxTitleCacheApplicationMetadata* cached = nxtcGetApplicationMetadataEntryById(appId);
-    if (cached) {
+    if (cached && liveVersion == cached->version_info) {
         if (cached->name) meta.name = cached->name;
         if (cached->version) meta.version = cached->version;
         if (cached->icon_data && cached->icon_size > 0) {
@@ -38,6 +48,7 @@ GameMetadata GameNACP::getGameNACP(uint64_t appId) {
         nxtcFreeApplicationMetadata(&cached);
         return meta;
     }
+    if (cached) nxtcFreeApplicationMetadata(&cached);
 
     // 缓存未命中，调 ns 服务
     auto controlData = std::make_unique<NsApplicationControlData>();
@@ -60,7 +71,7 @@ GameMetadata GameNACP::getGameNACP(uint64_t appId) {
     if (jpegSize > sizeof(NacpStruct)) {
         size_t iconSize = jpegSize - sizeof(NacpStruct);
         meta.icon.assign(controlData->icon, controlData->icon + iconSize);
-        nxtcAddEntry(appId, &controlData->nacp, iconSize, controlData->icon, false, 0);
+        nxtcAddEntry(appId, &controlData->nacp, iconSize, controlData->icon, false, liveVersion);
     }
 
     return meta;
