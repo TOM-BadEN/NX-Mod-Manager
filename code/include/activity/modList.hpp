@@ -21,6 +21,7 @@ public:
     BRLS_BIND(MyFrame, m_frame, "modList/frame");
     BRLS_BIND(RecyclingGrid, m_grid, "modList/grid");
     BRLS_BIND(brls::Box, m_detail, "modList/detail");
+    BRLS_BIND(brls::ScrollingFrame, m_scroll, "modList/scroll");
     BRLS_BIND(brls::Box, m_tagRow, "modList/tagRow");
 
     // 详情面板绑定
@@ -43,6 +44,7 @@ private:
     uint64_t m_appId = 0;                   // 游戏 TID
     std::vector<ModInfo> m_mods;            // mod 列表数据
     bool m_sortAsc = true;                  // 当前排序方向
+    size_t m_lastFocusIndex = 0;             // 切换到详情前记住的列表索引
 
     void setupModGrid();                    // 初始化网格（注册 Cell、绑定数据源、设置回调）
     void setupDetail();                     // 初始化详情面板（游戏图标/名/TID）

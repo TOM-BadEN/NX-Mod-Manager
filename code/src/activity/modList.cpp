@@ -54,6 +54,12 @@ void ModList::setupModGrid() {
         flipScreen(1);
         return true;
     }, true, true);
+
+    // 右键：列表 → 详情面板
+    m_grid->registerAction("", brls::BUTTON_NAV_RIGHT, [this](...) {
+        brls::Application::giveFocus(m_detail);
+        return true;
+    }, true, true);
 }
 
 void ModList::toggleSort() {
@@ -76,6 +82,30 @@ void ModList::setupDetail() {
     // 标签区域启用自动换行（Borealis XML 不支持 flexWrap 属性，直接调 Yoga API）
     YGNodeStyleSetFlexWrap(m_tagRow->getYGNode(), YGWrapWrap);
 
+    // 隐藏描述区滚动条（scrollingIndicatorVisible 非 XML 注册属性）
+    m_scroll->setScrollingIndicatorVisible(false);
+
+    // 左键：详情面板 → 列表（重置滚动 + 恢复焦点位置）
+    m_detail->registerAction("", brls::BUTTON_NAV_LEFT, [this](...) {
+        m_scroll->setContentOffsetY(0, false);
+        auto* cell = m_grid->getGridItemByIndex(m_lastFocusIndex);
+        if (cell) brls::Application::giveFocus(cell);
+        else brls::Application::giveFocus(m_grid);
+        return true;
+    }, true, true);
+
+    // 上下键：animated 驱动描述区滚动
+    m_detail->registerAction("", brls::BUTTON_NAV_DOWN, [this](...) {
+        float cur = m_scroll->getContentOffsetY();
+        m_scroll->setContentOffsetY(cur + 60.0f, true);
+        return true;
+    }, true, true);
+    m_detail->registerAction("", brls::BUTTON_NAV_UP, [this](...) {
+        float cur = m_scroll->getContentOffsetY();
+        m_scroll->setContentOffsetY(cur - 60.0f, true);
+        return true;
+    }, true, true);
+
     // 游戏名和 TID
     m_gameNameLabel->setText(m_gameName);
     char tid[17];
@@ -89,6 +119,8 @@ void ModList::setupDetail() {
 
 void ModList::updateDetail(size_t index) {
     if (index >= m_mods.size()) return;
+    m_lastFocusIndex = index;
+    m_scroll->setContentOffsetY(0, false);
     auto& mod = m_mods[index];
     m_tagType->setText(modTypeText(mod.type));
     m_tagVersion->setText(mod.modVersion.empty() ? "MOD 版本：未知" : "MOD 版本：" + mod.modVersion);

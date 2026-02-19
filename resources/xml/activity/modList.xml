@@ -19,13 +19,14 @@
             itemHeight="110"
             itemSpace="18"/>
 
-        <!-- 右侧：Mod 详情 -->
+        <!-- 右侧：Mod 详情（focusable 卡片，描述区 ScrollingFrame 滚动） -->
         <brls:Box
             id="modList/detail"
             width="auto"
             height="auto"
             grow="1"
             axis="column"
+            focusable="true"
             marginTop="25"
             marginBottom="25"
             marginLeft="0"
@@ -124,13 +125,20 @@
                 marginTop="20"
                 text="MOD描述"/>
 
-            <brls:Label
-                id="modList/descBody"
-                width="auto"
-                height="auto"
-                fontSize="20"
-                textColor="@theme/app/textSecondary"
-                marginTop="20"/>
+            <brls:ScrollingFrame
+                id="modList/scroll"
+                width="100%"
+                grow="1"
+                marginTop="20">
+
+                <brls:Label
+                    id="modList/descBody"
+                    width="auto"
+                    height="auto"
+                    fontSize="20"
+                    textColor="@theme/app/textSecondary"/>
+
+            </brls:ScrollingFrame>
 
         </brls:Box>
 
