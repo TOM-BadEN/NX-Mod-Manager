@@ -9,8 +9,11 @@
 #include "dataSource/modCardDS.hpp"
 #include "utils/strSort.hpp"
 #include "utils/format.hpp"
+#include "utils/fsHelper.hpp"
+#include "common/config.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <yoga/Yoga.h>
+#include <switch.h>
 
 ModList::ModList(const std::string& dirPath, const std::string& gameName, uint64_t appId)
     : m_dirPath(dirPath), m_gameName(gameName), m_appId(appId) {
@@ -19,7 +22,8 @@ ModList::ModList(const std::string& dirPath, const std::string& gameName, uint64
 
 void ModList::onContentAvailable() {
     m_frame->setTitle(m_gameName);
-    m_mods = ModScanner().scanMods(m_dirPath);
+    m_modJson.load(m_dirPath + config::modInfoFile);
+    m_mods = ModScanner().scanMods(m_dirPath, m_modJson);
 
     setupDetail();
     setupModGrid();
@@ -30,6 +34,8 @@ void ModList::onContentAvailable() {
         toggleSort();
         return true;
     });
+
+    startSizeLoader();
 }
 
 void ModList::setupModGrid() {
@@ -43,6 +49,7 @@ void ModList::setupModGrid() {
     m_grid->setDataSource(ds);
 
     m_grid->setFocusChangeCallback([this](size_t index) {
+        m_focusedIndex.store(index);
         m_frame->setIndexText(std::to_string(index + 1) + " / " + std::to_string(m_mods.size()));
         updateDetail(index);
     });
@@ -129,7 +136,7 @@ void ModList::updateDetail(size_t index) {
     if (mod.gameVersion.empty()) m_tagGameVer->setText("适配游戏：未知");
     else if (mod.gameVersion == "0") m_tagGameVer->setText("适配游戏：通用");
     else m_tagGameVer->setText("适配游戏：" + mod.gameVersion);
-    m_tagSize->setText("正在计算体积...");
+    m_tagSize->setText(mod.size.empty() ? "正在计算体积..." : mod.size);
     m_tagFormat->setText(mod.isZip ? "压缩包类型" : "文件类型");
     m_descBody->setText(mod.description.empty() ? "暂无描述" : mod.description);
 }
@@ -144,6 +151,56 @@ void ModList::retryIconLoad() {
         return;
     }
     brls::delay(1000, [this]() { retryIconLoad(); });
+}
+
+void ModList::startSizeLoader() {
+    m_sizeLoader = util::async([this](std::stop_token token) {
+        std::vector<int> tasks;
+        for (int i = 0; i < static_cast<int>(m_mods.size()); i++) {
+            if (m_mods[i].size.empty()) tasks.push_back(i);
+        }
+
+        while (!tasks.empty() && !token.stop_requested()) {
+            int center = m_focusedIndex.load();
+            int bestIdx = 0;
+            int bestDist = INT_MAX;
+            for (int i = 0; i < static_cast<int>(tasks.size()); i++) {
+                int dist = std::abs(tasks[i] - center);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    bestIdx = i;
+                }
+            }
+
+            int modIdx = tasks[bestIdx];
+            std::string modPath = m_mods[modIdx].path;
+            tasks.erase(tasks.begin() + bestIdx);
+
+            int64_t bytes = m_mods[modIdx].isZip ? fs::getFileSize(modPath) : fs::calcDirSize(modPath, &token);
+            if (token.stop_requested()) break;
+            if (bytes < 0) continue;
+            std::string sizeStr = format::fileSize(bytes);
+
+            // 回主线程更新数据和 UI
+            brls::sync([this, modIdx, sizeStr = std::move(sizeStr)]() {
+                applySizeResult(modIdx, sizeStr);
+            });
+
+            svcSleepThread(1000000ULL);  // 1ms
+        }
+
+        if (!token.stop_requested()) {
+            brls::sync([this]() {
+                m_modJson.save();
+            });
+        }
+    });
+}
+
+void ModList::applySizeResult(int modIdx, const std::string& sizeStr) {
+    m_mods[modIdx].size = sizeStr;
+    if (static_cast<size_t>(modIdx) == m_lastFocusIndex) m_tagSize->setText(sizeStr);
+    m_modJson.setString(m_mods[modIdx].dirName, "size", sizeStr);
 }
 
 void ModList::flipScreen(int direction) {

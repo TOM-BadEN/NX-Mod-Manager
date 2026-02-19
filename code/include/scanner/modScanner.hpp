@@ -9,8 +9,10 @@
 #include <string>
 #include "common/modInfo.hpp"
 
+class JsonFile;
+
 class ModScanner {
 public:
     // tidPath: 游戏的 TID 目录路径（GameInfo.dirPath）
-    std::vector<ModInfo> scanMods(const std::string& tidPath);
+    std::vector<ModInfo> scanMods(const std::string& tidPath, JsonFile& json);
 };

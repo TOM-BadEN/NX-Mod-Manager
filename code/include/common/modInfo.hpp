@@ -30,5 +30,6 @@ struct ModInfo {
     std::string size;           // 体积（预格式化，如 "12.5 MB"）
     bool isInstalled = false;   // 是否已安装
     bool isZip = false;         // 是否为 ZIP 形式
-    std::string path;           // 完整路径
+    std::string dirName;        // 目录名（JSON key）
+    std::string path;           // 完整路径（isZip 时指向 .zip 文件）
 };

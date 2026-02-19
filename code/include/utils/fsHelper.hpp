@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <stop_token>
 
 // 路径包装：自动拷贝到栈上，避免堆指针传给 libnx IPC
 struct FsPath {
@@ -32,6 +33,11 @@ namespace fs {
     // 列出指定目录下的所有子目录名（不递归）
     std::vector<std::string> listSubDirs(const FsPath& path);
 
+    // 列出指定目录下的文件名（不递归）
+    // exts 为空：返回所有文件
+    // exts 非空：只返回匹配扩展名的文件（exts 需小写，如 {".zip"}）
+    std::vector<std::string> listSubFiles(const FsPath& path, const std::vector<std::string>& exts = {});
+
     // 只数子目录数量
     int countDirs(const FsPath& path);
 
@@ -40,7 +46,11 @@ namespace fs {
     // exts 非空：数所有子目录 + 匹配扩展名的文件（exts 需小写，如 {".zip"}）
     int countItems(const FsPath& path, const std::vector<std::string>& exts = {});
 
+    // 获取单个文件大小（字节），失败返回 -1
+    int64_t getFileSize(const FsPath& path);
+
     // 递归统计目录总大小（字节），分批读取，返回精确值
-    int64_t calcDirSize(const FsPath& path);
+    // token 不为空时支持提前终止（返回不完整值）
+    int64_t calcDirSize(const FsPath& path, std::stop_token* token = nullptr);
 
 } // namespace fs

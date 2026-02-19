@@ -155,10 +155,12 @@ void Home::startNacpLoader() {
         }
 
         // 全部加载完后统一写回 JSON，并启用排序按钮
-        brls::sync([this]() {
-            m_jsonCache.save();
-            m_frame->setActionAvailable(brls::BUTTON_Y, true);
-        });
+        if (!token.stop_requested()) {
+            brls::sync([this]() {
+                m_jsonCache.save();
+                m_frame->setActionAvailable(brls::BUTTON_Y, true);
+            });
+        }
     });
 }
 

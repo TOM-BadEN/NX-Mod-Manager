@@ -8,9 +8,12 @@
 #include <borealis.hpp>
 #include <vector>
 #include <cstdint>
+#include <atomic>
 #include "view/myframe.hpp"
 #include "view/recyclingGrid.hpp"
 #include "common/modInfo.hpp"
+#include "utils/jsonFile.hpp"
+#include "utils/async.hpp"
 
 class ModList : public brls::Activity {
 public:
@@ -46,6 +49,9 @@ private:
     bool m_sortAsc = true;                  // 当前排序方向
     size_t m_lastFocusIndex = 0;             // 切换到详情前记住的列表索引
     int m_iconRetryLeft = 10;                // 图标重试剩余次数（每秒1次，最多10次）
+    JsonFile m_modJson;                      // mod 元数据 JSON（体积缓存等）
+    util::AsyncFurture<void> m_sizeLoader;   // 异步体积计算任务
+    std::atomic<int> m_focusedIndex{0};      // 当前焦点索引（体积计算优先级）
 
     void setupModGrid();                    // 初始化网格（注册 Cell、绑定数据源、设置回调）
     void setupDetail();                     // 初始化详情面板（游戏图标/名/TID）
@@ -53,4 +59,6 @@ private:
     void toggleSort();                      // 切换排序方向
     void flipScreen(int direction);         // LB/RB 翻页
     void retryIconLoad();                   // 图标延迟加载重试（每秒1次，最多10次）
+    void startSizeLoader();                  // 启动异步体积计算
+    void applySizeResult(int modIdx, const std::string& sizeStr);  // 应用体积结果到数据 + UI
 };

@@ -71,6 +71,55 @@ std::vector<std::string> listSubDirs(const FsPath& path) {
     return result;
 }
 
+std::vector<std::string> listSubFiles(const FsPath& path, const std::vector<std::string>& exts) {
+    std::vector<std::string> result;
+    FsFileSystem* fs = getSdFs();
+    if (!fs) return result;
+
+    // 以只读文件模式打开目录
+    FsDir dir;
+    Result rc = fsFsOpenDirectory(fs, path, FsDirOpenMode_ReadFiles, &dir);
+    if (R_FAILED(rc)) return result;
+
+    // 获取文件条目数量
+    s64 count = 0;
+    rc = fsDirGetEntryCount(&dir, &count);
+    if (R_FAILED(rc) || count <= 0) {
+        fsDirClose(&dir);
+        return result;
+    }
+
+    // 一次性读取所有文件条目
+    std::vector<FsDirectoryEntry> entries(count);
+    s64 readCount = 0;
+    rc = fsDirRead(&dir, &readCount, entries.size(), entries.data());
+    fsDirClose(&dir);
+    if (R_FAILED(rc)) return result;
+
+    // 无过滤：返回所有文件
+    result.reserve(readCount);
+    if (exts.empty()) {
+        for (s64 i = 0; i < readCount; i++)
+            result.emplace_back(entries[i].name);
+        return result;
+    }
+
+    // 有过滤：只返回匹配后缀的文件（转小写比较）
+    for (s64 i = 0; i < readCount; i++) {
+        std::string name(entries[i].name);
+        std::transform(name.begin(), name.end(), name.begin(),
+            [](unsigned char c) { return std::tolower(c); });
+        for (const auto& ext : exts) {
+            if (name.size() >= ext.size() &&
+                name.compare(name.size() - ext.size(), ext.size(), ext) == 0) {
+                result.emplace_back(entries[i].name);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
 int countDirs(const FsPath& path) {
     FsFileSystem* fs = getSdFs();
     if (!fs) return 0;
@@ -142,9 +191,23 @@ int countItems(const FsPath& path, const std::vector<std::string>& exts) {
     return count;
 }
 
-int64_t calcDirSize(const FsPath& path) {
+int64_t getFileSize(const FsPath& path) {
+    FsFileSystem* fs = getSdFs();
+    if (!fs) return -1;
+
+    FsFile file;
+    Result rc = fsFsOpenFile(fs, path, FsOpenMode_Read, &file);
+    if (R_FAILED(rc)) return -1;
+
+    s64 size = 0;
+    rc = fsFileGetSize(&file, &size);
+    fsFileClose(&file);
+    return R_SUCCEEDED(rc) ? size : -1;
+}
+
+int64_t calcDirSize(const FsPath& path, std::stop_token* token) {
     FsFileSystem* sdFs = getSdFs();
-    if (!sdFs) return 0;
+    if (!sdFs) return -1;
 
     int64_t totalSize = 0;
     std::vector<std::string> dirStack;
@@ -153,13 +216,17 @@ int64_t calcDirSize(const FsPath& path) {
     FsDirectoryEntry batch[64];
 
     while (!dirStack.empty()) {
+        if (token && token->stop_requested()) return -1;
         std::string curPath = std::move(dirStack.back());
         dirStack.pop_back();
 
         FsDir dir;
         Result rc = fsFsOpenDirectory(sdFs, FsPath(curPath),
             FsDirOpenMode_ReadDirs | FsDirOpenMode_ReadFiles, &dir);
-        if (R_FAILED(rc)) continue;
+        if (R_FAILED(rc)) {
+            if (dirStack.empty() && totalSize == 0) return -1;
+            continue;
+        }
 
         s64 readCount = 0;
 
