@@ -7,9 +7,9 @@
 #include "utils/jsonFile.hpp"
 #include "common/config.hpp"
 #include "utils/strSort.hpp"
+#include "utils/format.hpp"
 #include <algorithm>
 #include <cstdlib>
-#include <cstdio>
 
 std::vector<GameInfo> GameScanner::scanGames(JsonFile& jsonCache) {
     std::vector<GameInfo> games;
@@ -49,8 +49,7 @@ std::vector<GameInfo> GameScanner::scanGames(JsonFile& jsonCache) {
         if (modCount == 0) continue;
 
         // 用 appId 查 JSON
-        char appIdKey[17];
-        std::snprintf(appIdKey, sizeof(appIdKey), "%016lX", appId);
+        std::string appIdKey = format::appIdHex(appId);
 
         std::string displayName = jsonCache.getString(appIdKey, "displayName");
         std::string gameName = jsonCache.getString(appIdKey, "gameName");

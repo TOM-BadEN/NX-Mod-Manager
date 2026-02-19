@@ -10,6 +10,7 @@
 #include "activity/modList.hpp"
 #include "view/gameCard.hpp"
 #include "dataSource/gameCardDS.hpp"
+#include "utils/format.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -162,8 +163,7 @@ void Home::startNacpLoader() {
 }
 
 void Home::applyMetadata(int gameIdx, const GameMetadata& meta) {
-    char appIdKey[17];
-    std::snprintf(appIdKey, sizeof(appIdKey), "%016lX", m_games[gameIdx].appId);
+    std::string appIdKey = format::appIdHex(m_games[gameIdx].appId);
 
     // 更新 version
     if (!meta.version.empty()) {
