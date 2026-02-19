@@ -46,6 +46,7 @@ std::vector<GameInfo> GameScanner::scanGames(JsonFile& jsonCache) {
         // 数 mod（只数子目录，每个子目录 = 一个 mod）
         std::string appIdPath = dirPath + appIdHex + "/";
         int modCount = fs::countDirs(appIdPath);
+        if (modCount == 0) continue;
 
         // 用 appId 查 JSON
         char appIdKey[17];
