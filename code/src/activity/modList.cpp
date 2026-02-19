@@ -112,9 +112,10 @@ void ModList::setupDetail() {
     std::snprintf(tid, sizeof(tid), "%016lX", m_appId);
     m_gameTid->setText(tid);
 
-    // 从缓存取游戏图标
+    // 从缓存取游戏图标（异步加载可能还没完成，启动重试）
     int iconId = brls::TextureCache::instance().getCache(tid);
     if (iconId > 0) m_gameIcon->innerSetImage(iconId);
+    else retryIconLoad();
 }
 
 void ModList::updateDetail(size_t index) {
@@ -131,6 +132,19 @@ void ModList::updateDetail(size_t index) {
     m_tagSize->setText("正在计算体积...");
     m_tagFormat->setText(mod.isZip ? "压缩包类型" : "文件类型");
     m_descBody->setText(mod.description.empty() ? "暂无描述" : mod.description);
+}
+
+void ModList::retryIconLoad() {
+    if (m_iconRetryLeft <= 0) return;
+    m_iconRetryLeft--;
+    char tid[17];
+    std::snprintf(tid, sizeof(tid), "%016lX", m_appId);
+    int iconId = brls::TextureCache::instance().getCache(tid);
+    if (iconId > 0) {
+        m_gameIcon->innerSetImage(iconId);
+        return;
+    }
+    brls::delay(1000, [this]() { retryIconLoad(); });
 }
 
 void ModList::flipScreen(int direction) {

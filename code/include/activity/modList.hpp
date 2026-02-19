@@ -45,10 +45,12 @@ private:
     std::vector<ModInfo> m_mods;            // mod 列表数据
     bool m_sortAsc = true;                  // 当前排序方向
     size_t m_lastFocusIndex = 0;             // 切换到详情前记住的列表索引
+    int m_iconRetryLeft = 10;                // 图标重试剩余次数（每秒1次，最多10次）
 
     void setupModGrid();                    // 初始化网格（注册 Cell、绑定数据源、设置回调）
     void setupDetail();                     // 初始化详情面板（游戏图标/名/TID）
     void updateDetail(size_t index);        // 根据焦点更新详情面板
     void toggleSort();                      // 切换排序方向
     void flipScreen(int direction);         // LB/RB 翻页
+    void retryIconLoad();                   // 图标延迟加载重试（每秒1次，最多10次）
 };
