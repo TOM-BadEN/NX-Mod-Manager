@@ -287,7 +287,9 @@ ActionMenu (继承 brls::Box, translucent overlay)
 | 文件 | 改动 |
 |---|---|
 | `code/src/main.cpp` | 添加 `registerXMLView("ActionMenuCell", ActionMenuCell::create)` |
-| 集成页面（如 `home.cpp`） | 添加 `MenuPageConfig` 成员变量 + `registerAction` + `show()` 调用 |
+| `code/src/view/recyclingGrid.cpp` | `onChildFocusGained` 加 `m_defaultCellFocus = idx` + `queueReusableCell` 加 `cell->setParent(nullptr)`（见 11.8） |
+| `code/src/activity/home.cpp` | `toggleSort` 加 `setDefaultCellFocus(0)` + 集成 ActionMenu |
+| `code/src/activity/modList.cpp` | `toggleSort` 加 `setDefaultCellFocus(0)` |
 
 > **CMakeLists.txt 不需要改动**：`file(GLOB_RECURSE MAIN_SRC code/*.cpp)` 会自动扫描新增的 `.cpp` 文件。
 
@@ -332,9 +334,9 @@ ActionMenu (继承 brls::Box, translucent overlay)
 `RecyclingGrid::onChildFocusGained` 在首次获得焦点时即会触发回调（已验证源码），
 因此菜单打开后提示词卡片会自动填充第一项的 hintText，无需手动初始化。
 
-### 11.4 onDismiss 仅在菜单完全关闭时触发
+### 11.4 onDismiss 在菜单完全关闭时触发（任何关闭方式）
 
-只有根菜单的 `onDismiss` 会在用户按 B 清空栈后触发。
+无论 B 键关闭还是 CloseMenu 动作关闭，根菜单的 `onDismiss` 均会触发.
 子菜单通过栈 pop 返回父菜单，不触发子菜单的 `onDismiss`。
 用途：做资源清理或通知调用方刷新 UI，**不要用来执行业务逻辑**（业务逻辑应在 `onAction` 中完成）。
 
@@ -354,5 +356,60 @@ ActionMenu (继承 brls::Box, translucent overlay)
 
 ### 11.7 多选模式 show() 自动重置 selected 状态
 
-`MenuPageConfig::show()` 内部对多选模式自动执行 `for (auto& item : items) item.selected = false`。
+`MenuPageConfig::show()` 内部对多选模式自动执行 `for (auto& item : items) item.selected = false`.
 防止上次未确认的勾选残留到下次打开。调用方无需手动清理。
+
+### 11.8 底层焦点恢复（RecyclingGrid 改 2 行 + 现有页面各改 1 行）
+
+**问题**：Borealis 的 `focusStack` 存 View 原始指针。ActionMenu 打开期间若底层 RecyclingGrid
+执行 `reloadData()`（如删除游戏），被保存的 Cell 指针变成已回收的不可见对象，popActivity
+恢复焦点时指向错误位置。
+
+**方案**：
+
+1. **`RecyclingGrid::onChildFocusGained`** 加 `m_defaultCellFocus = idx`
+   — 每次聚焦自动记住索引，reloadData 使用该索引作为起始位置（内置越界钳位）
+2. **`RecyclingGrid::queueReusableCell`** 加 `cell->setParent(nullptr)`
+   — 回收 Cell 断开 parent 链，popActivity 检测到 `getParentActivity()==nullptr` 自动走
+   fallback：`giveFocus(底层 Activity contentView)` → 沿 `lastFocusedView` 链向下
+   → 到达 reloadData 设置的正确 Cell
+3. **Home::toggleSort / ModList::toggleSort** 在 `reloadData()` 前加 `setDefaultCellFocus(0)`
+   — 排序后明确回到顶部，防止 auto-track 导致停留在旧位置
+
+**场景验证**：
+
+| 场景 | 焦点位置 |
+|---|---|
+| 删中间的游戏 | 被删位置的下一个（原 index+1 顶上来） |
+| 删最后位置的游戏 | 上一个（钳位到 itemCount-1） |
+| 删唯一的游戏 | 其他 UI 元素（Tab 栏等） |
+| 排序 | 第一项（setDefaultCellFocus(0)） |
+| 打开菜单什么都没做就关 | 原来位置（Cell 未被回收，Borealis 正常恢复） |
+
+**调用方零负担**：onAction 可直接 `deleteGame() + reloadData()`，不需要标记位、onDismiss
+或手动 giveFocus。焦点自动恢复到正确位置。
+
+### 11.9 onDismiss 在菜单任何方式关闭时均触发
+
+不限于 B 键关闭。CloseMenu 动作关闭、B 键关闭均触发 `onDismiss`。
+调用方可在 onDismiss 中做统一的 UI 刷新（如有需要），但焦点恢复已由底层自动处理（见 11.8）。
+
+### 11.10 删除操作需检查是否删完
+
+onAction 中执行删除（游戏/Mod）后，必须检查列表是否为空。如果删完了，需要对应处理：
+
+```cpp
+.action([this]{
+    removeGame(index);
+    if (m_games.empty()) {
+        // 列表已空：隐藏 Grid，显示空提示，关闭菜单后焦点自动到提示 Label
+        showEmptyHint();
+    } else {
+        homeGrid->reloadData();  // 还有数据：正常 reload，焦点自动恢复（见 11.8）
+    }
+})
+```
+
+原因：`RecyclingGrid::getDefaultFocus()` 在 `itemCount==0` 时返回 `nullptr`，
+Borealis fallback 会把焦点给页面上其他可聚焦 View。如果此时 Grid 仍可见但为空，
+用户可能看到空白区域且无法操作。应主动切换到空提示状态。
