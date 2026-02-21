@@ -237,8 +237,8 @@ bool isTranslucent() override {
 | 组件 | 职责 |
 |---|---|
 | `ActionMenu` | 顶层容器，管理菜单栈、遮罩、动画、按键注册 |
-| `ActionMenuCell` | RecyclingGridItem 子类，单个选项 UI |
-| `ActionMenuDataSource` | RecyclingGridDataSource 实现，从当前 MenuPageConfig 提供数据 |
+| `ActionMenuItem` | RecyclingGridItem 子类，单个选项 UI |
+| `ActionMenuItemDS` | RecyclingGridDataSource 实现，从 MenuPageConfig 取数据填充 ActionMenuItem（内部实现，定义在 actionMenu.cpp） |
 
 ### 选项列表用 RecyclingGrid 的理由
 
@@ -262,10 +262,9 @@ ActionMenu (继承 brls::Box, translucent overlay)
     │   └── 标题 Label (id: actionMenu/title)
     ├── Content (Box, grow=1)
     │   └── RecyclingGrid (spanCount=1, estimatedRowHeight=70, estimatedRowSpace=0)
-    │       └── ActionMenuCell (RecyclingGridItem)
+    │       └── ActionMenuItem (RecyclingGridItem)
     │           ├── title Label（靠左）
-    │           ├── badge Label（app/textHighlight 色，靠右，可选）
-    │           └── 多选勾选图标 (Image, 仅多选模式显示)
+    │           └── badge Label（app/textHighlight 色，靠右，可选）
     └── Footer (Box, lineTop=1px 分界线, justifyContent=spaceBetween)
         ├── 索引 Label (id: actionMenu/index, 左侧, 如 "1/4")
         └── brls::Hints (右侧, 自动读取 registerAction 显示按钮图标+文字)
@@ -277,16 +276,18 @@ ActionMenu (继承 brls::Box, translucent overlay)
 
 | 文件 | 用途 |
 |---|---|
-| `code/include/view/actionMenu.hpp` | MenuItemConfig + MenuPageConfig + ActionMenu + ActionMenuCell 声明 |
-| `code/src/view/actionMenu.cpp` | ActionMenu 实现（栈管理、动画、DataSource）+ 链式方法实现 |
-| `resources/xml/view/actionMenu.xml` | 精简版框架布局（仿 myframe.xml，去掉时间/WiFi/电池）：Header(标题+分界线) + Content(空Box) + Footer(索引Label + brls::Hints + 分界线) + 左侧 hint 卡片 |
-| `resources/xml/view/actionMenuCell.xml` | 单个选项项布局（title + badge + 勾选图标） |
+| `code/include/view/actionMenu.hpp` | AfterAction + MenuItemConfig + MenuPageConfig + MenuStackEntry + ActionMenu 声明 |
+| `code/include/view/actionMenuItem.hpp` | ActionMenuItem（RecyclingGridItem 子类）声明 |
+| `code/src/view/actionMenu.cpp` | ActionMenu 实现（栈管理、动画）+ 链式方法实现 + ActionMenuItemDS（内部实现） |
+| `code/src/view/actionMenuItem.cpp` | ActionMenuItem 实现 |
+| `resources/xml/view/actionMenu.xml` | ActionMenu 整体布局（左侧提示词卡片 + 右侧面板：Header + Content + Footer） |
+| `resources/xml/view/actionMenuItem.xml` | 单个选项布局（title + badge） |
 
 ### 需要改动的已有文件
 
 | 文件 | 改动 |
 |---|---|
-| `code/src/main.cpp` | 添加 `registerXMLView("ActionMenuCell", ActionMenuCell::create)` |
+| `code/src/main.cpp` | 添加 `registerXMLView("ActionMenuItem", ActionMenuItem::create)` |
 | `code/src/view/recyclingGrid.cpp` | `onChildFocusGained` 加 `m_defaultCellFocus = idx` + `queueReusableCell` 加 `cell->setParent(nullptr)`（见 11.8） |
 | `code/src/activity/home.cpp` | `toggleSort` 加 `setDefaultCellFocus(0)` + 集成 ActionMenu |
 | `code/src/activity/modList.cpp` | `toggleSort` 加 `setDefaultCellFocus(0)` |
@@ -306,10 +307,10 @@ ActionMenu (继承 brls::Box, translucent overlay)
 
 ## 十、实现步骤
 
-1. 创建 actionMenu.hpp：MenuItemConfig / MenuPageConfig + 链式方法声明 + ActionMenuCell + ActionMenu 类声明
-2. 创建 XML 布局：actionMenu.xml（右侧面板 + 左侧提示词卡片）+ actionMenuCell.xml（title + badge + lineBottom 分隔线）
-3. 创建 actionMenu.cpp：链式方法实现 + ActionMenuCell + ActionMenu 构造/show/hide/动画
-4. 实现 RecyclingGridDataSource：从当前 MenuPageConfig 提供行数/Cell，用 getTitle()/getBadge() 取值
+1. 创建 actionMenu.hpp：MenuItemConfig / MenuPageConfig + 链式方法声明 + ActionMenu 类声明
+2. 创建 actionMenuItem.hpp/cpp：ActionMenuItem（RecyclingGridItem 子类）声明与实现
+3. 创建 XML 布局：actionMenu.xml（右侧面板 + 左侧提示词卡片）+ actionMenuItem.xml（title + badge + lineBottom 分隔线）
+4. 创建 actionMenu.cpp：链式方法实现 + ActionMenuItemDS（内部实现）+ ActionMenu 构造/show/hide/动画
 5. 实现菜单栈：pushPage / popPage / 标题更新 / reloadData
 6. 实现单选逻辑：onItemSelected → 有 subMenuPtr 则 pushPage，有 onAction 则执行 → AfterAction::CloseMenu/PopPage/Stay 三分支处理
 7. 实现多选模式：A 键 → 内部翻转 selected → 更新 Cell UI；+ 键 → 收集 indices → onConfirm → popActivity
