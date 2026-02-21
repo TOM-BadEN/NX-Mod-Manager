@@ -33,6 +33,30 @@ void Home::onContentAvailable() {
     });
     m_frame->setActionAvailable(brls::BUTTON_Y, false);
 
+    // 测试菜单
+    m_testMenu = {"测试菜单", {
+        MenuItemConfig{"对话框测试", "点击后关闭菜单并弹出对话框"}
+            .action([]() {
+                auto* dialog = new brls::Dialog("这是一个测试对话框");
+                dialog->addButton("确认", []() {});
+                dialog->addButton("取消", []() {});
+                dialog->open();
+            }),
+        MenuItemConfig{"禁用测试", "此项已禁用，不可点击"}
+            .disabled(),
+        MenuItemConfig{"测试菜单3", "关闭菜单"},
+        MenuItemConfig{"测试菜单4", "关闭菜单"},
+        MenuItemConfig{"测试菜单5", "关闭菜单"},
+        MenuItemConfig{"测试菜单6", "关闭菜单"},
+        MenuItemConfig{"测试菜单7", "关闭菜单"},
+        MenuItemConfig{"测试菜单8", "关闭菜单"},
+        MenuItemConfig{"测试菜单9", "关闭菜单"},
+    }};
+    m_frame->registerAction("菜单", brls::BUTTON_X, [this](...) {
+        m_testMenu.show();
+        return true;
+    });
+
     startNacpLoader();
 }
 
@@ -72,6 +96,7 @@ void Home::setupGridPage() {
 void Home::toggleSort() {
     m_sortAsc = !m_sortAsc;
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
+    m_grid->setDefaultCellFocus(0);  // 11.8: 排序后回到顶部
     m_grid->reloadData();
     auto* cell = m_grid->getGridItemByIndex(0);
     if (cell) {

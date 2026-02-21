@@ -11,9 +11,7 @@
 #include <borealis.hpp>              // Borealis 框架主头文件
 #include "activity/home.hpp"          // 主页面
 #include "view/myframe.hpp"           // 自定义应用框架
-#include "view/gameCard.hpp"          // 游戏卡片组件
 #include "view/recyclingGrid.hpp"     // 回收网格组件
-#include "view/modCard.hpp"           // Mod 卡片组件
 #include "theme/theme.hpp"              // 主题初始化
 #include "utils/pinYinCvt.hpp"          // 拼音工具
 #ifdef NXLINK
@@ -36,9 +34,7 @@ int main(int argc, char* argv[]) {
     
     // 注册自定义视图组件
     brls::Application::registerXMLView("MyFrame", MyFrame::create);
-    brls::Application::registerXMLView("GameCard", GameCard::create);
     brls::Application::registerXMLView("RecyclingGrid", RecyclingGrid::create);
-    brls::Application::registerXMLView("ModCard", ModCard::create);
     
     // 初始化主题颜色
     initTheme();

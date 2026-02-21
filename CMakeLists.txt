@@ -89,6 +89,9 @@ if (NXLINK)
     target_compile_definitions(${PROJECT_NAME} PRIVATE NXLINK)
 endif()
 
+# 版本号传递给 C++ 代码（ActionMenu Header 显示）
+target_compile_definitions(${PROJECT_NAME} PRIVATE APP_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_ALTER}")
+
 # ============================================================================
 # 构建 Switch .nro 文件
 # ============================================================================

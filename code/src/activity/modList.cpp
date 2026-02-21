@@ -73,6 +73,7 @@ void ModList::setupModGrid() {
 void ModList::toggleSort() {
     m_sortAsc = !m_sortAsc;
     strSort::sortAZ(m_mods, &ModInfo::displayName, &ModInfo::isInstalled, &ModInfo::type, m_sortAsc);
+    m_grid->setDefaultCellFocus(0);  // 11.8: 排序后回到顶部
     m_grid->reloadData();
     auto* cell = m_grid->getGridItemByIndex(0);
     if (cell) {

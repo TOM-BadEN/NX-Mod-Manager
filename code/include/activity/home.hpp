@@ -14,6 +14,7 @@
 #include "common/gameInfo.hpp"
 #include "utils/jsonFile.hpp"
 #include "utils/async.hpp"
+#include "view/actionMenu.hpp"
 
 struct GameMetadata;
 
@@ -35,6 +36,7 @@ private:
     util::AsyncFurture<void> m_nacpLoader;                      // 异步 NACP 加载任务
     std::atomic<int> m_focusedIndex{0};                          // 当前焦点索引（后台线程读，主线程写）
     bool m_sortAsc = true;                                      // 排序方向（true=升序）
+    MenuPageConfig m_testMenu;                                   // 测试菜单
 
     void showEmptyHint();                                       // 显示空列表提示
     void setupGridPage();                                       // 初始化网格 + 注册回调

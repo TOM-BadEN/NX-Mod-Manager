@@ -288,10 +288,13 @@ void RecyclingGrid::setFocusChangeCallback(std::function<void(size_t)> callback)
 
 void RecyclingGrid::onChildFocusGained(View* directChild, View* focusedView) {
     ScrollingFrame::onChildFocusGained(directChild, focusedView);
-    if (!m_focusChangeCallback) return;
     View* v = focusedView;
     while (v && !dynamic_cast<RecyclingGridItem*>(v)) v = v->getParent();
-    if (v) m_focusChangeCallback(static_cast<RecyclingGridItem*>(v)->getIndex());
+    if (v) {
+        size_t idx = static_cast<RecyclingGridItem*>(v)->getIndex();
+        m_defaultCellFocus = idx;  // 自动记住焦点索引
+        if (m_focusChangeCallback) m_focusChangeCallback(idx);
+    }
 }
 
 // ── 导航 ───────────────────────────────────────────────────────
@@ -487,6 +490,7 @@ void RecyclingGrid::removeCell(brls::View* view) {
 
 void RecyclingGrid::queueReusableCell(RecyclingGridItem* cell) {
     m_queueMap.at(cell->reuseIdentifier)->push_back(cell);
+    cell->setParent(nullptr);  // 断开 parent 链，popActivity 走 fallback 恢复焦点
     cell->cacheForReuse();
 }
 

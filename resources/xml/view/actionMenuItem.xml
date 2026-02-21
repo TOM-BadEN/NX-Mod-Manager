@@ -1,0 +1,39 @@
+<!--
+    ActionMenuItem - 菜单选项组件
+    左侧标题 + 右侧 badge（单选显示值 / 多选显示勾）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    paddingTop="18"
+    paddingBottom="18"
+    paddingLeft="30"
+    paddingRight="30"
+    lineColor="@theme/app/textSecondary"
+    lineBottom="1px"
+>
+
+    <!-- 标题 -->
+    <brls:Label
+        id="actionMenuItem/title"
+        width="auto"
+        height="auto"
+        grow="1"
+        fontSize="24"
+        singleLine="true"/>
+
+    <!-- badge（单选：显示值如"开启"；多选：显示 ✓） -->
+    <brls:Label
+        id="actionMenuItem/badge"
+        width="auto"
+        height="auto"
+        shrink="0"
+        fontSize="22"
+        textColor="@theme/app/textHighlight"
+        marginLeft="20"
+        singleLine="true"/>
+
+</brls:Box>
