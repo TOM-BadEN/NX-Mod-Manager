@@ -118,7 +118,7 @@ ActionMenu::ActionMenu(MenuPageConfig* rootPage)
     m_version->setText(APP_VERSION);
 
     // 列表内边距（与 ModList 一致，统一由 RecyclingGrid 内部管理）
-    m_grid->setPadding(30, 35, 30, 20);
+    m_grid->setPadding(30, 35, 30, 28);
 
     // 注册 Cell 类型
     m_grid->registerCell("ActionMenuItem", ActionMenuItem::create);
@@ -244,11 +244,12 @@ void ActionMenu::updateHint(size_t index) {
     auto* currentPage = m_menuStack.back().page;
     if (index >= currentPage->items.size()) return;
 
-    const auto& hintText = currentPage->items[index].hintText;
-    if (hintText.empty()) {
+    const auto& item = currentPage->items[index];
+    if (item.hintText.empty()) {
         m_hintCard->setVisibility(brls::Visibility::INVISIBLE);
     } else {
-        m_hint->setText(hintText);
+        m_hintTitle->setText(item.getTitle());
+        m_hint->setText(item.hintText);
         m_hintCard->setVisibility(brls::Visibility::VISIBLE);
     }
 }

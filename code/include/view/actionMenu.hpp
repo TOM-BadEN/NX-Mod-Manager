@@ -91,6 +91,7 @@ private:
     BRLS_BIND(brls::Label, m_version, "actionMenu/version");    // Header 版本号
     BRLS_BIND(RecyclingGrid, m_grid, "actionMenu/grid");        // 选项列表
     BRLS_BIND(brls::Label, m_index, "actionMenu/index");        // Footer 索引
-    BRLS_BIND(brls::Label, m_hint, "actionMenu/hint");          // 提示词文字
+    BRLS_BIND(brls::Label, m_hintTitle, "actionMenu/hintTitle"); // 提示词标题
+    BRLS_BIND(brls::Label, m_hint, "actionMenu/hint");          // 提示词内容
     BRLS_BIND(brls::Box, m_hintCard, "actionMenu/hintCard");    // 提示词卡片容器
 };

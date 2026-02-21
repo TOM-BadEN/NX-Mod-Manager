@@ -15,28 +15,38 @@
         height="auto"
         grow="1"
         axis="column"
-        justifyContent="center"
+        justifyContent="flexStart"
         alignItems="flexEnd"
-        paddingRight="40">
+        paddingTop="87"
+        paddingRight="18">
 
         <!-- 提示词卡片（默认隐藏，焦点变化时显示） -->
         <brls:Box
             id="actionMenu/hintCard"
-            width="280"
+            width="50%"
             height="auto"
+            minHeight="30%"
             axis="column"
-            paddingTop="20"
-            paddingBottom="20"
-            paddingLeft="20"
-            paddingRight="20"
+            shadowType="generic"
+            paddingTop="30"
+            paddingBottom="30"
+            paddingLeft="30"
+            paddingRight="30"
             backgroundColor="@theme/app/menuBg"
             cornerRadius="8">
+
+            <brls:Label
+                id="actionMenu/hintTitle"
+                width="auto"
+                height="auto"
+                fontSize="21"/>
 
             <brls:Label
                 id="actionMenu/hint"
                 width="auto"
                 height="auto"
-                fontSize="20"/>
+                fontSize="21"
+                marginTop="21"/>
 
         </brls:Box>
 
@@ -45,10 +55,11 @@
     <!-- 右侧：菜单面板 -->
     <brls:Box
         id="actionMenu/panel"
-        width="33%"
+        width="37%"
         height="auto"
         axis="column"
-        backgroundColor="@theme/app/menuBg">
+        backgroundColor="@theme/app/menuBg"
+        shadowType="generic">
 
         <!-- Header -->
         <brls:Box
@@ -58,9 +69,7 @@
             justifyContent="spaceBetween"
             alignItems="center"
             paddingLeft="@style/brls/applet_frame/header_padding_sides"
-            paddingRight="@style/brls/applet_frame/header_padding_sides"
-            lineColor="@theme/brls/applet_frame/separator"
-            lineBottom="1px">
+            paddingRight="@style/brls/applet_frame/header_padding_sides">
 
             <brls:Label
                 id="actionMenu/title"
@@ -77,6 +86,14 @@
 
         </brls:Box>
 
+        <!-- Header 分界线（缩短，不连到边缘） -->
+        <brls:Box
+            width="auto"
+            height="1"
+            marginLeft="20"
+            marginRight="20"
+            backgroundColor="@theme/brls/applet_frame/separator"/>
+
         <!-- Content -->
         <brls:Box
             width="auto"
@@ -85,13 +102,25 @@
 
             <RecyclingGrid
                 id="actionMenu/grid"
-                width="100%"
+                width="auto"
                 height="100%"
+                grow="1"
+                marginRight="8"
+                marginTop="5"
+                marginBottom="5"
                 spanCount="1"
                 itemHeight="76"
                 itemSpace="0"/>
 
         </brls:Box>
+
+        <!-- Footer 分界线（缩短，不连到边缘） -->
+        <brls:Box
+            width="auto"
+            height="1"
+            marginLeft="20"
+            marginRight="20"
+            backgroundColor="@theme/brls/applet_frame/separator"/>
 
         <!-- Footer -->
         <brls:Box
@@ -103,9 +132,7 @@
             paddingLeft="@style/brls/hints/footer_padding_sides"
             paddingRight="@style/brls/hints/footer_padding_sides"
             paddingTop="@style/brls/hints/footer_padding_top_bottom"
-            paddingBottom="@style/brls/hints/footer_padding_top_bottom"
-            lineColor="@theme/brls/applet_frame/separator"
-            lineTop="1px">
+            paddingBottom="@style/brls/hints/footer_padding_top_bottom">
 
             <!-- 索引 -->
             <brls:Label
