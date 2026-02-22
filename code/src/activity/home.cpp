@@ -123,15 +123,6 @@ void Home::setupGridPage() {
         m_focusedIndex.store(index);
         m_frame->setIndexText(std::to_string(index + 1) + " / " + std::to_string(m_games.size()));
     });
-
-    m_grid->registerAction("上翻", brls::BUTTON_LB, [this](...) {
-        flipScreen(-1);
-        return true;
-    }, true, true);
-    m_grid->registerAction("下翻", brls::BUTTON_RB, [this](...) {
-        flipScreen(1);
-        return true;
-    }, true, true);
 }
 
 void Home::toggleSort() {
@@ -149,36 +140,6 @@ void Home::toggleSort() {
     }
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
-}
-
-void Home::flipScreen(int direction) {
-    auto* focus = brls::Application::getCurrentFocus();
-    if (!focus) return;
-    while (focus && !dynamic_cast<RecyclingGridItem*>(focus))
-        focus = focus->getParent();
-    if (!focus) return;
-    size_t idx = static_cast<RecyclingGridItem*>(focus)->getIndex();
-
-    int rowsPerScreen = std::max(1, static_cast<int>(m_grid->getHeight() / m_grid->estimatedRowHeight));
-    int target = static_cast<int>(idx) + direction * m_grid->spanCount * rowsPerScreen;
-    target = std::clamp(target, 0, static_cast<int>(m_grid->getDataSource()->getItemCount()) - 1);
-    if (static_cast<size_t>(target) == idx) {
-        auto* cur = brls::Application::getCurrentFocus();
-        if (cur) cur->shakeHighlight(direction > 0 ? brls::FocusDirection::DOWN : brls::FocusDirection::UP);
-        return;
-    }
-
-    // selectRowAt 确保 target Cell 在 contentBox 中
-    m_grid->selectRowAt(target, false);
-    auto* cell = m_grid->getGridItemByIndex(target);
-    if (!cell) return;
-
-    // 1ms 动画 trick 防高亮闪烁
-    auto style = brls::Application::getStyle();
-    float saved = style["brls/animations/highlight"];
-    style.addMetric("brls/animations/highlight", 1.0f);
-    brls::Application::giveFocus(cell);
-    style.addMetric("brls/animations/highlight", saved);
 }
 
 void Home::startNacpLoader() {

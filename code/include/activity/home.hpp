@@ -41,7 +41,7 @@ private:
     void setupGridPage();                                       // 初始化网格 + 注册回调
     void startNacpLoader();                                     // 启动异步 NACP 加载
     void toggleSort();                                          // 切换排序方向
-    void flipScreen(int direction);                             // LB/RB 翻页
+
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 
 

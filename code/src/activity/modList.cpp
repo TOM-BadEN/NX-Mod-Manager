@@ -54,15 +54,6 @@ void ModList::setupModGrid() {
         updateDetail(index);
     });
 
-    m_grid->registerAction("上翻", brls::BUTTON_LB, [this](...) {
-        flipScreen(-1);
-        return true;
-    }, true, true);
-    m_grid->registerAction("下翻", brls::BUTTON_RB, [this](...) {
-        flipScreen(1);
-        return true;
-    }, true, true);
-
     // 右键：列表 → 详情面板
     m_grid->registerAction("", brls::BUTTON_NAV_RIGHT, [this](...) {
         brls::Application::giveFocus(m_detail);
@@ -202,33 +193,4 @@ void ModList::applySizeResult(int modIdx, const std::string& sizeStr) {
     m_mods[modIdx].size = sizeStr;
     if (static_cast<size_t>(modIdx) == m_lastFocusIndex) m_tagSize->setText(sizeStr);
     m_modJson.setString(m_mods[modIdx].dirName, "size", sizeStr);
-}
-
-void ModList::flipScreen(int direction) {
-    auto* focus = brls::Application::getCurrentFocus();
-    if (!focus) return;
-    while (focus && !dynamic_cast<RecyclingGridItem*>(focus))
-        focus = focus->getParent();
-    if (!focus) return;
-    size_t idx = static_cast<RecyclingGridItem*>(focus)->getIndex();
-
-    int rowsPerScreen = std::max(1, static_cast<int>(m_grid->getHeight() / (m_grid->estimatedRowHeight + m_grid->estimatedRowSpace)));
-    int target = static_cast<int>(idx) + direction * m_grid->spanCount * rowsPerScreen;
-    target = std::clamp(target, 0, static_cast<int>(m_grid->getDataSource()->getItemCount()) - 1);
-
-    if (static_cast<size_t>(target) == idx) {
-        auto* cur = brls::Application::getCurrentFocus();
-        if (cur) cur->shakeHighlight(direction > 0 ? brls::FocusDirection::DOWN : brls::FocusDirection::UP);
-        return;
-    }
-
-    m_grid->selectRowAt(target, false);
-    auto* cell = m_grid->getGridItemByIndex(target);
-    if (!cell) return;
-
-    auto style = brls::Application::getStyle();
-    float saved = style["brls/animations/highlight"];
-    style.addMetric("brls/animations/highlight", 1.0f);
-    brls::Application::giveFocus(cell);
-    style.addMetric("brls/animations/highlight", saved);
 }

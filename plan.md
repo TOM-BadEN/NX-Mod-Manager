@@ -64,4 +64,4 @@ RecyclingGrid 只新增 `flipScreen(int direction)` 公开方法，不内部注�
 
 ## 决策
 
-**待定**，暂不实施。
+**方案 A（完全内置）**，已实施。flipScreen 方法 + LB/RB 注册内置于 RecyclingGrid，Home/ModList/ActionMenu 自动获得翻页能力。

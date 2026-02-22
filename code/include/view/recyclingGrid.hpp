@@ -93,6 +93,9 @@ public:
     size_t getRowCount();
     float getHeightByCellIndex(size_t index, size_t start = 0);
 
+    // 翻页
+    void flipScreen(int direction);
+
     // 分页
     void onNextPage(const std::function<void()>& callback = nullptr);
     void forceRequestNextPage();

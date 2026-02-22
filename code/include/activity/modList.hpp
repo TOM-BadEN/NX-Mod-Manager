@@ -57,7 +57,7 @@ private:
     void setupDetail();                     // 初始化详情面板（游戏图标/名/TID）
     void updateDetail(size_t index);        // 根据焦点更新详情面板
     void toggleSort();                      // 切换排序方向
-    void flipScreen(int direction);         // LB/RB 翻页
+
     void retryIconLoad();                   // 图标延迟加载重试（每秒1次，最多10次）
     void startSizeLoader();                  // 启动异步体积计算
     void applySizeResult(int modIdx, const std::string& sizeStr);  // 应用体积结果到数据 + UI

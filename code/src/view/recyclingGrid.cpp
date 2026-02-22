@@ -75,6 +75,10 @@ RecyclingGrid::RecyclingGrid() {
 
     registerPercentageXMLAttribute("paddingLeft",
                                      [this](float percentage) { setPaddingLeftPercentage(percentage); });
+
+    // LB/RB 翻页（hidden=true：不在底部按钮栏显示）
+    registerAction("上翻", brls::ControllerButton::BUTTON_LB, [this](...) { flipScreen(-1); return true; }, true, true);
+    registerAction("下翻", brls::ControllerButton::BUTTON_RB, [this](...) { flipScreen(1); return true; }, true, true);
 }
 
 RecyclingGrid::~RecyclingGrid() {
@@ -90,6 +94,33 @@ RecyclingGrid::~RecyclingGrid() {
         }
         delete it.second;
     }
+}
+
+// ── 翻页 ──────────────────────────────────────────────────────
+
+void RecyclingGrid::flipScreen(int direction) {
+    if (!m_dataSource || m_dataSource->getItemCount() == 0) return;
+
+    size_t idx = m_defaultCellFocus;
+    int rowsPerScreen = std::max(1, static_cast<int>(getHeight() / (estimatedRowHeight + estimatedRowSpace)));
+    int target = static_cast<int>(idx) + direction * spanCount * rowsPerScreen;
+    target = std::clamp(target, 0, static_cast<int>(m_dataSource->getItemCount()) - 1);
+
+    if (static_cast<size_t>(target) == idx) {
+        if (auto* cell = getGridItemByIndex(idx))
+            cell->shakeHighlight(direction > 0 ? brls::FocusDirection::DOWN : brls::FocusDirection::UP);
+        return;
+    }
+
+    selectRowAt(target, false);
+    auto* cell = getGridItemByIndex(target);
+    if (!cell) return;
+
+    auto style = brls::Application::getStyle();
+    float saved = style["brls/animations/highlight"];
+    style.addMetric("brls/animations/highlight", 1.0f);
+    brls::Application::giveFocus(cell);
+    style.addMetric("brls/animations/highlight", saved);
 }
 
 // ── draw ───────────────────────────────────────────────────────
