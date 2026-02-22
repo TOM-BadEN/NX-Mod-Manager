@@ -81,7 +81,7 @@ void Home::toggleSort() {
 void Home::setupMenu() {
     m_menu = {"菜单选项", {
 
-        MenuItemConfig{"收藏游戏", "将当前游戏加入\\取消收藏，收藏的游戏会优先显示在列表顶部"}
+        MenuItemConfig{"收藏游戏", "将当前游戏加入/取消收藏，收藏的游戏会优先显示在列表顶部"}
             .title([this]{ return m_games[m_focusedIndex.load()].isFavorite ? "取消收藏" : "收藏游戏"; }),
 
         MenuItemConfig{"管理游戏", "包含以下内容：\n - 修改游戏的元数据\n - 新增、移除当前游戏 \n - 查看游戏的SD卡路径"},
@@ -95,6 +95,7 @@ void Home::setupMenu() {
         MenuItemConfig{"关于插件", "包含以下内容：\n - 使用说明\n - 基本信息\n - 反馈与建议渠道\n - 赞助支持"},
 
     }};
+
     m_frame->registerAction("菜单", brls::BUTTON_X, [this](...) {
         m_menu.title = m_games[m_focusedIndex.load()].displayName;
         m_menu.show();

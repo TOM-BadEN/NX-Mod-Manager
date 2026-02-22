@@ -9,5 +9,5 @@
     <!-- 胶囊标签背景色 -->
     <color name="app/tagBg" dark="#FFFFFF18" light="#00000010"/>
     <!-- 菜单面板 / 提示卡片背景色（较低透明度） -->
-    <color name="app/menuBg" dark="#1A1A1AF5" light="#F0F0F0F5"/>
+    <color name="app/menuBg" dark="#1A1A1AF5" light="#FAFAFAF5"/>
 </theme>
