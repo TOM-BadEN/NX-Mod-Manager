@@ -1,7 +1,8 @@
 /**
  * RecyclingGrid - 通用回收网格组件
  * 继承 ScrollingFrame，支持多列网格布局 + Cell 回收复用 + 分页加载
- * 移植自 wiliwili 项目，移除了 ButtonRefresh / SkeletonCell 等特有依赖
+ * 移植自 wiliwili 项目，移除了 ButtonRefresh / SkeletonCell 等特有依赖，添加了内置翻页功能，
+ * 修改了部分代码逻辑
  * https://github.com/xfangfang/wiliwili
  */
 
