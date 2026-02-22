@@ -39,7 +39,7 @@ void ModList::onContentAvailable() {
 }
 
 void ModList::setupModGrid() {
-    m_grid->setPadding(25, 0, 20, 40);
+    m_grid->setPadding(25, 0, 25, 40);
     m_grid->setScrollingIndicatorVisible(false);
     m_grid->registerCell("ModCard", ModCard::create);
 

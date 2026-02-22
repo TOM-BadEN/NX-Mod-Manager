@@ -146,8 +146,14 @@ RecyclingGridItem* RecyclingGrid::dequeueReusableCell(std::string identifier) {
     if (it != m_queueMap.end()) {
         std::vector<RecyclingGridItem*>* vector = it->second;
         if (!vector->empty()) {
-            cell = vector->back();
-            vector->pop_back();
+            auto* curFocus = brls::Application::getCurrentFocus();
+            if (vector->size() > 1 && vector->back() == curFocus) {
+                cell = vector->front();
+                vector->erase(vector->begin());
+            } else {
+                cell = vector->back();
+                vector->pop_back();
+            }
         } else {
             cell                  = m_allocationMap.at(identifier)();
             cell->reuseIdentifier = identifier;
@@ -207,8 +213,8 @@ void RecyclingGrid::reloadData() {
 
     // 设置列表总高度
     if (!isFlowMode || spanCount != 1) {
-        m_contentBox->setHeight((estimatedRowHeight + estimatedRowSpace) * (float)getRowCount() +
-                                m_paddingTop + m_paddingBottom);
+        m_contentBox->setHeight((estimatedRowHeight + estimatedRowSpace) * (float)getRowCount()
+                                - estimatedRowSpace + m_paddingTop + m_paddingBottom);
         size_t lineHeadIndex = cellFocusIndex / spanCount * spanCount;
         m_renderedFrame.origin.y = getHeightByCellIndex(lineHeadIndex);
         addCellAt(lineHeadIndex, true);
@@ -236,8 +242,8 @@ void RecyclingGrid::notifyDataChanged() {
             }
             m_contentBox->setHeight(getHeightByCellIndex(m_dataSource->getItemCount()) + m_paddingTop + m_paddingBottom);
         } else {
-            m_contentBox->setHeight((estimatedRowHeight + estimatedRowSpace) * getRowCount() +
-                                    m_paddingTop + m_paddingBottom);
+            m_contentBox->setHeight((estimatedRowHeight + estimatedRowSpace) * getRowCount()
+                                    - estimatedRowSpace + m_paddingTop + m_paddingBottom);
         }
     }
     m_requestNextPage = false;

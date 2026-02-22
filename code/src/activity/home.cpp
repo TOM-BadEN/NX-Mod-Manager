@@ -110,7 +110,7 @@ void Home::showEmptyHint() {
 }
 
 void Home::setupGridPage() {
-    m_grid->setPadding(20, 40, 20, 40);
+    m_grid->setPadding(17, 15, 17, 40);
     m_grid->registerCell("GameCard", GameCard::create);
 
     auto* ds = new GameCardDS(m_games, [this](size_t index) {
