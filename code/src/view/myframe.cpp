@@ -12,6 +12,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <switch.h>
 
 // 构造函数：加载布局 + 注册按键
 MyFrame::MyFrame() {
@@ -35,6 +36,10 @@ MyFrame::MyFrame() {
 #ifdef NXLINK
     brls::Application::setFPSStatus(true);
     m_fpsLabel->setVisibility(brls::Visibility::VISIBLE);
+    m_memLabel->setVisibility(brls::Visibility::VISIBLE);
+    uint64_t totalMem = 0;
+    svcGetInfo(&totalMem, InfoType_TotalMemorySize, CUR_PROCESS_HANDLE, 0);
+    m_totalMemMB = totalMem / (1024 * 1024);
 #endif
 }
 
@@ -123,6 +128,13 @@ void MyFrame::updateStatusText() {
     if (fps != m_lastFps) {
         m_lastFps = fps;
         m_fpsLabel->setText("FPS:" + std::to_string(fps));
+    }
+    uint64_t usedMem = 0;
+    svcGetInfo(&usedMem, InfoType_UsedMemorySize, CUR_PROCESS_HANDLE, 0);
+    uint64_t usedMB = usedMem / (1024 * 1024);
+    if (usedMB != m_lastUsedMB) {
+        m_lastUsedMB = usedMB;
+        m_memLabel->setText(std::to_string(usedMB) + " / " + std::to_string(m_totalMemMB) + " MB");
     }
 #endif
 }

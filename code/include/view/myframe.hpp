@@ -26,6 +26,7 @@ private:
     BRLS_BIND(brls::Label, m_titleLabel, "my/title");
     BRLS_BIND(brls::Image, m_iconImage, "my/icon");
     BRLS_BIND(brls::Label, m_fpsLabel, "my/fps");
+    BRLS_BIND(brls::Label, m_memLabel, "my/memory");
     BRLS_BIND(brls::Label, m_timeLabel, "my/time");
     BRLS_BIND(brls::Label, m_batteryPercentLabel, "my/battery_percent");
     BRLS_BIND(brls::Label, m_indexLabel, "my/indexLabel");
@@ -34,6 +35,8 @@ private:
     brls::View* m_contentView = nullptr;
     std::string m_timeText;
     size_t m_lastFps = 0;
+    uint64_t m_totalMemMB = 0;  // 总内存 MB（启动时获取一次）
+    uint64_t m_lastUsedMB = 0;  // 上次显示的已用 MB
     
     void setContentView(brls::View* view);
     void updateFrameItem();

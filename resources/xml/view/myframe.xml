@@ -57,19 +57,27 @@
             marginTop="13">
 
             <brls:Label
-                id="my/time"
-                width="auto"
-                height="auto"
-                marginRight="20"
-                fontSize="21.5"/>
-
-            <brls:Label
                 id="my/fps"
                 width="auto"
                 height="auto"
                 marginRight="20"
                 fontSize="21.5"
                 visibility="gone"/>
+
+            <brls:Label
+                id="my/memory"
+                width="auto"
+                height="auto"
+                marginRight="20"
+                fontSize="21.5"
+                visibility="gone"/>
+
+            <brls:Label
+                id="my/time"
+                width="auto"
+                height="auto"
+                marginRight="20"
+                fontSize="21.5"/>
 
             <brls:Wireless
                 marginRight="20"
