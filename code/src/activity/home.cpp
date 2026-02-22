@@ -33,6 +33,44 @@ void Home::onContentAvailable() {
     });
     m_frame->setActionAvailable(brls::BUTTON_Y, false);
 
+    // 子菜单配置
+    m_modeSubMenu = {"选择模式", {
+        MenuItemConfig{"模式1", "基础模式"}
+            .badge([this] { return m_currentMode == 1 ? "\uE876" : ""; })
+            .action([this] { m_currentMode = 1; })
+            .popPage(),
+        MenuItemConfig{"模式2", "进阶模式"}
+            .badge([this] { return m_currentMode == 2 ? "\uE876" : ""; })
+            .action([this] { m_currentMode = 2; })
+            .popPage(),
+        MenuItemConfig{"模式3", "高级模式"}
+            .badge([this] { return m_currentMode == 3 ? "\uE876" : ""; })
+            .action([this] { m_currentMode = 3; })
+            .popPage(),
+    }};
+    m_modeSubMenu.defaultFocus = [this] { return (size_t)(m_currentMode - 1); };
+
+    // 多选测试子菜单（1-100）
+    m_multiSelectTest = {"多选测试", {}};
+    m_multiSelectTest.multiSelect = true;
+    for (int i = 1; i <= 100; i++) m_multiSelectTest.items.push_back(MenuItemConfig{std::to_string(i), ""});
+    m_multiSelectTest.onConfirm = [](const std::vector<int>& indices) {
+        std::string msg;
+        if (indices.empty()) {
+            msg = "未选中任何项";
+        } else {
+            msg = "选中了：";
+            for (size_t i = 0; i < indices.size(); i++) {
+                if (i > 0) msg += ", ";
+                msg += std::to_string(indices[i] + 1);
+            }
+        }
+        auto* dialog = new brls::Dialog(msg);
+        dialog->addButton("确认", []() {});
+        dialog->addButton("取消", []() {});
+        dialog->open();
+    };
+
     // 测试菜单
     m_testMenu = {"测试菜单", {
         MenuItemConfig{"对话框测试", "点击后关闭菜单并弹出对话框"}
@@ -44,13 +82,16 @@ void Home::onContentAvailable() {
             }),
         MenuItemConfig{"禁用测试", "此项已禁用，不可点击"}
             .disabled(),
-        MenuItemConfig{"测试菜单3", "关闭菜单"},
-        MenuItemConfig{"测试菜单4", "关闭菜单"},
-        MenuItemConfig{"测试菜单5", "关闭菜单"},
-        MenuItemConfig{"测试菜单6", "关闭菜单"},
-        MenuItemConfig{"测试菜单7", "关闭菜单"},
-        MenuItemConfig{"测试菜单8", "关闭菜单"},
-        MenuItemConfig{"测试菜单9", "关闭菜单"},
+        MenuItemConfig{"开关切换测试", "点击切换开启/关闭状态"}
+            .badge([this]() { return m_toggleState ? "开启" : "关闭"; })
+            .badgeHighlight([this] { return m_toggleState; })
+            .action([this]() { m_toggleState = !m_toggleState; })
+            .stayOpen(),
+        MenuItemConfig{"模式选择", "选择不同的运行模式"}
+            .badge([this] { return "模式" + std::to_string(m_currentMode); })
+            .submenu(&m_modeSubMenu),
+        MenuItemConfig{"多选测试", "1-100多选，+键提交"}
+            .submenu(&m_multiSelectTest),
     }};
     m_frame->registerAction("菜单", brls::BUTTON_X, [this](...) {
         m_testMenu.show();

@@ -17,6 +17,7 @@ MenuItemConfig& MenuItemConfig::submenu(MenuPageConfig* s) { subMenuPtr = s; ret
 MenuItemConfig& MenuItemConfig::disabled() { enabled = false; return *this; }
 MenuItemConfig& MenuItemConfig::popPage() { afterAction = AfterAction::PopPage; return *this; }
 MenuItemConfig& MenuItemConfig::stayOpen() { afterAction = AfterAction::Stay; return *this; }
+MenuItemConfig& MenuItemConfig::badgeHighlight(std::function<bool()> f) { badgeHighlightGetter = std::move(f); return *this; }
 
 std::string MenuItemConfig::getTitle() const { return titleGetter ? titleGetter() : titleText; }
 std::string MenuItemConfig::getBadge() const { return badgeGetter ? badgeGetter() : badgeText; }
@@ -47,10 +48,12 @@ public:
         auto* cell = static_cast<ActionMenuItem*>(grid->dequeueReusableCell("ActionMenuItem"));
         auto& item = m_page->items[index];
         if (m_page->multiSelect)
-            cell->setItem(item.getTitle(), item.selected ? "✓" : "");
+            cell->setItem(item.getTitle(), item.selected ? "\uE876" : "");
         else
             cell->setItem(item.getTitle(), item.getBadge());
         cell->setDisabled(!item.enabled);
+        if (item.badgeHighlightGetter)
+            cell->setBadgeHighlighted(item.badgeHighlightGetter());
         // 最后一项不显示分隔线
         cell->setLineBottom(index < m_page->items.size() - 1 ? 1 : 0);
         return cell;
@@ -66,7 +69,7 @@ public:
             // 更新当前 Cell（11.1: 不要 reloadData）
             auto* cell = dynamic_cast<ActionMenuItem*>(grid->getGridItemByIndex(index));
             if (cell) {
-                cell->setItem(item.getTitle(), item.selected ? "✓" : "");
+                cell->setItem(item.getTitle(), item.selected ? "\uE876" : "");
             }
             return;
         }
@@ -94,7 +97,10 @@ public:
                 if (item.onAction) item.onAction();
                 // 直接更新当前 Cell
                 auto* cell = dynamic_cast<ActionMenuItem*>(grid->getGridItemByIndex(index));
-                if (cell) cell->setItem(item.getTitle(), item.getBadge());
+                if (cell) {
+                    cell->setItem(item.getTitle(), item.getBadge());
+                    if (item.badgeHighlightGetter) cell->setBadgeHighlighted(item.badgeHighlightGetter());
+                }
                 break;
             }
         }
@@ -153,9 +159,10 @@ void ActionMenu::willAppear(bool resetState) {
 // ── 菜单栈操作 ──────────────────────────────────────────────────
 
 void ActionMenu::pushPage(MenuPageConfig* page) {
-    // 保存当前页焦点
+    // 保存当前页焦点 + 滚动位置
     if (!m_menuStack.empty()) {
         m_menuStack.back().focusIndex = m_grid->getDefaultCellFocus();
+        m_menuStack.back().scrollOffset = m_grid->getContentOffsetY();
     }
 
     m_menuStack.push_back({page, 0});
@@ -166,9 +173,25 @@ void ActionMenu::pushPage(MenuPageConfig* page) {
     // 动态注册/注销多选按键
     updateMultiSelectActions(page->multiSelect);
 
+    // 多选模式：重置勾选状态
+    if (page->multiSelect) {
+        for (auto& item : page->items) item.selected = false;
+    }
+
+    // 转移焦点到非 Cell 视图，避免 setDataSource 回收时 LIFO 碰撞导致 giveFocus 跳过
+    m_title->setFocusable(true);
+    brls::Application::giveFocus(m_title);
+    m_title->setFocusable(false);
+
     // 设置数据源（RecyclingGrid 会 delete 旧 DS）
-    m_grid->setDefaultCellFocus(0);
+    size_t focusIndex = page->defaultFocus ? page->defaultFocus() : 0;
+    m_grid->setDefaultCellFocus(focusIndex);
     m_grid->setDataSource(new ActionMenuItemDS(this, page));
+    brls::Application::giveFocus(m_grid);
+    // 抑制 handleAction 残留点击动画（旧 Cell 被 LIFO 复用为焦点行）
+    if (auto* cell = m_grid->getGridItemByIndex(focusIndex)) {
+        cell->setHideClickAnimation(true);
+    }
 }
 
 void ActionMenu::popPage() {
@@ -187,9 +210,20 @@ void ActionMenu::popPage() {
     // 动态注册/注销多选按键
     updateMultiSelectActions(parent.page->multiSelect);
 
+    // 转移焦点到非 Cell 视图，避免 setDataSource 回收时 LIFO 碰撞导致 giveFocus 跳过
+    m_title->setFocusable(true);
+    brls::Application::giveFocus(m_title);
+    m_title->setFocusable(false);
+
     // 11.6: 恢复焦点 + reloadData 刷新 badge
     m_grid->setDefaultCellFocus(parent.focusIndex);
     m_grid->setDataSource(new ActionMenuItemDS(this, parent.page));
+    m_grid->setContentOffsetY(parent.scrollOffset, false);
+    brls::Application::giveFocus(m_grid);
+    // 抑制 handleAction 残留点击动画（旧 Cell 被 LIFO 复用为焦点行）
+    if (auto* cell = m_grid->getGridItemByIndex(parent.focusIndex)) {
+        cell->setHideClickAnimation(true);
+    }
 }
 
 void ActionMenu::closeMenu() {
@@ -203,14 +237,13 @@ void ActionMenu::closeMenu() {
 // ── 多选按键动态注册 ─────────────────────────────────────────────
 
 void ActionMenu::updateMultiSelectActions(bool multiSelect) {
-    // 注销旧的 X/+ action
-    if (m_actionX != ACTION_NONE) { unregisterAction(m_actionX); m_actionX = ACTION_NONE; }
+    // 注销旧的 + action
     if (m_actionStart != ACTION_NONE) { unregisterAction(m_actionStart); m_actionStart = ACTION_NONE; }
 
     if (!multiSelect) return;
 
-    // 多选模式：注册 + 键确认
-    m_actionStart = registerAction("确认", brls::ControllerButton::BUTTON_START, [this](brls::View*) {
+    // 多选模式：注册 + 键提交
+    m_actionStart = registerAction("提交", brls::ControllerButton::BUTTON_START, [this](brls::View*) {
         auto* currentPage = m_menuStack.back().page;
         if (!currentPage->onConfirm) return true;
 
@@ -218,22 +251,9 @@ void ActionMenu::updateMultiSelectActions(bool multiSelect) {
         for (size_t i = 0; i < currentPage->items.size(); i++) {
             if (currentPage->items[i].selected) indices.push_back(static_cast<int>(i));
         }
-        currentPage->onConfirm(indices);
+        auto onConfirm = currentPage->onConfirm;
         closeMenu();
-        return true;
-    });
-
-    // 多选模式：注册 X 键全选/全不选
-    m_actionX = registerAction("全选", brls::ControllerButton::BUTTON_X, [this](brls::View*) {
-        auto* currentPage = m_menuStack.back().page;
-        bool allSelected = true;
-        for (auto& item : currentPage->items) {
-            if (item.enabled && !item.selected) { allSelected = false; break; }
-        }
-        for (auto& item : currentPage->items) {
-            if (item.enabled) item.selected = !allSelected;
-        }
-        m_grid->reloadData();
+        onConfirm(indices);
         return true;
     });
 }

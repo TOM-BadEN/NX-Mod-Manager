@@ -18,8 +18,12 @@ public:
     // 设置禁用状态（次级文字颜色）
     void setDisabled(bool disabled);
 
+    // 设置 badge 高亮状态（true=高亮色，false=次级灰色）
+    void setBadgeHighlighted(bool highlighted);
+
     // 回收复用时重置内容
     void prepareForReuse() override;
+    void onFocusGained() override;
 
     // 工厂函数
     static RecyclingGridItem* create();

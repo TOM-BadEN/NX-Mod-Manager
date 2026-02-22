@@ -33,6 +33,7 @@ struct MenuItemConfig {
     // 动态覆盖（可选，运行时优先于静态值）
     std::function<std::string()> titleGetter    = nullptr;  // 动态标题
     std::function<std::string()> badgeGetter    = nullptr;  // 动态 badge
+    std::function<bool()> badgeHighlightGetter  = nullptr;  // badge 是否高亮（nullptr=始终高亮）
 
     // 链式方法
     MenuItemConfig& title(const std::string& s);            // 设置静态标题
@@ -44,6 +45,7 @@ struct MenuItemConfig {
     MenuItemConfig& disabled();                             // 标记不可选
     MenuItemConfig& popPage();                              // action 后返回上级
     MenuItemConfig& stayOpen();                             // action 后留在当前页
+    MenuItemConfig& badgeHighlight(std::function<bool()> f); // badge 动态高亮
 
     // ActionMenu 内部取值（优先动态，回退静态）
     std::string getTitle() const;
@@ -56,6 +58,7 @@ struct MenuPageConfig {
     bool multiSelect = false;                                               // 多选模式
     std::function<void(const std::vector<int>&)> onConfirm = nullptr;       // 多选确认回调
     std::function<void()> onDismiss = nullptr;                              // 菜单关闭回调
+    std::function<size_t()> defaultFocus = nullptr;                           // 动态初始焦点索引
 
     void show();  // 弹出菜单（内部创建 ActionMenu + pushActivity）
 };
@@ -63,6 +66,7 @@ struct MenuPageConfig {
 struct MenuStackEntry {
     MenuPageConfig* page;   // 当前页配置
     size_t focusIndex;      // 离开时的焦点位置（返回时恢复）
+    float scrollOffset;     // 离开时的滚动位置（返回时恢复）
 };
 
 class ActionMenu : public brls::Box {
@@ -80,8 +84,7 @@ private:
     MenuPageConfig* m_rootPage;                 // 根菜单页（由调用方持有生命周期）
     std::vector<MenuStackEntry> m_menuStack;    // 多级菜单栈
 
-    brls::ActionIdentifier m_actionX = ACTION_NONE;  // X 键（全选）action ID
-    brls::ActionIdentifier m_actionStart = ACTION_NONE;  // + 键（确认）action ID
+    brls::ActionIdentifier m_actionStart = ACTION_NONE;  // + 键（提交）action ID
 
     void updateHint(size_t index);              // 更新左侧提示词卡片
     void updateIndex(size_t index);             // 更新底部索引（如 "2/4"）

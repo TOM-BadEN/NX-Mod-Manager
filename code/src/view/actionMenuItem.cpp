@@ -15,6 +15,7 @@ void ActionMenuItem::setItem(const std::string& title, const std::string& badge)
     if (badge.empty()) {
         // 空 badge 从 Yoga 布局中排除，避免 Borealis labelMeasureFunc 空文本缓存 bug
         YGNodeStyleSetDisplay(m_badge->getYGNode(), YGDisplayNone);
+        m_badge->invalidate();
     } else {
         YGNodeStyleSetDisplay(m_badge->getYGNode(), YGDisplayFlex);
         m_badge->setText(badge);
@@ -28,9 +29,24 @@ void ActionMenuItem::setDisabled(bool disabled) {
     m_badge->setTextColor(disabled ? color : theme.getColor("app/textHighlight"));
 }
 
+void ActionMenuItem::setBadgeHighlighted(bool highlighted) {
+    auto theme = brls::Application::getTheme();
+    m_badge->setTextColor(theme.getColor(highlighted ? "app/textHighlight" : "app/textSecondary"));
+}
+
 void ActionMenuItem::prepareForReuse() {
     YGNodeStyleSetDisplay(m_badge->getYGNode(), YGDisplayNone);
     setDisabled(false);
+    setHideHighlight(true);
+    setHideClickAnimation(true);
+    playClickAnimation(false, false, true);
+    resetClickAnimation();
+}
+
+void ActionMenuItem::onFocusGained() {
+    setHideHighlight(false);
+    setHideClickAnimation(false);
+    RecyclingGridItem::onFocusGained();
 }
 
 RecyclingGridItem* ActionMenuItem::create() {

@@ -36,7 +36,6 @@ private:
     util::AsyncFurture<void> m_nacpLoader;                      // 异步 NACP 加载任务
     std::atomic<int> m_focusedIndex{0};                          // 当前焦点索引（后台线程读，主线程写）
     bool m_sortAsc = true;                                      // 排序方向（true=升序）
-    MenuPageConfig m_testMenu;                                   // 测试菜单
 
     void showEmptyHint();                                       // 显示空列表提示
     void setupGridPage();                                       // 初始化网格 + 注册回调
@@ -44,4 +43,14 @@ private:
     void toggleSort();                                          // 切换排序方向
     void flipScreen(int direction);                             // LB/RB 翻页
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
+
+
+    // 临时菜单测试变量
+    bool m_toggleState = false;
+    int m_currentMode = 1;             // 当前模式
+    
+    MenuPageConfig m_testMenu;                                   // 测试菜单
+    MenuPageConfig m_modeSubMenu;      // 子菜单配置
+    MenuPageConfig m_multiSelectTest;  // 多选测试子菜单
+    
 };
