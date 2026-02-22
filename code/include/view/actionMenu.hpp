@@ -97,4 +97,5 @@ private:
     BRLS_BIND(brls::Label, m_hintTitle, "actionMenu/hintTitle"); // 提示词标题
     BRLS_BIND(brls::Label, m_hint, "actionMenu/hint");          // 提示词内容
     BRLS_BIND(brls::Box, m_hintCard, "actionMenu/hintCard");    // 提示词卡片容器
+    BRLS_BIND(brls::Box, m_left, "actionMenu/left");              // 左侧区域（触摸关闭）
 };

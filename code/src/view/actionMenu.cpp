@@ -1,6 +1,50 @@
 /**
- * ActionMenu - 通用右侧弹出菜单组件实现
- * 包含：链式方法、ActionMenuItemDS（内部数据源）、ActionMenu 核心逻辑
+ * ActionMenu - 右侧菜单
+ *
+ * ── 创建菜单 ──
+ *
+ *   MenuPageConfig menu = {"菜单标题", {
+ *       MenuItemConfig{"选项名", "提示词"}.action([]{ ... }),
+ *   }};
+ *   menu.show();  // 弹出菜单
+ *
+ * ── 选项配置（链式调用）──
+ *
+ *   .action(func)         点击回调
+ *   .badge("文字")        右侧标签（静态）
+ *   .badge(func)          右侧标签（动态，每次显示时调用）
+ *   .badgeHighlight(func) 标签高亮条件（true=高亮色）
+ *   .submenu(&subPage)    点击进入子菜单（与 action 互斥）
+ *   .popPage()            执行 action 后返回上级（用于子菜单选项）
+ *   .stayOpen()           执行 action 后留在当前页（用于开关类选项）
+ *   .disabled()           禁用，不可点击
+ *
+ * ── 页面配置 ──
+ *
+ *   menu.defaultFocus = []{ return index; };     打开时聚焦第几项
+ *   menu.onDismiss = []{ ... };                  菜单关闭时回调
+ *
+ * ── 多选模式 ──
+ *
+ *   menu.multiSelect = true;
+ *   menu.onConfirm = [](const vector<int>& selected){ ... };  // +键提交
+ *
+ * ── 示例 ──
+ *
+ *   // 开关选项（留在当前页，badge 动态显示状态）
+ *   MenuItemConfig{"Wi-Fi", ""}
+ *       .badge([&]{ return wifiOn ? "开启" : "关闭"; })
+ *       .badgeHighlight([&]{ return wifiOn; })
+ *       .action([&]{ wifiOn = !wifiOn; })
+ *       .stayOpen()
+ *
+ *   // 子菜单（选择后返回上级，勾号标记当前项）
+ *   MenuPageConfig langMenu = {"语言", {
+ *       MenuItemConfig{"中文", ""}.badge([&]{ return lang==0 ? "\uE876" : ""; }).action([&]{ lang=0; }).popPage(),
+ *       MenuItemConfig{"English", ""}.badge([&]{ return lang==1 ? "\uE876" : ""; }).action([&]{ lang=1; }).popPage(),
+ *   }};
+ *   langMenu.defaultFocus = [&]{ return (size_t)lang; };
+ *   MenuItemConfig{"语言", ""}.badge([&]{ return langNames[lang]; }).submenu(&langMenu)
  */
 
 #include "view/actionMenu.hpp"
@@ -146,6 +190,13 @@ ActionMenu::ActionMenu(MenuPageConfig* rootPage)
 
     // 默认隐藏提示词卡片（pushPage 延迟到 willAppear，确保 RecyclingGrid 已完成布局）
     m_hintCard->setVisibility(brls::Visibility::INVISIBLE);
+
+    // 触摸左侧空白区域关闭菜单（排除提示词卡片）
+    m_left->addGestureRecognizer(new brls::TapGestureRecognizer([this](brls::TapGestureStatus status, brls::Sound* sound) {
+        if (status.state != brls::GestureState::END) return;
+        if (m_hintCard->getVisibility() == brls::Visibility::VISIBLE && m_hintCard->getFrame().pointInside(status.position)) return;
+        closeMenu();
+    }));
 }
 
 void ActionMenu::willAppear(bool resetState) {
