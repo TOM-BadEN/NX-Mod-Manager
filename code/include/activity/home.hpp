@@ -44,13 +44,6 @@ private:
 
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 
-
-    // 临时菜单测试变量
-    bool m_toggleState = false;
-    int m_currentMode = 1;             // 当前模式
-    
-    MenuPageConfig m_testMenu;                                   // 测试菜单
-    MenuPageConfig m_modeSubMenu;      // 子菜单配置
-    MenuPageConfig m_multiSelectTest;  // 多选测试子菜单
-    
+    MenuPageConfig m_menu;                                      // 主菜单
+    void setupMenu();                                           // 初始化菜单
 };

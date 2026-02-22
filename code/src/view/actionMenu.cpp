@@ -10,6 +10,8 @@
  *
  * ── 选项配置（链式调用）──
  *
+ *   .title("文字")        覆盖标题（静态）
+ *   .title(func)          覆盖标题（动态，每次显示时调用）
  *   .action(func)         点击回调
  *   .badge("文字")        右侧标签（静态）
  *   .badge(func)          右侧标签（动态，每次显示时调用）
@@ -218,8 +220,9 @@ void ActionMenu::pushPage(MenuPageConfig* page) {
 
     m_menuStack.push_back({page, 0});
 
-    // 更新标题
+    // 更新标题（超长时自动滚动）
     m_title->setText(page->title);
+    m_title->setAnimated(true);
 
     // 动态注册/注销多选按键
     updateMultiSelectActions(page->multiSelect);
@@ -250,8 +253,9 @@ void ActionMenu::popPage() {
     m_menuStack.pop_back();
     auto& parent = m_menuStack.back();
 
-    // 更新标题
+    // 更新标题（超长时自动滚动）
     m_title->setText(parent.page->title);
+    m_title->setAnimated(true);
 
     // 动态注册/注销多选按键
     updateMultiSelectActions(parent.page->multiSelect);

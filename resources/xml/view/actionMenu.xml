@@ -75,14 +75,19 @@
                 id="actionMenu/title"
                 width="auto"
                 height="auto"
-                fontSize="@style/brls/applet_frame/header_title_font_size"/>
+                grow="1"
+                fontSize="@style/brls/applet_frame/header_title_font_size"
+                singleLine="true"/>
 
             <brls:Label
                 id="actionMenu/version"
                 width="auto"
                 height="auto"
+                shrink="0"
+                marginLeft="25"
                 fontSize="21.5"
-                textColor="@theme/app/textSecondary"/>
+                textColor="@theme/app/textSecondary"
+                singleLine="true"/>
 
         </brls:Box>
 
