@@ -39,7 +39,6 @@ void ActionMenuItem::prepareForReuse() {
     setDisabled(false);
     setHideHighlight(true);
     setHideClickAnimation(true);
-    playClickAnimation(false, false, true);
     resetClickAnimation();
 }
 

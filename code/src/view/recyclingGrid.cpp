@@ -147,9 +147,16 @@ RecyclingGridItem* RecyclingGrid::dequeueReusableCell(std::string identifier) {
         std::vector<RecyclingGridItem*>* vector = it->second;
         if (!vector->empty()) {
             auto* curFocus = brls::Application::getCurrentFocus();
-            if (vector->size() > 1 && vector->back() == curFocus) {
-                cell = vector->front();
-                vector->erase(vector->begin());
+            if (vector->back() == curFocus) {
+                if (vector->size() > 1) {
+                    cell = vector->front();
+                    vector->erase(vector->begin());
+                } else {
+                    // 池子仅剩焦点 cell，创建新 cell 避免指针复用导致 giveFocus no-op
+                    cell                  = m_allocationMap.at(identifier)();
+                    cell->reuseIdentifier = identifier;
+                    cell->detach();
+                }
             } else {
                 cell = vector->back();
                 vector->pop_back();

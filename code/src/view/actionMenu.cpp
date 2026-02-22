@@ -178,11 +178,6 @@ void ActionMenu::pushPage(MenuPageConfig* page) {
         for (auto& item : page->items) item.selected = false;
     }
 
-    // 转移焦点到非 Cell 视图，避免 setDataSource 回收时 LIFO 碰撞导致 giveFocus 跳过
-    m_title->setFocusable(true);
-    brls::Application::giveFocus(m_title);
-    m_title->setFocusable(false);
-
     // 设置数据源（RecyclingGrid 会 delete 旧 DS）
     size_t focusIndex = page->defaultFocus ? page->defaultFocus() : 0;
     m_grid->setDefaultCellFocus(focusIndex);
@@ -210,12 +205,7 @@ void ActionMenu::popPage() {
     // 动态注册/注销多选按键
     updateMultiSelectActions(parent.page->multiSelect);
 
-    // 转移焦点到非 Cell 视图，避免 setDataSource 回收时 LIFO 碰撞导致 giveFocus 跳过
-    m_title->setFocusable(true);
-    brls::Application::giveFocus(m_title);
-    m_title->setFocusable(false);
-
-    // 11.6: 恢复焦点 + reloadData 刷新 badge
+    // 恢复焦点 + reloadData 刷新 badge
     m_grid->setDefaultCellFocus(parent.focusIndex);
     m_grid->setDataSource(new ActionMenuItemDS(this, parent.page));
     m_grid->setContentOffsetY(parent.scrollOffset, false);
