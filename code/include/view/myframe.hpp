@@ -35,8 +35,7 @@ private:
     brls::View* m_contentView = nullptr;
     std::string m_timeText;
     size_t m_lastFps = 0;
-    uint64_t m_totalMemMB = 0;  // 总内存 MB（启动时获取一次）
-    uint64_t m_lastUsedMB = 0;  // 上次显示的已用 MB
+    uint64_t m_lastUsedMB = 0;  // 上次显示的已用堆内存 MB
     
     void setContentView(brls::View* view);
     void updateFrameItem();
