@@ -12,12 +12,13 @@
 #include "view/myframe.hpp"
 #include "view/recyclingGrid.hpp"
 #include "common/modInfo.hpp"
+#include "common/gameInfo.hpp"
 #include "utils/jsonFile.hpp"
 #include "utils/async.hpp"
 
 class ModList : public brls::Activity {
 public:
-    ModList(const std::string& dirPath, const std::string& gameName, uint64_t appId);
+    ModList(const GameInfo& game);
 
     CONTENT_FROM_XML_RES("activity/modList.xml");
 
@@ -29,6 +30,7 @@ public:
 
     // 详情面板绑定
     BRLS_BIND(brls::Image, m_gameIcon, "modList/gameIcon");
+    BRLS_BIND(brls::Image, m_favIcon, "modList/favIcon");
     BRLS_BIND(brls::Label, m_gameNameLabel, "modList/gameName");
     BRLS_BIND(brls::Label, m_gameTid, "modList/gameTid");
     BRLS_BIND(brls::Label, m_tagType, "modList/tagType");
@@ -42,9 +44,7 @@ public:
     void onContentAvailable() override;
 
 private:
-    std::string m_dirPath;                  // 游戏 mod 目录路径
-    std::string m_gameName;                 // 游戏名称
-    uint64_t m_appId = 0;                   // 游戏 TID
+    const GameInfo& m_game;                 // 游戏信息（引用 Home::m_games 中的元素）
     std::vector<ModInfo> m_mods;            // mod 列表数据
     bool m_sortAsc = true;                  // 当前排序方向
     size_t m_lastFocusIndex = 0;             // 切换到详情前记住的列表索引

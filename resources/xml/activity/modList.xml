@@ -47,14 +47,31 @@
                 axis="row"
                 alignItems="center">
 
-                <brls:Image
-                    id="modList/gameIcon"
+                <brls:Box
                     width="80"
                     height="80"
-                    marginRight="16"
-                    cornerRadius="8"
-                    scalingType="fit"
-                    image="@res/img/game/defaultIcon.jpg"/>
+                    marginRight="16">
+
+                    <brls:Image
+                        id="modList/gameIcon"
+                        width="80"
+                        height="80"
+                        cornerRadius="8"
+                        scalingType="fit"
+                        image="@res/img/game/defaultIcon.jpg"/>
+
+                    <brls:Image
+                        id="modList/favIcon"
+                        width="17"
+                        height="17"
+                        positionType="absolute"
+                        positionTop="3"
+                        positionRight="3"
+                        scalingType="fit"
+                        visibility="gone"
+                        image="@res/img/game/like.png"/>
+
+                </brls:Box>
 
                 <brls:Box
                     width="auto"

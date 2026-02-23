@@ -15,15 +15,15 @@
 #include <yoga/Yoga.h>
 #include <switch.h>
 
-ModList::ModList(const std::string& dirPath, const std::string& gameName, uint64_t appId)
-    : m_dirPath(dirPath), m_gameName(gameName), m_appId(appId) {
+ModList::ModList(const GameInfo& game)
+    : m_game(game) {
 
 }
 
 void ModList::onContentAvailable() {
-    m_frame->setTitle(m_gameName);
-    m_modJson.load(m_dirPath + config::modInfoFile);
-    m_mods = ModScanner().scanMods(m_dirPath, m_modJson);
+    m_frame->setTitle(m_game.displayName);
+    m_modJson.load(m_game.dirPath + config::modInfoFile);
+    m_mods = ModScanner().scanMods(m_game.dirPath, m_modJson);
 
     setupDetail();
     setupModGrid();
@@ -107,14 +107,16 @@ void ModList::setupDetail() {
     }, true, true);
 
     // 游戏名和 TID
-    m_gameNameLabel->setText(m_gameName);
-    std::string tid = format::appIdHex(m_appId);
+    m_gameNameLabel->setText(m_game.displayName);
+    std::string tid = format::appIdHex(m_game.appId);
     m_gameTid->setText(tid);
 
-    // 从缓存取游戏图标（异步加载可能还没完成，启动重试）
-    int iconId = brls::TextureCache::instance().getCache(tid);
-    if (iconId > 0) m_gameIcon->innerSetImage(iconId);
+    // 从 GameInfo 或缓存取游戏图标
+    if (m_game.iconId > 0) m_gameIcon->innerSetImage(m_game.iconId);
     else retryIconLoad();
+
+    // 收藏标志
+    m_favIcon->setVisibility(m_game.isFavorite ? brls::Visibility::VISIBLE : brls::Visibility::GONE);
 }
 
 void ModList::updateDetail(size_t index) {
@@ -136,7 +138,7 @@ void ModList::updateDetail(size_t index) {
 void ModList::retryIconLoad() {
     if (m_iconRetryLeft <= 0) return;
     m_iconRetryLeft--;
-    std::string tid = format::appIdHex(m_appId);
+    std::string tid = format::appIdHex(m_game.appId);
     int iconId = brls::TextureCache::instance().getCache(tid);
     if (iconId > 0) {
         m_gameIcon->innerSetImage(iconId);
