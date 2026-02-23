@@ -71,10 +71,11 @@ struct MenuStackEntry {
 
 class ActionMenu : public brls::Box {
 public:
-    ActionMenu(MenuPageConfig* rootPage);
+    ActionMenu(MenuPageConfig* rootPage, brls::View* prevFocus = nullptr);
 
     bool isTranslucent() override { return true || View::isTranslucent(); }
     void willAppear(bool resetState) override;
+    void draw(NVGcontext* vg, float x, float y, float width, float height, brls::Style style, brls::FrameContext* ctx) override;
 
     void pushPage(MenuPageConfig* page);        // 进入子菜单
     void popPage();                             // 返回上级（栈空则关闭菜单）
@@ -82,6 +83,7 @@ public:
 
 private:
     MenuPageConfig* m_rootPage;                 // 根菜单页（由调用方持有生命周期）
+    brls::View* m_prevFocus = nullptr;           // 菜单打开前的焦点（用于画假焦点框）
     std::vector<MenuStackEntry> m_menuStack;    // 多级菜单栈
 
     brls::ActionIdentifier m_actionStart = ACTION_NONE;  // + 键（提交）action ID

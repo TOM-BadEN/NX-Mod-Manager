@@ -76,7 +76,7 @@ void MenuPageConfig::show() {
         for (auto& item : items) item.selected = false;
     }
 
-    auto* actionMenu = new ActionMenu(this);
+    auto* actionMenu = new ActionMenu(this, brls::Application::getCurrentFocus());
     auto* activity = new brls::Activity(actionMenu);
     brls::Application::pushActivity(activity, brls::TransitionAnimation::NONE);
 }
@@ -161,8 +161,8 @@ private:
 
 // ── ActionMenu 构造函数 ─────────────────────────────────────────
 
-ActionMenu::ActionMenu(MenuPageConfig* rootPage)
-    : m_rootPage(rootPage)
+ActionMenu::ActionMenu(MenuPageConfig* rootPage, brls::View* prevFocus)
+    : m_rootPage(rootPage), m_prevFocus(prevFocus)
 {
     inflateFromXMLRes("xml/view/actionMenu.xml");
 
@@ -199,6 +199,74 @@ ActionMenu::ActionMenu(MenuPageConfig* rootPage)
         if (m_hintCard->getVisibility() == brls::Visibility::VISIBLE && m_hintCard->getFrame().pointInside(status.position)) return;
         closeMenu();
     }));
+}
+
+// 菜单打开时，底层焦点控件失去焦点高亮。在此绘制假焦点框（复刻框架 drawHighlight 边框部分），
+// 让用户能看到菜单是从哪个控件上打开的。高亮背景无法复刻（需插入控件内部层级），仅绘制边框。
+void ActionMenu::draw(NVGcontext* vg, float x, float y, float width, float height, brls::Style style, brls::FrameContext* ctx) {
+    if (m_prevFocus) {
+        float sw = style["brls/highlight/stroke_width"];
+        float cr = style["brls/highlight/corner_radius"];
+        brls::Theme theme = brls::Application::getTheme();
+        float fx = m_prevFocus->getX() - sw / 2;
+        float fy = m_prevFocus->getY() - sw / 2;
+        float fw = m_prevFocus->getWidth() + sw;
+        float fh = m_prevFocus->getHeight() + sw;
+
+        // 外阴影
+        float shadowOffset = style["brls/highlight/shadow_offset"];
+        NVGpaint shadowPaint = nvgBoxGradient(vg,
+            fx, fy + style["brls/highlight/shadow_width"],
+            fw, fh,
+            cr * 2, style["brls/highlight/shadow_feather"],
+            nvgRGBA(0, 0, 0, (int)style["brls/highlight/shadow_opacity"]), brls::TRANSPARENT);
+        nvgBeginPath(vg);
+        nvgRect(vg, fx - shadowOffset, fy - shadowOffset,
+            fw + shadowOffset * 2, fh + shadowOffset * 3);
+        nvgRoundedRect(vg, fx, fy, fw, fh, cr);
+        nvgPathWinding(vg, NVG_HOLE);
+        nvgFillPaint(vg, shadowPaint);
+        nvgFill(vg);
+
+        // 脉冲边框
+        float gradientX, gradientY, colorAnim;
+        brls::getHighlightAnimation(&gradientX, &gradientY, &colorAnim);
+
+        NVGcolor color1 = theme["brls/highlight/color1"];
+        NVGcolor pulsationColor = nvgRGBAf(
+            colorAnim * color1.r + (1 - colorAnim) * color1.r,
+            colorAnim * color1.g + (1 - colorAnim) * color1.g,
+            colorAnim * color1.b + (1 - colorAnim) * color1.b, 1.0f);
+
+        nvgBeginPath(vg);
+        nvgStrokeColor(vg, pulsationColor);
+        nvgStrokeWidth(vg, sw);
+        nvgRoundedRect(vg, fx, fy, fw, fh, cr);
+        nvgStroke(vg);
+
+        // 光点 1
+        NVGcolor borderColor = theme["brls/highlight/color2"];
+        borderColor.a = 0.5f;
+        NVGpaint border1 = nvgRadialGradient(vg,
+            fx + gradientX * fw, fy + gradientY * fh,
+            sw * 10, sw * 40, borderColor, brls::TRANSPARENT);
+        nvgBeginPath(vg);
+        nvgStrokePaint(vg, border1);
+        nvgStrokeWidth(vg, sw);
+        nvgRoundedRect(vg, fx, fy, fw, fh, cr);
+        nvgStroke(vg);
+
+        // 光点 2
+        NVGpaint border2 = nvgRadialGradient(vg,
+            fx + (1 - gradientX) * fw, fy + (1 - gradientY) * fh,
+            sw * 10, sw * 40, borderColor, brls::TRANSPARENT);
+        nvgBeginPath(vg);
+        nvgStrokePaint(vg, border2);
+        nvgStrokeWidth(vg, sw);
+        nvgRoundedRect(vg, fx, fy, fw, fh, cr);
+        nvgStroke(vg);
+    }
+    Box::draw(vg, x, y, width, height, style, ctx);
 }
 
 void ActionMenu::willAppear(bool resetState) {
@@ -274,7 +342,12 @@ void ActionMenu::popPage() {
 void ActionMenu::closeMenu() {
     // 11.4/11.9: 任何关闭方式都触发根菜单 onDismiss
     auto onDismiss = m_rootPage->onDismiss;
-    brls::Application::popActivity(brls::TransitionAnimation::NONE, [onDismiss]() {
+    // 瞬移焦点动画，避免假→真脉冲闪烁
+    auto style = brls::Application::getStyle();
+    float saved = style["brls/animations/highlight"];
+    style.addMetric("brls/animations/highlight", 1.0f);
+    brls::Application::popActivity(brls::TransitionAnimation::NONE, [onDismiss, saved]() {
+        brls::Application::getStyle().addMetric("brls/animations/highlight", saved);
         if (onDismiss) onDismiss();
     });
 }
