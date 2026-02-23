@@ -85,25 +85,28 @@ void Home::toggleFavorite() {
     game.isFavorite = !game.isFavorite;
 
     std::string appIdKey = format::appIdHex(game.appId);
+    uint64_t targetAppId = game.appId;
     m_jsonCache.setBool(appIdKey, "favorite", game.isFavorite);
     m_jsonCache.save();
 
-    // ── 刷新列表但保持页面不动 ──
-    // 背景：菜单关闭时 popActivity 会 giveFocus → CENTERED 模式触发居中滚动动画，
-    //       紧接着 reloadData + giveFocus 又触发一次，两次动画冲突导致列表跳动。
-    // 解法：操作前保存滚动位置，操作后用 setContentOffsetY(savedY, false) 强制恢复，
-    //       同时终止 giveFocus 触发的居中动画，实现页面零移动。
-    float savedY = m_grid->getContentOffsetY();
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
 
-    int stayIdx = idx;
-    if (stayIdx >= (int)m_games.size()) stayIdx = (int)m_games.size() - 1;
+    // 找到目标游戏排序后的新位置
+    int newIdx = 0;
+    for (int i = 0; i < (int)m_games.size(); i++) {
+        if (m_games[i].appId == targetAppId) { newIdx = i; break; }
+    }
 
-    m_grid->setDefaultCellFocus(stayIdx);
+    m_grid->setDefaultCellFocus(newIdx);
     m_grid->reloadData();
-    auto* cell = m_grid->getGridItemByIndex(stayIdx);
-    if (cell) brls::Application::giveFocus(cell);
-    m_grid->setContentOffsetY(savedY, false);
+    auto* cell = m_grid->getGridItemByIndex(newIdx);
+    if (cell) {
+        auto style = brls::Application::getStyle();
+        float saved = style["brls/animations/highlight"];
+        style.addMetric("brls/animations/highlight", 1.0f);
+        brls::Application::giveFocus(cell);
+        style.addMetric("brls/animations/highlight", saved);
+    }
 }
 
 void Home::setupMenu() {
