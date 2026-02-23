@@ -204,7 +204,7 @@ ActionMenu::ActionMenu(MenuPageConfig* rootPage, brls::View* prevFocus)
 // 菜单打开时，底层焦点控件失去焦点高亮。在此绘制假焦点框（复刻框架 drawHighlight 边框部分），
 // 让用户能看到菜单是从哪个控件上打开的。高亮背景无法复刻（需插入控件内部层级），仅绘制边框。
 void ActionMenu::draw(NVGcontext* vg, float x, float y, float width, float height, brls::Style style, brls::FrameContext* ctx) {
-    if (m_prevFocus) {
+    if (m_prevFocus && brls::Application::getInputType() != brls::InputType::TOUCH) {
         float sw = style["brls/highlight/stroke_width"];
         float cr = style["brls/highlight/corner_radius"];
         brls::Theme theme = brls::Application::getTheme();

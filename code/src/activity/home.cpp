@@ -138,7 +138,6 @@ void Home::setupMenu() {
     }};
 
     m_frame->registerAction("菜单", brls::BUTTON_X, [this](...) {
-        m_menu.title = m_games[m_focusedIndex.load()].displayName;
         m_menu.show();
         return true;
     });
