@@ -18,6 +18,9 @@ public:
     // 设置游戏图标（传入 NVG 纹理 ID）
     void setIcon(int iconId);
     
+    // 设置收藏状态（显示/隐藏爱心）
+    void setFavorite(bool favorite);
+    
     // 恢复默认图标（不走缓存计数）
     void resetIcon();
 
@@ -32,6 +35,7 @@ private:
 
     // XML 绑定的组件
     BRLS_BIND(brls::Image, m_icon, "gameCard/icon");
+    BRLS_BIND(brls::Image, m_like, "gameCard/like");
     BRLS_BIND(brls::Label, m_name, "gameCard/name");
     BRLS_BIND(brls::Label, m_version, "gameCard/version");
     BRLS_BIND(brls::Label, m_modCount, "gameCard/modCount");

@@ -28,6 +28,7 @@ public:
         auto& game = m_games[index];
         card->setGame(game.displayName, game.version, game.modCount);
         if (game.iconId > 0) card->setIcon(game.iconId);
+        card->setFavorite(game.isFavorite);
         return card;
     }
 

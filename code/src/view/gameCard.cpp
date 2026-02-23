@@ -25,12 +25,17 @@ void GameCard::setIcon(int iconId) {
     m_icon->innerSetImage(iconId);
 }                                 
 
+void GameCard::setFavorite(bool favorite) {
+    m_like->setVisibility(favorite ? brls::Visibility::VISIBLE : brls::Visibility::GONE);
+}
+
 void GameCard::resetIcon() {
     m_icon->innerSetImage(m_defaultIconId);
 }
 
 void GameCard::prepareForReuse() {
     resetIcon();
+    m_like->setVisibility(brls::Visibility::GONE);
     m_name->setText("");
     m_version->setText("");
     m_modCount->setText("");

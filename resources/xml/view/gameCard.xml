@@ -19,14 +19,31 @@
     shadowType="generic">
 
     <!-- 左侧：游戏图标 -->
-    <brls:Image
-        id="gameCard/icon"
+    <brls:Box
         width="120"
         height="120"
-        marginRight="20"
-        scalingType="fit"
-        cornerRadius="8"
-        image="@res/img/game/defaultIcon.jpg" />
+        marginRight="20">
+
+        <brls:Image
+            id="gameCard/icon"
+            width="120"
+            height="120"
+            scalingType="fit"
+            cornerRadius="8"
+            image="@res/img/game/defaultIcon.jpg" />
+
+        <brls:Image
+            id="gameCard/like"
+            width="25"
+            height="25"
+            positionType="absolute"
+            positionTop="5"
+            positionRight="5"
+            scalingType="fit"
+            visibility="gone"
+            image="@res/img/game/like.png" />
+
+    </brls:Box>
 
     <!-- 右侧：文本区域 -->
     <brls:Box

@@ -78,11 +78,40 @@ void Home::toggleSort() {
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
 
+void Home::toggleFavorite() {
+    int idx = m_focusedIndex.load();
+    auto& game = m_games[idx];
+
+    game.isFavorite = !game.isFavorite;
+
+    std::string appIdKey = format::appIdHex(game.appId);
+    m_jsonCache.setBool(appIdKey, "favorite", game.isFavorite);
+    m_jsonCache.save();
+
+    // ── 刷新列表但保持页面不动 ──
+    // 背景：菜单关闭时 popActivity 会 giveFocus → CENTERED 模式触发居中滚动动画，
+    //       紧接着 reloadData + giveFocus 又触发一次，两次动画冲突导致列表跳动。
+    // 解法：操作前保存滚动位置，操作后用 setContentOffsetY(savedY, false) 强制恢复，
+    //       同时终止 giveFocus 触发的居中动画，实现页面零移动。
+    float savedY = m_grid->getContentOffsetY();
+    strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
+
+    int stayIdx = idx;
+    if (stayIdx >= (int)m_games.size()) stayIdx = (int)m_games.size() - 1;
+
+    m_grid->setDefaultCellFocus(stayIdx);
+    m_grid->reloadData();
+    auto* cell = m_grid->getGridItemByIndex(stayIdx);
+    if (cell) brls::Application::giveFocus(cell);
+    m_grid->setContentOffsetY(savedY, false);
+}
+
 void Home::setupMenu() {
     m_menu = {"菜单选项", {
 
         MenuItemConfig{"收藏游戏", "将当前游戏加入/取消收藏，收藏的游戏会优先显示在列表顶部"}
-            .title([this]{ return m_games[m_focusedIndex.load()].isFavorite ? "取消收藏" : "收藏游戏"; }),
+            .title([this]{ return m_games[m_focusedIndex.load()].isFavorite ? "取消收藏" : "收藏游戏"; })
+            .action([this]{ toggleFavorite(); }),
 
         MenuItemConfig{"管理游戏", "包含以下内容：\n - 修改游戏的元数据\n - 新增、移除当前游戏 \n - 查看游戏的SD卡路径"},
         MenuItemConfig{"文件传输", "通过 MTP 传输 Mod 文件到 SD 卡上"},
