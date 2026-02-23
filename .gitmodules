@@ -16,12 +16,12 @@
 [submodule "reference/libnx"]
 	path = reference/libnx
 	url = https://github.com/switchbrew/libnx
-[submodule "library/borealis"]
-	path = library/borealis
-	url = https://github.com/TOM-BadEN/borealis.git
 [submodule "reference/sphaira"]
 	path = reference/sphaira
 	url = https://github.com/ITotalJustice/sphaira.git
 [submodule "library/cpp-pinyin"]
 	path = library/cpp-pinyin
 	url = https://github.com/wolfgitpr/cpp-pinyin.git
+[submodule "library/borealis"]
+	path = library/borealis
+	url = https://github.com/xfangfang/borealis.git
