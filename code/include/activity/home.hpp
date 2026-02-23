@@ -46,5 +46,6 @@ private:
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 
     MenuPageConfig m_menu;                                      // 主菜单
+    MenuPageConfig m_gameManageMenu;                            // 管理游戏子菜单
     void setupMenu();                                           // 初始化菜单
 };

@@ -110,13 +110,22 @@ void Home::toggleFavorite() {
 }
 
 void Home::setupMenu() {
+    m_gameManageMenu = {"管理游戏", {
+        MenuItemConfig{"手动改名", "手动输入自定义游戏显示名称，用于给游戏设置本土化名称"},
+        MenuItemConfig{"在线获取", "从云端数据库匹配本土化游戏名称\n - 数据源于 AI 翻译，置信度不足时将保留原名\n - 目前仅支持简中、繁中、英文，其他语言默认返回英文名称"},
+        MenuItemConfig{"新增游戏", "从主机已安装的游戏列表中选择添加，也可手动输入 TID 添加未安装的游戏"},
+        MenuItemConfig{"删除游戏", "从列表中移除当前游戏条目，存在已安装 MOD 时不可操作"},
+        MenuItemConfig{"查看位置", "查看当前游戏在 SD 卡上的目录路径"},
+    }};
+
     m_menu = {"菜单选项", {
 
         MenuItemConfig{"收藏游戏", "将当前游戏加入/取消收藏，收藏的游戏会优先显示在列表顶部"}
             .title([this]{ return m_games[m_focusedIndex.load()].isFavorite ? "取消收藏" : "收藏游戏"; })
             .action([this]{ toggleFavorite(); }),
 
-        MenuItemConfig{"管理游戏", "包含以下内容：\n - 修改游戏的元数据\n - 新增、移除当前游戏 \n - 查看游戏的SD卡路径"},
+        MenuItemConfig{"管理游戏", "包含以下内容：\n - 自定义游戏名称，支持联网获取游戏名称\n - 新增、移除当前游戏 \n - 查看当前游戏在 SD 卡上的目录路径"}
+            .submenu(&m_gameManageMenu),
         MenuItemConfig{"文件传输", "通过 MTP 传输 Mod 文件到 SD 卡上"},
         MenuItemConfig{"功能设置", "包含以下内容：\n - 待定"},
 
