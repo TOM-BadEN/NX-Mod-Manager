@@ -193,7 +193,7 @@ void Home::applyMetadata(int gameIdx, const GameMetadata& meta) {
         m_jsonCache.setString(appIdKey, "version", meta.version);
     }
 
-    // 更新 displayName（用户自定义优先）
+    // 更新官方名(gameName)，仅在无自定义名时同步到显示名
     if (!meta.name.empty()) {
         m_jsonCache.setString(appIdKey, "gameName", meta.name);
         if (m_jsonCache.getString(appIdKey, "displayName").empty()) {
