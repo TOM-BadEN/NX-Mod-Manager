@@ -318,7 +318,7 @@ void ActionMenu::pushPage(MenuPageConfig* page) {
     size_t focusIndex = page->defaultFocus ? page->defaultFocus() : 0;
     m_grid->setDefaultCellFocus(focusIndex);
     m_grid->setDataSource(new ActionMenuItemDS(this, page));
-    brls::Application::giveFocus(m_grid);
+    m_grid->instantFocus(focusIndex);
     // 抑制 handleAction 残留点击动画（旧 Cell 被 LIFO 复用为焦点行）
     if (auto* cell = m_grid->getGridItemByIndex(focusIndex)) {
         cell->setHideClickAnimation(true);
@@ -346,7 +346,7 @@ void ActionMenu::popPage() {
     m_grid->setDefaultCellFocus(parent.focusIndex);
     m_grid->setDataSource(new ActionMenuItemDS(this, parent.page));
     m_grid->setContentOffsetY(parent.scrollOffset, false);
-    brls::Application::giveFocus(m_grid);
+    m_grid->instantFocus(parent.focusIndex);
     // 抑制 handleAction 残留点击动画（旧 Cell 被 LIFO 复用为焦点行）
     if (auto* cell = m_grid->getGridItemByIndex(parent.focusIndex)) {
         cell->setHideClickAnimation(true);

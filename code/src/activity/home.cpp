@@ -100,7 +100,7 @@ void Home::toggleFavorite() {
 void Home::renameGame() {
     int idx = m_focusedIndex.load();
     auto& game = m_games[idx];
-    std::string text = keyboard::showText("手动改名", "请输入游戏显示名称", game.displayName, 64);
+    std::string text = keyboard::showText("请输入游戏显示名称", "请输入游戏显示名称", game.displayName, 64);
     if (text.empty()) return;
     game.displayName = text;
     std::string appIdKey = format::appIdHex(game.appId);
@@ -111,13 +111,55 @@ void Home::renameGame() {
         game.displayName, game.version, game.modCount);
 }
 
+void Home::restoreName() {
+    int idx = m_focusedIndex.load();
+    auto& game = m_games[idx];
+    std::string appIdKey = format::appIdHex(game.appId);
+
+    // 回滚链：gameName → 目录名（从 dirPath 提取倒数第二段）
+    std::string restored = m_jsonCache.getString(appIdKey, "gameName");
+    if (restored.empty()) {
+        std::string path = game.dirPath;
+        auto pos2 = path.rfind('/');
+        if (pos2 != std::string::npos && pos2 > 0) {
+            auto pos1 = path.rfind('/', pos2 - 1);
+            restored = path.substr(pos1 + 1, pos2 - pos1 - 1);
+        }
+    }
+    if (restored.empty()) return;
+
+    auto onConfirm = [this, idx, appIdKey, restored] {
+        m_games[idx].displayName = restored;
+        m_jsonCache.removeKey(appIdKey, "displayName");
+        m_jsonCache.save();
+        auto* cell = m_grid->getGridItemByIndex(idx);
+        if (cell) static_cast<GameCard*>(cell)->setGame(
+            m_games[idx].displayName, m_games[idx].version, m_games[idx].modCount);
+    };
+
+    dialog::showConfirm("确认将 [" + game.displayName + "] 恢复为 [" + restored + "] ？", onConfirm);
+}
+
 void Home::setupMenu() {
-    m_gameManageMenu = {"管理游戏", {
-        MenuItemConfig{"手动改名", "手动输入自定义游戏显示名称，用于给游戏设置本土化名称"}
+    m_gameNameMenu = {"修改名称", {
+
+        MenuItemConfig{"手动修改", "手动输入自定义游戏显示名称"}
             .action([this]{ renameGame(); }),
+
         MenuItemConfig{"在线获取", "从云端数据库匹配本土化游戏名称\n - 数据源于 AI 翻译，置信度不足时将保留原名\n - 目前仅支持简中、繁中、英文，其他语言默认返回英文名称"},
+        
+        MenuItemConfig{"恢复名称", "删除自定义名称，恢复为系统获取的原始游戏名"}
+            .action([this]{restoreName();}),
+    }};
+
+    m_gameManageMenu = {"管理游戏", {
+
+        MenuItemConfig{"修改名称", "自定义游戏显示名称，支持手动输入、在线获取和恢复名称"}
+            .submenu(&m_gameNameMenu),
+
         MenuItemConfig{"新增游戏", "从主机已安装的游戏列表中选择添加，也可手动输入 TID 添加未安装的游戏"},
         MenuItemConfig{"移除游戏", "从列表中移除当前游戏条目，存在已安装 MOD 时不可操作，游戏中的 MOD 将移动到待添加目录中"},
+        
         MenuItemConfig{"查看位置", "查看当前游戏在 SD 卡上的目录路径"}
             .action([this]{ dialog::showMessage(m_games[m_focusedIndex.load()].dirPath); }),
     }};
@@ -130,6 +172,7 @@ void Home::setupMenu() {
 
         MenuItemConfig{"管理游戏", "包含以下内容：\n - 自定义游戏名称，支持联网获取游戏名称\n - 新增、移除当前游戏 \n - 查看当前游戏在 SD 卡上的目录路径"}
             .submenu(&m_gameManageMenu),
+        
         MenuItemConfig{"文件传输", "通过 MTP 传输 Mod 文件到 SD 卡上"},
         MenuItemConfig{"功能设置", "包含以下内容：\n - 待定"},
 

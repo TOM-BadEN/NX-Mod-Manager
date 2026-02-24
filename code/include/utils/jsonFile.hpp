@@ -37,6 +37,7 @@ public:
 
     // 删除
     void removeRootKey(const std::string& rootKey);
+    void removeKey(const std::string& rootKey, const std::string& key);
 
 private:
     std::string m_path;

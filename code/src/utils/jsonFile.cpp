@@ -163,6 +163,13 @@ bool JsonFile::hasRootKey(const std::string& rootKey) {
     return findRootObj(rootKey) != nullptr;
 }
 
+// 删除子键
+void JsonFile::removeKey(const std::string& rootKey, const std::string& key) {
+    yyjson_mut_val* obj = static_cast<yyjson_mut_val*>(findRootObj(rootKey));
+    if (!obj) return;
+    yyjson_mut_obj_remove_str(obj, key.c_str());
+}
+
 // 删除根键
 void JsonFile::removeRootKey(const std::string& rootKey) {
     if (!m_doc) return;
