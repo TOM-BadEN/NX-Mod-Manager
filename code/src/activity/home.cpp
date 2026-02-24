@@ -137,7 +137,7 @@ void Home::restoreName() {
             m_games[idx].displayName, m_games[idx].version, m_games[idx].modCount);
     };
 
-    dialog::showConfirm("确认将 [" + game.displayName + "] 恢复为 [" + restored + "] ？", onConfirm);
+    dialog::showConfirm("确认将显示名恢复为该名称吗？\n\n" + restored, onConfirm);
 }
 
 void Home::setupMenu() {
