@@ -12,6 +12,7 @@
 #include "dataSource/gameCardDS.hpp"
 #include "utils/format.hpp"
 #include "utils/dialog.hpp"
+#include "utils/keyboard.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -99,18 +100,15 @@ void Home::toggleFavorite() {
 void Home::renameGame() {
     int idx = m_focusedIndex.load();
     auto& game = m_games[idx];
+    std::string text = keyboard::showText("手动改名", "请输入游戏显示名称", game.displayName, 64);
+    if (text.empty()) return;
+    game.displayName = text;
     std::string appIdKey = format::appIdHex(game.appId);
-    brls::Application::getImeManager()->openForText(
-        [this, idx, appIdKey](std::string text) {
-            if (text.empty()) return;
-            m_games[idx].displayName = text;
-            m_jsonCache.setString(appIdKey, "displayName", text);
-            m_jsonCache.save();
-            auto* cell = m_grid->getGridItemByIndex(idx);
-            if (cell) static_cast<GameCard*>(cell)->setGame(
-                m_games[idx].displayName, m_games[idx].version, m_games[idx].modCount);
-        },
-        "手动改名", "请输入游戏显示名称", 64, game.displayName);
+    m_jsonCache.setString(appIdKey, "displayName", text);
+    m_jsonCache.save();
+    auto* cell = m_grid->getGridItemByIndex(idx);
+    if (cell) static_cast<GameCard*>(cell)->setGame(
+        game.displayName, game.version, game.modCount);
 }
 
 void Home::setupMenu() {
