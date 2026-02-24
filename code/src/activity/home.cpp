@@ -155,6 +155,7 @@ void Home::setupMenu() {
     m_gameManageMenu = {"管理游戏", {
 
         MenuItemConfig{"修改名称", "自定义游戏显示名称，支持手动输入、在线获取和恢复名称"}
+            .badge("\uE14A")
             .submenu(&m_gameNameMenu),
 
         MenuItemConfig{"新增游戏", "从主机已安装的游戏列表中选择添加，也可手动输入 TID 添加未安装的游戏"},
@@ -171,16 +172,21 @@ void Home::setupMenu() {
             .action([this]{ toggleFavorite(); }),
 
         MenuItemConfig{"管理游戏", "包含以下内容：\n - 自定义游戏名称，支持联网获取游戏名称\n - 新增、移除当前游戏 \n - 查看当前游戏在 SD 卡上的目录路径"}
+            .badge("\uE14A")
             .submenu(&m_gameManageMenu),
         
-        MenuItemConfig{"文件传输", "通过 MTP 传输 Mod 文件到 SD 卡上"},
-        MenuItemConfig{"功能设置", "包含以下内容：\n - 待定"},
+        MenuItemConfig{"文件传输", "通过 MTP 传输 Mod 文件到 SD 卡上"}
+            .badge("\uE14A"),
+
+        MenuItemConfig{"功能设置", "包含以下内容：\n - 待定"}
+            .badge("\uE14A"),
+
+        MenuItemConfig{"关于插件", "包含以下内容：\n - 使用说明\n - 基本信息\n - 反馈与建议渠道\n - 赞助支持"}
+            .badge("\uE14A"),
 
         MenuItemConfig{"检查更新", "用于查看和更新最新的插件版本"}
             .badge("暂无更新")
             .badgeHighlight([]{ return false; }),
-
-        MenuItemConfig{"关于插件", "包含以下内容：\n - 使用说明\n - 基本信息\n - 反馈与建议渠道\n - 赞助支持"},
 
     }};
 
