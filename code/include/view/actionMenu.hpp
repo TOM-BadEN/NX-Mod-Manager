@@ -84,6 +84,7 @@ public:
 private:
     MenuPageConfig* m_rootPage;                 // 根菜单页（由调用方持有生命周期）
     brls::View* m_prevFocus = nullptr;           // 菜单打开前的焦点（用于画假焦点框）
+    brls::View* m_clipView = nullptr;            // 假焦点裁切区域（最近的 ScrollingFrame）
     std::vector<MenuStackEntry> m_menuStack;    // 多级菜单栈
 
     brls::ActionIdentifier m_actionStart = ACTION_NONE;  // + 键（提交）action ID

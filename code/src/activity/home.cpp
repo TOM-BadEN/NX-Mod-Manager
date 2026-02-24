@@ -11,6 +11,7 @@
 #include "view/gameCard.hpp"
 #include "dataSource/gameCardDS.hpp"
 #include "utils/format.hpp"
+#include "utils/dialog.hpp"
 #include <borealis/core/cache_helper.hpp>
 #include <switch.h>
 
@@ -66,14 +67,7 @@ void Home::toggleSort() {
     strSort::sortAZ(m_games, &GameInfo::displayName, &GameInfo::isFavorite, m_sortAsc);
     m_grid->setDefaultCellFocus(0);  // 11.8: 排序后回到顶部
     m_grid->reloadData();
-    auto* cell = m_grid->getGridItemByIndex(0);
-    if (cell) {
-        auto style = brls::Application::getStyle();
-        float saved = style["brls/animations/highlight"];
-        style.addMetric("brls/animations/highlight", 1.0f);
-        brls::Application::giveFocus(cell);
-        style.addMetric("brls/animations/highlight", saved);
-    }
+    m_grid->instantFocus(0);
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }
@@ -99,23 +93,35 @@ void Home::toggleFavorite() {
 
     m_grid->setDefaultCellFocus(newIdx);
     m_grid->reloadData();
-    auto* cell = m_grid->getGridItemByIndex(newIdx);
-    if (cell) {
-        auto style = brls::Application::getStyle();
-        float saved = style["brls/animations/highlight"];
-        style.addMetric("brls/animations/highlight", 1.0f);
-        brls::Application::giveFocus(cell);
-        style.addMetric("brls/animations/highlight", saved);
-    }
+    m_grid->instantFocus(newIdx);
+}
+
+void Home::renameGame() {
+    int idx = m_focusedIndex.load();
+    auto& game = m_games[idx];
+    std::string appIdKey = format::appIdHex(game.appId);
+    brls::Application::getImeManager()->openForText(
+        [this, idx, appIdKey](std::string text) {
+            if (text.empty()) return;
+            m_games[idx].displayName = text;
+            m_jsonCache.setString(appIdKey, "displayName", text);
+            m_jsonCache.save();
+            auto* cell = m_grid->getGridItemByIndex(idx);
+            if (cell) static_cast<GameCard*>(cell)->setGame(
+                m_games[idx].displayName, m_games[idx].version, m_games[idx].modCount);
+        },
+        "手动改名", "请输入游戏显示名称", 64, game.displayName);
 }
 
 void Home::setupMenu() {
     m_gameManageMenu = {"管理游戏", {
-        MenuItemConfig{"手动改名", "手动输入自定义游戏显示名称，用于给游戏设置本土化名称"},
+        MenuItemConfig{"手动改名", "手动输入自定义游戏显示名称，用于给游戏设置本土化名称"}
+            .action([this]{ renameGame(); }),
         MenuItemConfig{"在线获取", "从云端数据库匹配本土化游戏名称\n - 数据源于 AI 翻译，置信度不足时将保留原名\n - 目前仅支持简中、繁中、英文，其他语言默认返回英文名称"},
         MenuItemConfig{"新增游戏", "从主机已安装的游戏列表中选择添加，也可手动输入 TID 添加未安装的游戏"},
-        MenuItemConfig{"删除游戏", "从列表中移除当前游戏条目，存在已安装 MOD 时不可操作"},
-        MenuItemConfig{"查看位置", "查看当前游戏在 SD 卡上的目录路径"},
+        MenuItemConfig{"移除游戏", "从列表中移除当前游戏条目，存在已安装 MOD 时不可操作，游戏中的 MOD 将移动到待添加目录中"},
+        MenuItemConfig{"查看位置", "查看当前游戏在 SD 卡上的目录路径"}
+            .action([this]{ dialog::showMessage(m_games[m_focusedIndex.load()].dirPath); }),
     }};
 
     m_menu = {"菜单选项", {

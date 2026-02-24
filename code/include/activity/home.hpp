@@ -42,6 +42,7 @@ private:
     void startNacpLoader();                                     // 启动异步 NACP 加载
     void toggleSort();                                          // 切换排序方向
     void toggleFavorite();                                      // 收藏/取消收藏当前游戏
+    void renameGame();                                          // 手动改名当前游戏
 
     void applyMetadata(int gameIdx, const GameMetadata& meta);  // 应用 NACP 数据到游戏 + UI
 

@@ -85,6 +85,7 @@ public:
     void setDefaultCellFocus(size_t index);
     size_t getDefaultCellFocus() const;
     void selectRowAt(size_t index, bool animated);
+    void instantFocus(size_t index);
     View* getNextCellFocus(brls::FocusDirection direction, View* currentView);
 
     // 查询

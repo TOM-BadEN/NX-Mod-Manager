@@ -8,6 +8,7 @@
  */
 
 #include "view/myframe.hpp"
+#include "utils/dialog.hpp"
 #include <chrono>
 #include <ctime>
 #include <iomanip>
@@ -23,12 +24,7 @@ MyFrame::MyFrame() {
     // 返回按钮处理
     auto backAction = [this](...) {
         if (!brls::Application::popActivity()) {
-            auto dialog = new brls::Dialog("确定要退出吗？");
-            dialog->addButton("取消", []() {});
-            dialog->addButton("确定", []() {
-                brls::Application::quit();
-            });
-            dialog->open();
+            dialog::showConfirm("确定要退出吗？", []{ brls::Application::quit(); });
         }
         return true;
     };

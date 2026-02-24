@@ -66,14 +66,7 @@ void ModList::toggleSort() {
     strSort::sortAZ(m_mods, &ModInfo::displayName, &ModInfo::isInstalled, &ModInfo::type, m_sortAsc);
     m_grid->setDefaultCellFocus(0);  // 11.8: 排序后回到顶部
     m_grid->reloadData();
-    auto* cell = m_grid->getGridItemByIndex(0);
-    if (cell) {
-        auto style = brls::Application::getStyle();
-        float saved = style["brls/animations/highlight"];
-        style.addMetric("brls/animations/highlight", 1.0f);
-        brls::Application::giveFocus(cell);
-        style.addMetric("brls/animations/highlight", saved);
-    }
+    m_grid->instantFocus(0);
     m_frame->updateActionHint(brls::BUTTON_Y, m_sortAsc ? "排序：升" : "排序：降");
     brls::Application::getGlobalHintsUpdateEvent()->fire();
 }

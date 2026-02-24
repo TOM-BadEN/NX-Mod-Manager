@@ -96,6 +96,16 @@ RecyclingGrid::~RecyclingGrid() {
     }
 }
 
+void RecyclingGrid::instantFocus(size_t index) {
+    auto* cell = getGridItemByIndex(index);
+    if (!cell) return;
+    auto style = brls::Application::getStyle();
+    float saved = style["brls/animations/highlight"];
+    style.addMetric("brls/animations/highlight", 1.0f);
+    brls::Application::giveFocus(cell);
+    style.addMetric("brls/animations/highlight", saved);
+}
+
 // ── 翻页 ──────────────────────────────────────────────────────
 
 void RecyclingGrid::flipScreen(int direction) {
@@ -113,14 +123,7 @@ void RecyclingGrid::flipScreen(int direction) {
     }
 
     selectRowAt(target, false);
-    auto* cell = getGridItemByIndex(target);
-    if (!cell) return;
-
-    auto style = brls::Application::getStyle();
-    float saved = style["brls/animations/highlight"];
-    style.addMetric("brls/animations/highlight", 1.0f);
-    brls::Application::giveFocus(cell);
-    style.addMetric("brls/animations/highlight", saved);
+    instantFocus(target);
 }
 
 // ── draw ───────────────────────────────────────────────────────

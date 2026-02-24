@@ -164,6 +164,11 @@ private:
 ActionMenu::ActionMenu(MenuPageConfig* rootPage, brls::View* prevFocus)
     : m_rootPage(rootPage), m_prevFocus(prevFocus)
 {
+    // 沿父链查找最近的 ScrollingFrame，用于假焦点框裁切
+    auto* p = m_prevFocus ? m_prevFocus->getParent() : nullptr;
+    while (p && !dynamic_cast<brls::ScrollingFrame*>(p)) p = p->getParent();
+    m_clipView = p;
+
     inflateFromXMLRes("xml/view/actionMenu.xml");
 
     // 版本号（APP_VERSION 宏由 CMakeLists.txt 定义）
@@ -205,6 +210,13 @@ ActionMenu::ActionMenu(MenuPageConfig* rootPage, brls::View* prevFocus)
 // 让用户能看到菜单是从哪个控件上打开的。高亮背景无法复刻（需插入控件内部层级），仅绘制边框。
 void ActionMenu::draw(NVGcontext* vg, float x, float y, float width, float height, brls::Style style, brls::FrameContext* ctx) {
     if (m_prevFocus && brls::Application::getInputType() != brls::InputType::TOUCH) {
+        // 裁切到 ScrollingFrame 可见区域，防止假焦点框溢出滚动容器边界
+        if (m_clipView) {
+            nvgSave(vg);
+            nvgIntersectScissor(vg, m_clipView->getX(), m_clipView->getY(),
+                m_clipView->getWidth(), m_clipView->getHeight());
+        }
+
         float sw = style["brls/highlight/stroke_width"];
         float cr = style["brls/highlight/corner_radius"];
         brls::Theme theme = brls::Application::getTheme();
@@ -265,6 +277,8 @@ void ActionMenu::draw(NVGcontext* vg, float x, float y, float width, float heigh
         nvgStrokeWidth(vg, sw);
         nvgRoundedRect(vg, fx, fy, fw, fh, cr);
         nvgStroke(vg);
+
+        if (m_clipView) nvgRestore(vg);
     }
     Box::draw(vg, x, y, width, height, style, ctx);
 }
