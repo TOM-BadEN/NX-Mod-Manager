@@ -1,0 +1,83 @@
+<!--
+    StoreGameCard - 商店游戏卡片组件
+    左侧图标 + 右侧文本（游戏名、MOD数量、更新时间）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    focusable="true"
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 左侧：游戏图标 -->
+    <brls:Box
+        width="120"
+        height="120"
+        marginRight="20">
+
+        <brls:Image
+            id="storeGameCard/icon"
+            width="120"
+            height="120"
+            scalingType="fit"
+            cornerRadius="8"
+            image="@res/img/game/defaultIcon.jpg" />
+
+        <brls:Image
+            id="storeGameCard/installed"
+            width="25"
+            height="25"
+            positionType="absolute"
+            positionBottom="5"
+            positionRight="5"
+            scalingType="fit"
+            visibility="gone"
+            image="@res/img/game/installed.png" />
+
+    </brls:Box>
+
+    <!-- 右侧：文本区域 -->
+    <brls:Box
+        width="auto"
+        height="120"
+        axis="column"
+        justifyContent="spaceEvenly"
+        grow="1">
+
+        <!-- 游戏名字 -->
+        <brls:Label
+            id="storeGameCard/name"
+            width="auto"
+            height="auto"
+            fontSize="23"
+            textColor="@theme/app/textStore"
+            singleLine="true" />
+
+        <!-- MOD数量 -->
+        <brls:Label
+            id="storeGameCard/modCount"
+            width="auto"
+            height="auto"
+            fontSize="19"
+            textColor="@theme/app/textSecondary" />
+
+        <!-- 更新时间 -->
+        <brls:Label
+            id="storeGameCard/lastUpdate"
+            width="auto"
+            height="auto"
+            fontSize="19"
+            textColor="@theme/app/textSecondary" />
+
+    </brls:Box>
+
+</brls:Box>

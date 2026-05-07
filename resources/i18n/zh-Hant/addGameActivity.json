@@ -1,0 +1,22 @@
+{
+    "title": "請選擇遊戲",
+    "back": "返回",
+    "search": "搜尋",
+    "menu": "選單",
+    "sortAsc": "排序：升",
+    "sortDesc": "排序：降",
+    "menuTitle": "新增模組",
+    "menuMtp": "MTP 傳輸",
+    "menuMtpDesc": "透過 USB 連接傳輸模組檔案\n - 傳輸速度較快，但在傳輸包含大量小檔案的資料夾形式的模組時，可能會傳輸失敗\n - 對於包含大量小檔案的模組建議優先打包為 ZIP 壓縮包後再進行傳輸，或使用 FTP 以獲得更穩定的傳輸效果",
+    "menuFtp": "FTP 傳輸",
+    "menuFtpDesc": "透過 Wi-Fi 無線傳輸模組檔案\n - 傳輸速度較慢，推薦使用第三方 FTP 用戶端，並開啟 6 個執行緒以提升傳輸效率",
+    "transitEmpty": "中轉站中未發現任何模組，請先上傳模組至中轉站。\uE0E2 選單 \u2192 新增模組。",
+    "selectMod": "選擇模組",
+    "addSuccess": "已成功新增 {} 個模組！",
+    "addConfirm": "確認新增 {} 個模組？",
+    "ok": "我已知曉",
+    "cancel": "取消",
+    "confirm": "確認",
+    "tidPlaceholder": "請輸入遊戲的 TID ...",
+    "tidInvalid": "遊戲 TID 無效，請檢查後重試！"
+}

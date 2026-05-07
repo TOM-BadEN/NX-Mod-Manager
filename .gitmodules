@@ -1,0 +1,21 @@
+[submodule "library/lib/extern/glfw"]
+	path = library/lib/extern/glfw
+	url = https://github.com/xfangfang/glfw.git
+[submodule "library/lib/extern/SDL"]
+	path = library/lib/extern/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "library/cpp-pinyin"]
+	path = library/cpp-pinyin
+	url = https://github.com/wolfgitpr/cpp-pinyin.git
+[submodule "library/borealis"]
+	path = library/borealis
+	url = https://github.com/xfangfang/borealis.git
+[submodule "library/lunasvg"]
+	path = library/lunasvg
+	url = https://github.com/sammycage/lunasvg.git
+[submodule "library/QR-Code-generator"]
+	path = library/QR-Code-generator
+	url = https://github.com/nayuki/QR-Code-generator.git
+[submodule "library/miniz"]
+	path = library/miniz
+	url = https://github.com/richgel999/miniz.git

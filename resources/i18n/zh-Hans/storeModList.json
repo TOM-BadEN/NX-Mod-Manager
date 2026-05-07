@@ -1,0 +1,42 @@
+{
+    "loading": "加载数据中...",
+    "ok": "我已知晓",
+    "noMods": "未找到任何模组",
+    "loadingHint": "正在加载...",
+    "titleSearch": "搜索: {}",
+
+    "searchPlaceholder": "搜索模组名或作者名，支持拼音、首字母、模糊搜索...",
+    "searchAction": "搜索",
+    "resetSearch": "重置",
+
+    "filterMenuTitle": "筛选",
+    "filterAction": "筛选",
+
+    "sortMenuTitle": "排序方式",
+    "sortEntry": "排序方式",
+    "sortEntryDesc": "选择模组的排列顺序",
+    "sortLatest": "最新上传",
+    "sortLatestDesc": "按上传时间从新到旧",
+    "sortDownload": "下载最多",
+    "sortDownloadDesc": "按下载量从高到低",
+    "sortLike": "最多点赞",
+    "sortLikeDesc": "按点赞数从高到低",
+
+    "typeMenuTitle": "模组类型",
+    "typeEntry": "模组类型",
+    "typeEntryDesc": "按功能分类筛选模组",
+    "typeAll": "不限类型",
+    "typeAllDesc": "显示所有类型的模组",
+
+    "versionMenuTitle": "游戏版本",
+    "versionEntry": "游戏版本",
+    "versionEntryDesc": "按适配的游戏版本筛选模组",
+    "versionAll": "不限版本",
+    "versionAllDesc": "显示所有版本的模组",
+    "versionUniversal": "版本通用",
+    "versionUniversalDesc": "所有游戏版本都支持的模组",
+    "versionSpecificDesc": "只显示适配游戏 {} 版本的模组",
+
+    "resetFilter": "重置筛选",
+    "resetFilterDesc": "恢复默认排序和筛选条件"
+}

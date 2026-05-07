@@ -1,0 +1,40 @@
+{
+    "loading": "Loading...",
+    "descTitle": "MOD Description",
+    "screenshotTitle": "MOD Screenshots",
+    "ok": "OK",
+    "okShort": "OK",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+
+    "btnLike": "Like",
+    "btnDislike": "Dislike",
+    "btnDownload": "Download",
+    "btnComment": "Comment",
+
+    "loadFailed": "Failed to load",
+    "noComments": "No comments yet",
+
+    "unknownAuthor": "Unknown Author",
+    "authorPrefix": "By {}",
+    "sizeUnknown": "Size unknown",
+    "modVersionUnknown": "MOD Version: Unknown",
+    "modVersionFmt": "MOD Version: {}",
+    "gameVersionUnknown": "Game Version: Unknown",
+    "gameVersionUniversal": "Game Version: Universal",
+    "gameVersionFmt": "Game Version: {}",
+    "noDescription": "No description",
+
+    "tooFast": "Too fast, please wait~",
+    "noRepeatInstall": "Already installed!",
+    "downloading": "Downloading {}",
+    "calculating": "Calculating...",
+    "downloadRateLimit": "Download too frequent, please try again later",
+    "downloadFailed": "Download failed!",
+    "downloadComplete": "{}\n\nDownload complete! The mod has been added to the corresponding game's mod list.",
+    "confirmDownload": "Confirm downloading this mod?",
+
+    "anonymousUser": "Anonymous",
+    "inputComment": "Enter your comment",
+    "commentSuccess": "Comment submitted, pending review!"
+}
