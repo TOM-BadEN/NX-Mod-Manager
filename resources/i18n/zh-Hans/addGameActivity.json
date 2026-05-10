@@ -1,0 +1,22 @@
+{
+    "title": "请选择游戏",
+    "back": "返回",
+    "search": "搜索",
+    "menu": "菜单",
+    "sortAsc": "排序：升",
+    "sortDesc": "排序：降",
+    "menuTitle": "添加模组",
+    "menuMtp": "MTP 传输",
+    "menuMtpDesc": "通过 USB 连接传输模组文件\n - 传输速度较快，但在传输包含大量小文件的文件夹形式的模组时，可能会传输失败\n - 对于包含大量小文件的模组建议优先打包为 ZIP 压缩包后再进行传输，或使用 FTP 以获得更稳定的传输效果",
+    "menuFtp": "FTP 传输",
+    "menuFtpDesc": "通过 Wi-Fi 无线传输模组文件\n - 传输速度较慢，推荐使用第三方 FTP 客户端，并开启 6 个线程以提升传输效率",
+    "transitEmpty": "中转站中未发现任何模组，请先上传模组至中转站。\uE0E2 菜单 \u2192 添加模组。",
+    "selectMod": "选择模组",
+    "addSuccess": "已成功添加 {} 个模组！",
+    "addConfirm": "确认添加 {} 个模组？",
+    "ok": "我已知晓",
+    "cancel": "取消",
+    "confirm": "确认",
+    "tidPlaceholder": "请输入游戏的 TID ...",
+    "tidInvalid": "游戏 TID 无效，请检查后重试！"
+}

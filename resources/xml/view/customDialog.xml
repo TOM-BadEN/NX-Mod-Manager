@@ -1,0 +1,114 @@
+<!--
+    CustomDialog - 自定义对话框布局
+    和框架 brls::Dialog 的 XML 完全一样，只换了 id 前缀
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="center"
+    alignItems="center"
+    backgroundColor="@theme/brls/backdrop">
+
+    <brls:AppletFrame
+        id="custom_dialog/applet"
+        width="720"
+        height="auto"
+        headerHidden="true"
+        footerHidden="true"
+        cornerRadius="4"
+        backgroundColor="@theme/brls/background">
+
+        <DialogButtonBox
+            width="auto"
+            height="auto"
+            grow="1"
+            axis="column">
+
+            <!-- 内容区 -->
+            <brls:Box
+                id="custom_dialog/container"
+                width="auto"
+                height="auto"
+                grow="1"
+                axis="column"/>
+
+            <!-- 第 3 个按钮（独占一行，在底部按钮行上方） -->
+            <brls:Rectangle
+                id="custom_dialog/button3/separator"
+                width="auto"
+                height="2"
+                color="@theme/brls/sidebar/separator"
+                visibility="gone" />
+
+            <DialogButton
+                id="custom_dialog/button3"
+                width="auto"
+                height="72"
+                axis="column"
+                focusable="true"
+                justifyContent="center"
+                alignItems="center"
+                highlightCornerRadius="6"
+                fontSize="@style/brls/dialog/fontSize"
+                style="borderless"
+                textColor="@theme/brls/accent"
+                text="Continue"
+                visibility="gone"/>
+
+            <!-- 底部按钮行（放按钮 1 和按钮 2） -->
+            <DialogButtonBox
+                width="auto"
+                height="72"
+                axis="row"
+                justifyContent="spaceEvenly"
+                alignItems="stretch"
+                lineTop="2px"
+                lineColor="@theme/brls/sidebar/separator"
+                visibility="gone">
+
+                <DialogButton
+                    id="custom_dialog/button1"
+                    width="0"
+                    height="auto"
+                    grow="1"
+                    focusable="true"
+                    justifyContent="center"
+                    alignItems="center"
+                    highlightCornerRadius="6"
+                    text="Continue"
+                    style="borderless"
+                    fontSize="@style/brls/dialog/fontSize"
+                    textColor="@theme/brls/accent"
+                    visibility="gone"/>
+
+                <brls:Rectangle
+                    id="custom_dialog/button2/separator"
+                    width="2"
+                    height="auto"
+                    color="@theme/brls/sidebar/separator"
+                    visibility="gone" />
+
+                <DialogButton
+                    id="custom_dialog/button2"
+                    width="0"
+                    height="auto"
+                    grow="1"
+                    focusable="true"
+                    justifyContent="center"
+                    alignItems="center"
+                    highlightCornerRadius="6"
+                    text="Continue"
+                    style="borderless"
+                    fontSize="@style/brls/dialog/fontSize"
+                    textColor="@theme/brls/accent"
+                    visibility="gone"/>
+
+            </DialogButtonBox>
+
+        </DialogButtonBox>
+
+    </brls:AppletFrame>
+
+</brls:Box>

@@ -1,0 +1,40 @@
+{
+    "loading": "正在載入...",
+    "descTitle": "MOD 描述",
+    "screenshotTitle": "MOD 截圖",
+    "ok": "我已知曉",
+    "okShort": "好的",
+    "cancel": "取消",
+    "confirm": "確認",
+
+    "btnLike": "按讚",
+    "btnDislike": "倒讚",
+    "btnDownload": "下載",
+    "btnComment": "留言",
+
+    "loadFailed": "載入失敗",
+    "noComments": "暫無留言",
+
+    "unknownAuthor": "未知作者",
+    "authorPrefix": "By {}",
+    "sizeUnknown": "大小未知",
+    "modVersionUnknown": "MOD 版本：未知",
+    "modVersionFmt": "MOD 版本：{}",
+    "gameVersionUnknown": "適配遊戲：未知",
+    "gameVersionUniversal": "適配遊戲：通用",
+    "gameVersionFmt": "適配遊戲：{}",
+    "noDescription": "暫無描述",
+
+    "tooFast": "操作太快了~",
+    "noRepeatInstall": "請勿重複安裝！",
+    "downloading": "正在下載 {}",
+    "calculating": "計算中...",
+    "downloadRateLimit": "下載過於頻繁，請稍後再試",
+    "downloadFailed": "下載失敗！",
+    "downloadComplete": "{}\n\n下載完成，已新增至對應遊戲的模組列表！",
+    "confirmDownload": "確認下載該模組？",
+
+    "anonymousUser": "匿名使用者",
+    "inputComment": "請輸入留言內容",
+    "commentSuccess": "已成功提交留言，待管理員審核！"
+}

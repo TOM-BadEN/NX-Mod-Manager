@@ -1,0 +1,85 @@
+{
+    "modType": {
+        "performance": "性能优化",
+        "graphics": "画质增强",
+        "translation": "游戏汉化",
+        "feature": "功能扩展",
+        "ui": "界面美化",
+        "music": "音乐替换",
+        "skin": "角色皮肤",
+        "cheat": "金手指",
+        "other": "其他"
+    },
+    "modTypeDesc": {
+        "performance": "通过优化游戏设置，提升游戏帧率与运行流畅度",
+        "graphics": "改善游戏画面表现，包括材质、光影或分辨率等视觉效果提升",
+        "translation": "提供游戏文本的本地化翻译支持",
+        "feature": "在原有基础上新增玩法、系统或机制，丰富整体游戏体验",
+        "ui": "优化游戏界面，使操作更直观、视觉更舒适",
+        "music": "替换或新增背景音乐或音效内容，增强游戏氛围与沉浸感",
+        "skin": "更换角色或模型外观，包括服装、造型等个性化视觉内容",
+        "cheat": "通过修改游戏数值或机制，实现辅助功能或降低游戏难度",
+        "other": "不属于当前分类的模组类型"
+    },
+    "format": {
+        "seconds": "{} 秒",
+        "hms": "{} 时 {} 分 {} 秒",
+        "ms": "{} 分 {} 秒",
+        "justNow": "刚刚",
+        "minutesAgo": "{}分钟前",
+        "hoursAgo": "{}小时前",
+        "daysAgo": "{}天前",
+        "monthsAgo": "{}个月前",
+        "yearsAgo": "{}年前"
+    },
+    "installer": {
+        "scanningFiles": "正在扫描文件...",
+        "scanningDirs": "正在扫描目录...",
+        "detectingConflicts": "冲突检测中...",
+        "checkingConflicts": "正在排查冲突文件，请耐心等待...",
+        "buildingDirs": "正在构建目录...",
+        "aggregatingFiles": "正在聚合文件...",
+        "createDirFailed": "创建目录失败，错误码：{}",
+        "pchtxtConvertFailed": "pchtxt 转换失败：{}",
+        "pchtxtCreateDirFailed": "pchtxt 创建目录失败",
+        "writeIpsFailed": "写入 IPS 失败，错误码：{}",
+        "unknownMod": "未知模组",
+        "zipNotFound": "未找到 ZIP 文件",
+        "zipOpenFailed": "无法打开 ZIP 文件",
+        "zipNoFiles": "ZIP 内无文件",
+        "zipExtractFailed": "ZIP 解压失败",
+        "zipReadFailed": "ZIP 读取失败",
+        "invalidModStructure": "MOD 结构不合法",
+        "memAllocFailed": "内存分配失败",
+        "modConflict": "MOD 文件冲突",
+        "readPchtxtFailed": "读取 pchtxt 失败",
+        "writeFailed": "写入失败，错误码：{}",
+        "createFileFailed": "创建文件失败，错误码：{}",
+        "openDirFailed": "打开目录失败，错误码：{}",
+        "readDirFailed": "读取目录失败，错误码：{}",
+        "readSourceFailed": "读取源文件失败，错误码：{}",
+        "readSourceFailedNoCode": "读取源文件失败"
+    },
+    "pchtxt": {
+        "oddLength": "数据长度非偶数",
+        "invalidHex": "数据包含非法十六进制字符",
+        "unknownEscape": "未知转义序列",
+        "unclosedString": "字符串未闭合",
+        "invalidOffset": "偏移格式错误",
+        "missingData": "缺少数据",
+        "emptyData": "数据为空",
+        "missingNsobid": "缺少 @nsobid",
+        "lineError": "第 {} 行：{}",
+        "noPatchFound": "未找到有效补丁"
+    },
+    "ftp": {
+        "alreadyRunning": "FTP 服务已在运行",
+        "noIpAddress": "无法获取 IP 地址，请检查网络连接",
+        "startFailed": "FTP 服务启动失败"
+    },
+    "api": {
+        "networkError": "网络请求失败！",
+        "parseError": "数据解析失败！",
+        "gameNotFound": "未收录该游戏！"
+    }
+}
