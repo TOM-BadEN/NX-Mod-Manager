@@ -1,0 +1,12 @@
+/.vscode
+/debug
+/release
+/lib
+*.tar*
+*.log
+*.bin
+*.elf
+*.nacp
+*.nro
+*.code-workspace
+/example/build

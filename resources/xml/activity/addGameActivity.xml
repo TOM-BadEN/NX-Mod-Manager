@@ -1,0 +1,19 @@
+<!--
+    添加游戏页面布局文件
+-->
+
+<MyFrame id="addGame/frame">
+    <brls:Box id="addGame/content" width="100%" height="100%" title="@i18n/addGameActivity/title">
+        <RecyclingGrid
+            id="addGame/grid"
+            width="auto"
+            height="auto"
+            grow="1"
+            marginRight="7"
+            marginTop="4"
+            marginBottom="5"
+            spanCount="3"
+            itemHeight="160"
+            itemSpace="18"/>
+    </brls:Box>
+</MyFrame>

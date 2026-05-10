@@ -1,0 +1,22 @@
+{
+    "title": "Select Game",
+    "back": "Back",
+    "search": "Search",
+    "menu": "Menu",
+    "sortAsc": "Sort: Asc",
+    "sortDesc": "Sort: Desc",
+    "menuTitle": "Add Mod",
+    "menuMtp": "MTP",
+    "menuMtpDesc": "Transfer mod files via USB connection\n - Faster transfer speed, but may fail when transferring folder-type mods with a large number of small files\n - For mods with many small files, it is recommended to pack them into a ZIP archive first, or use FTP for more stable transfers",
+    "menuFtp": "FTP",
+    "menuFtpDesc": "Transfer mod files via Wi-Fi\n - Slower transfer speed; recommend using a third-party FTP client with 6 threads enabled for better efficiency",
+    "transitEmpty": "No mods found in transit. Please upload mods to transit first. Press \uE0E2 menu \u2192 Add Mod.",
+    "selectMod": "Select Mod",
+    "addSuccess": "Successfully added {} mod(s)!",
+    "addConfirm": "Add {} mod(s)?",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "tidPlaceholder": "Enter game TID ...",
+    "tidInvalid": "Invalid game TID, please check and try again!"
+}

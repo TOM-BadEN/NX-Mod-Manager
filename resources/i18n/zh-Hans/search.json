@@ -1,0 +1,9 @@
+{
+    "title": "搜索",
+    "switchResult": "切换：结果",
+    "switchKeyboard": "切换：键盘",
+    "back": "返回",
+    "hintIdle": "支持拼音、多音字、首字母、模糊、全拼等多种搜索方式",
+    "hintEmpty": "未搜索到任何内容",
+    "confirm": "确认"
+}
