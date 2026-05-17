@@ -1,0 +1,32 @@
+<!--
+    StoreGameList - 商店游戏列表页面
+    九宫格展示有 MOD 的游戏，支持分页加载
+-->
+
+<MyFrame id="storeGameList/frame">
+    <brls:Box id="storeGameList/content" width="100%" height="100%" title="@i18n/storeGameList/frameTitle">
+        <RecyclingGrid
+            id="storeGameList/grid"
+            width="auto"
+            height="auto"
+            grow="1"
+            marginRight="7"
+            marginTop="4"
+            marginBottom="5"
+            spanCount="5"
+            itemHeight="210"
+            itemSpace="12"/>
+        <brls:Label
+            id="storeGameList/emptyHint"
+            width="100%"
+            height="100%"
+            visibility="gone"
+            focusable="true"
+            hideHighlight="true"
+            fontSize="32"
+            text="@i18n/storeGameList/noGames"
+            textColor="@theme/app/textSecondary"
+            horizontalAlign="center"
+            verticalAlign="center"/>
+    </brls:Box>
+</MyFrame>

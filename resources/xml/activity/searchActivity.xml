@@ -1,0 +1,69 @@
+<!--
+    搜索页面布局
+    Content 区域 = 结果占位 + 键盘（含输入显示区）
+    底部背景色：绝对定位面板覆盖键盘 + Footer 区域
+-->
+
+<brls:Box
+    width="100%"
+    height="100%">
+
+    <!-- 底部背景色面板（绝对定位，在 MyFrame 之下） -->
+    <brls:Box
+        id="search/bgPanel"
+        positionType="absolute"
+        positionBottom="0"
+        width="100%"
+        height="440"
+        backgroundColor="@theme/app/keyboardBg" />
+
+    <!-- MyFrame 透明叠加，Footer 区域显示底下的背景色 -->
+    <MyFrame id="search/frame" width="100%" height="100%">
+        <brls:Box
+            id="search/content"
+            width="100%"
+            height="100%"
+            axis="column">
+
+            <!-- 搜索结果区域 -->
+            <brls:Box
+                id="search/results"
+                width="auto"
+                height="auto"
+                grow="1"
+                axis="column"
+                justifyContent="center"
+                alignItems="center"
+                paddingLeft="40"
+                paddingRight="40"
+                paddingBottom="15">
+
+                <!-- 提示文本（空闲/无结果时显示） -->
+                <brls:Label
+                    id="search/hint"
+                    width="auto"
+                    height="auto"
+                    text="@i18n/search/hintIdle"
+                    textColor="@theme/app/textSecondary"
+                    fontSize="24" />
+
+                <!-- 搜索结果按钮容器（子 View 由代码动态填充） -->
+                <ResultButtonGrid
+                    id="search/buttonContainer"
+                    axis="column"
+                    alignItems="flexStart"
+                    visibility="gone" />
+
+            </brls:Box>
+
+            <!-- 键盘（底部间距 25，左右间距 40） -->
+            <Keyboard
+                id="search/keyboard"
+                width="100%"
+                paddingLeft="40"
+                paddingRight="40"
+                marginBottom="25" />
+
+        </brls:Box>
+    </MyFrame>
+</brls:Box>
