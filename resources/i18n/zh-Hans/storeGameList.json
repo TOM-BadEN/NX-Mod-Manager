@@ -1,0 +1,22 @@
+{
+    "frameTitle": "在线商店",
+    "loading": "加载数据中...",
+    "ok": "我已知晓",
+    "noGames": "未找到任何游戏",
+    "searchPlaceholder": "搜索游戏名或TID，支持拼音、首字母、模糊搜索...",
+    "searchAction": "搜索",
+    "resetSearch": "重置",
+    "loadingHint": "正在加载...",
+    "titleDefault": "模组商店 - 游戏",
+    "titleSearch": "搜索: {}",
+    "filterAction": "筛选",
+    "filterTitle": "筛选",
+    "filterAll": "全部游戏",
+    "filterAllDesc": "显示服务器中所有有模组的游戏",
+    "filterInstalled": "已安装游戏",
+    "filterInstalledDesc": "只显示 Switch 本地已安装的游戏",
+    "filterNotInstalled": "未安装游戏",
+    "filterNotInstalledDesc": "只显示 Switch 本地未安装的游戏",
+    "placeholderTitle": "加载中...",
+    "placeholderIndex": "加载中..."
+}
