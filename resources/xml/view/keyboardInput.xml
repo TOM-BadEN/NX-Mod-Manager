@@ -1,0 +1,62 @@
+<!--
+    KeyboardInput - 底部键盘输入
+    外层全屏遮罩 + 内层键盘面板贴底部
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="flexEnd"
+    alignItems="stretch"
+    backgroundColor="@theme/brls/backdrop">
+
+    <!-- 键盘面板 -->
+    <brls:Box
+        id="keyboardInput/panel"
+        width="auto"
+        height="auto"
+        axis="column"
+        alignItems="center"
+        paddingTop="20"
+        backgroundColor="@theme/brls/background">
+
+        <!-- Keyboard 容器（由代码注入 Keyboard 视图） -->
+        <brls:Box
+            id="keyboardInput/content"
+            width="auto"
+            height="auto"
+            axis="column"
+            alignItems="center"
+            paddingBottom="25"/>
+
+        <!-- Footer：计数器 + 按钮提示栏 -->
+        <brls:Box
+            width="auto"
+            height="@style/brls/applet_frame/footer_height"
+            axis="row"
+            alignSelf="stretch"
+            justifyContent="spaceBetween"
+            alignItems="center"
+            paddingLeft="@style/brls/hints/footer_padding_sides"
+            paddingRight="@style/brls/hints/footer_padding_sides"
+            paddingTop="@style/brls/hints/footer_padding_top_bottom"
+            paddingBottom="@style/brls/hints/footer_padding_top_bottom"
+            lineTop="1px"
+            lineColor="@theme/brls/applet_frame/separator">
+
+            <brls:Label
+                id="keyboardInput/counter"
+                width="auto"
+                height="auto"
+                fontSize="21.5"/>
+
+            <brls:Hints
+                width="auto"
+                height="auto"/>
+
+        </brls:Box>
+
+    </brls:Box>
+
+</brls:Box>

@@ -1,0 +1,162 @@
+<!--
+    MyFrame - 自定义应用框架布局
+    顶部标题栏
+    底部按钮栏
+    中间内容区域
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="spaceBetween">
+
+    <!-- Header -->
+    <brls:Box
+        id="my/header"
+        width="auto"
+        height="@style/brls/applet_frame/header_height"
+        axis="row"
+        justifyContent="spaceBetween"
+        alignItems="center"
+        paddingLeft="@style/brls/applet_frame/header_padding_sides"
+        paddingRight="@style/brls/applet_frame/header_padding_sides"
+        marginLeft="@style/brls/applet_frame/padding_sides"
+        marginRight="@style/brls/applet_frame/padding_sides"
+        lineColor="@theme/brls/applet_frame/separator"
+        lineBottom="1px">
+
+        <!-- 左侧：图标 + 标题组 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center"
+            grow="1"
+            shrink="1"
+            marginTop="8"
+            marginRight="60">
+            <brls:Image
+                id="my/icon"
+                width="auto"
+                height="auto"
+                marginRight="@style/brls/applet_frame/header_image_title_spacing"
+                visibility="gone" />
+
+            <!-- 标题组：大小标题底部对齐 -->
+            <brls:Box
+                width="auto"
+                height="auto"
+                axis="row"
+                alignItems="flexEnd">
+
+                <brls:Label
+                    id="my/title"
+                    width="auto"
+                    height="auto"
+                    fontSize="@style/brls/applet_frame/header_title_font_size"
+                    singleLine="true"
+                    shrink="1"/>
+
+                <brls:Label
+                    id="my/subtitle"
+                    width="auto"
+                    height="auto"
+                    fontSize="18"
+                    marginLeft="12"
+                    textColor="@theme/app/textSecondary"
+                    singleLine="true"
+                    shrink="0"
+                    visibility="gone"/>
+
+            </brls:Box>
+        </brls:Box>
+
+        <!-- 右侧：时间 WiFi xx% 电池 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center"
+            shrink="0"
+            marginTop="13">
+
+            <brls:Label
+                id="my/fps"
+                width="auto"
+                height="auto"
+                marginRight="20"
+                fontSize="21.5"
+                visibility="gone"/>
+
+            <brls:Label
+                id="my/memory"
+                width="auto"
+                height="auto"
+                marginRight="20"
+                fontSize="21.5"
+                visibility="gone"/>
+
+            <brls:Label
+                id="my/time"
+                width="auto"
+                height="auto"
+                marginRight="20"
+                fontSize="21.5"/>
+
+            <brls:Wireless
+                marginRight="20"
+                marginBottom="5"/>
+
+            <brls:Label
+                id="my/battery_percent"
+                width="auto"
+                height="auto"
+                marginRight="5"
+                fontSize="21.5"/>
+
+            <brls:Battery
+                marginBottom="5"/>
+
+        </brls:Box>
+
+    </brls:Box>
+
+    <!-- Content 内容区域 -->
+    <brls:Box
+        id="my/content"
+        width="auto"
+        height="auto"
+        grow="1"/>
+
+    <!-- Footer 底部按钮提示 -->
+    <brls:Box
+        width="auto"
+        height="@style/brls/applet_frame/footer_height"
+        axis="row"
+        justifyContent="spaceBetween"
+        alignItems="center"
+        marginLeft="@style/brls/applet_frame/padding_sides"
+        marginRight="@style/brls/applet_frame/padding_sides"
+        paddingLeft="@style/brls/hints/footer_padding_sides"
+        paddingRight="@style/brls/hints/footer_padding_sides"
+        paddingTop="@style/brls/hints/footer_padding_top_bottom"
+        paddingBottom="@style/brls/hints/footer_padding_top_bottom"
+        lineColor="@theme/brls/applet_frame/separator"
+        lineTop="1px">
+
+        <!-- 左侧：索引信息 -->
+        <brls:Label
+            id="my/indexLabel"
+            width="auto"
+            height="auto"
+            fontSize="21.5"/>
+
+        <!-- 右侧：按钮提示 -->
+        <brls:Hints
+            width="auto"
+            height="auto"/>
+
+    </brls:Box>
+
+</brls:Box>

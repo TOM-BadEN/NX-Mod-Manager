@@ -1,0 +1,44 @@
+{
+    "notInstalled": "Local: Not Installed",
+    "localVersion": "Local: {}",
+    "loading": "Loading...",
+    "ok": "OK",
+    "noMods": "No mods found",
+    "loadingHint": "Loading...",
+    "titleSearch": "Search: {}",
+
+    "searchPlaceholder": "Search mod or author, supports pinyin, abbreviation, fuzzy...",
+    "searchAction": "Search",
+    "resetSearch": "Reset",
+
+    "filterMenuTitle": "Filter",
+    "filterAction": "Filter",
+
+    "sortMenuTitle": "Sort By",
+    "sortEntry": "Sort By",
+    "sortEntryDesc": "Choose the sorting order for mods",
+    "sortLatest": "Latest",
+    "sortLatestDesc": "Sort by upload time, newest first",
+    "sortDownload": "Most Downloads",
+    "sortDownloadDesc": "Sort by download count, highest first",
+    "sortLike": "Most Liked",
+    "sortLikeDesc": "Sort by like count, highest first",
+
+    "typeMenuTitle": "Mod Type",
+    "typeEntry": "Mod Type",
+    "typeEntryDesc": "Filter mods by category",
+    "typeAll": "All Types",
+    "typeAllDesc": "Show all types of mods",
+
+    "versionMenuTitle": "Game Version",
+    "versionEntry": "Game Version",
+    "versionEntryDesc": "Filter mods by compatible game version",
+    "versionAll": "All Versions",
+    "versionAllDesc": "Show mods for all versions",
+    "versionUniversal": "Universal",
+    "versionUniversalDesc": "Mods compatible with all game versions",
+    "versionSpecificDesc": "Only show mods for game version {}",
+
+    "resetFilter": "Reset Filter",
+    "resetFilterDesc": "Restore default sorting and filter settings"
+}

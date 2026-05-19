@@ -1,0 +1,85 @@
+{
+    "modType": {
+        "performance": "效能優化",
+        "graphics": "畫質增強",
+        "translation": "遊戲漢化",
+        "feature": "功能擴展",
+        "ui": "介面美化",
+        "music": "音樂替換",
+        "skin": "角色皮膚",
+        "cheat": "金手指",
+        "other": "其他"
+    },
+    "modTypeDesc": {
+        "performance": "透過優化遊戲設定，提升遊戲幀率與運行流暢度",
+        "graphics": "改善遊戲畫面表現，包括材質、光影或解析度等視覺效果提升",
+        "translation": "提供遊戲文本的本地化翻譯支援",
+        "feature": "在原有基礎上新增玩法、系統或機制，豐富整體遊戲體驗",
+        "ui": "優化遊戲介面，使操作更直觀、視覺更舒適",
+        "music": "替換或新增背景音樂或音效內容，增強遊戲氛圍與沉浸感",
+        "skin": "更換角色或模型外觀，包括服裝、造型等個性化視覺內容",
+        "cheat": "透過修改遊戲數值或機制，實現輔助功能或降低遊戲難度",
+        "other": "不屬於當前分類的模組類型"
+    },
+    "format": {
+        "seconds": "{} 秒",
+        "hms": "{} 時 {} 分 {} 秒",
+        "ms": "{} 分 {} 秒",
+        "justNow": "剛剛",
+        "minutesAgo": "{}分鐘前",
+        "hoursAgo": "{}小時前",
+        "daysAgo": "{}天前",
+        "monthsAgo": "{}個月前",
+        "yearsAgo": "{}年前"
+    },
+    "installer": {
+        "scanningFiles": "正在掃描檔案...",
+        "scanningDirs": "正在掃描目錄...",
+        "detectingConflicts": "衝突檢測中...",
+        "checkingConflicts": "正在排查衝突檔案，請耐心等待...",
+        "buildingDirs": "正在建構目錄...",
+        "aggregatingFiles": "正在聚合檔案...",
+        "createDirFailed": "建立目錄失敗，錯誤碼：{}",
+        "pchtxtConvertFailed": "pchtxt 轉換失敗：{}",
+        "pchtxtCreateDirFailed": "pchtxt 建立目錄失敗",
+        "writeIpsFailed": "寫入 IPS 失敗，錯誤碼：{}",
+        "unknownMod": "未知模組",
+        "zipNotFound": "未找到 ZIP 檔案",
+        "zipOpenFailed": "無法開啟 ZIP 檔案",
+        "zipNoFiles": "ZIP 內無檔案",
+        "zipExtractFailed": "ZIP 解壓失敗",
+        "zipReadFailed": "ZIP 讀取失敗",
+        "invalidModStructure": "MOD 結構不合法",
+        "memAllocFailed": "記憶體分配失敗",
+        "modConflict": "MOD 檔案衝突",
+        "readPchtxtFailed": "讀取 pchtxt 失敗",
+        "writeFailed": "寫入失敗，錯誤碼：{}",
+        "createFileFailed": "建立檔案失敗，錯誤碼：{}",
+        "openDirFailed": "開啟目錄失敗，錯誤碼：{}",
+        "readDirFailed": "讀取目錄失敗，錯誤碼：{}",
+        "readSourceFailed": "讀取來源檔案失敗，錯誤碼：{}",
+        "readSourceFailedNoCode": "讀取來源檔案失敗"
+    },
+    "pchtxt": {
+        "oddLength": "資料長度非偶數",
+        "invalidHex": "資料包含非法十六進位字元",
+        "unknownEscape": "未知跳脫序列",
+        "unclosedString": "字串未閉合",
+        "invalidOffset": "偏移格式錯誤",
+        "missingData": "缺少資料",
+        "emptyData": "資料為空",
+        "missingNsobid": "缺少 @nsobid",
+        "lineError": "第 {} 行：{}",
+        "noPatchFound": "未找到有效補丁"
+    },
+    "ftp": {
+        "alreadyRunning": "FTP 服務已在執行",
+        "noIpAddress": "無法取得 IP 位址，請檢查網路連線",
+        "startFailed": "FTP 服務啟動失敗"
+    },
+    "api": {
+        "networkError": "網路請求失敗！",
+        "parseError": "資料解析失敗！",
+        "gameNotFound": "未收錄該遊戲！"
+    }
+}
