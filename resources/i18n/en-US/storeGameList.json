@@ -1,0 +1,20 @@
+{
+    "frameTitle": "Online Store",
+    "ok": "OK",
+    "noGames": "No games found",
+    "searchPlaceholder": "Search game name or TID, supports pinyin, abbreviation, fuzzy...",
+    "searchAction": "Search",
+    "resetSearch": "Reset",
+    "titleDefault": "Mod Store - Games",
+    "titleSearch": "Search: {}",
+    "filterAction": "Filter",
+    "filterTitle": "Filter",
+    "filterAll": "All Games",
+    "filterAllDesc": "Show all games with mods on the server",
+    "filterInstalled": "Installed Games",
+    "filterInstalledDesc": "Only show games installed on this Switch",
+    "filterNotInstalled": "Not Installed Games",
+    "filterNotInstalledDesc": "Only show games not installed on this Switch",
+    "placeholderTitle": "Loading...",
+    "placeholderIndex": "Loading..."
+}

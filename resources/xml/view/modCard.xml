@@ -1,0 +1,82 @@
+<!--
+    ModCard - Mod 卡片组件
+    左侧图标 + 中间名称/类型 + 右侧安装状态
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    focusable="true"
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 左侧：mod 图标 -->
+    <brls:Image
+        id="modCard/icon"
+        width="70"
+        height="70"
+        marginRight="20"
+        cornerRadius="8"
+        scalingType="fit"/>
+
+    <!-- 中间：名称 + 类型（纵向） -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="column"
+        justifyContent="center"
+        grow="1">
+
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center">
+
+            <brls:Label
+                id="modCard/name"
+                width="auto"
+                height="auto"
+                fontSize="24"
+                singleLine="true"
+                shrink="1"/>
+
+            <SVGImage
+                id="modCard/cloudIcon"
+                SVG="img/mod/cloud.svg"
+                width="20"
+                height="20"
+                marginLeft="20"
+                visibility="invisible"/>
+
+        </brls:Box>
+
+        <brls:Label
+            id="modCard/type"
+            width="auto"
+            height="auto"
+            fontSize="20"
+            textColor="@theme/app/textSecondary"
+            marginTop="12"/>
+
+    </brls:Box>
+
+    <!-- 右侧：安装状态 -->
+    <brls:Label
+        id="modCard/status"
+        width="auto"
+        height="auto"
+        fontSize="22"
+        singleLine="true"
+        shrink="0"
+        marginLeft="20"/>
+
+</brls:Box>
