@@ -1,0 +1,52 @@
+{
+    "notInstalled": "本地：未安装",
+    "localVersion": "本地：{}",
+    "loading": "正在加载...",
+    "descTitle": "MOD 描述",
+    "screenshotTitle": "MOD 截图",
+    "ok": "我已知晓",
+    "okShort": "好的",
+    "cancel": "取消",
+    "confirm": "确认",
+
+    "btnLike": "点赞",
+    "btnDislike": "点踩",
+    "btnDownload": "下载",
+    "btnComment": "留言",
+
+    "loadFailed": "加载失败",
+    "noComments": "暂无留言",
+
+    "unknownAuthor": "未知作者",
+    "authorPrefix": "By {}",
+    "sizeUnknown": "大小未知",
+    "modVersionUnknown": "MOD 版本：未知",
+    "modVersionFmt": "MOD 版本：{}",
+    "gameVersionUnknown": "适配游戏：未知",
+    "gameVersionUniversal": "适配游戏：通用",
+    "gameVersionFmt": "适配游戏：{}",
+    "noDescription": "暂无描述",
+
+    "tooFast": "操作的太快了~",
+    "noRepeatInstall": "请勿重复下载！",
+    "downloading": "正在下载 {}",
+    "calculating": "计算中...",
+    "downloadRateLimit": "服务器资源有限，每 30 秒只能下载一次，请见谅",
+    "downloadFailed": "下载失败！",
+    "downloadComplete": "{}\n\n下载完成，已添加至对应游戏的模组列表！",
+    "updateFailed": "更新失败！",
+    "updateComplete": "{}\n\n更新完成，已同步至对应游戏的模组列表！",
+    "confirmDownload": "确认下载该模组？",
+    "updateInstalledBlocked": "当前模组已安装到游戏中，请卸载后再尝试更新！",
+    "confirmUpdate": "原来的模组将被覆盖，确认更新该模组吗？",
+    "continueBrowse": "继续浏览",
+    "backToHome": "返回主页",
+    "backToModList": "返回模组列表",
+
+    "anonymousUser": "匿名用户",
+    "inputComment": "请输入留言内容",
+    "commentSuccess": "已成功提交留言，待管理员审核！",
+
+    "changelogBtn": "更新记录",
+    "noChangelog": "暂无更多记录"
+}
