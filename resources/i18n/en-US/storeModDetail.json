@@ -1,0 +1,52 @@
+{
+    "notInstalled": "Local: Not Installed",
+    "localVersion": "Local: {}",
+    "loading": "Loading...",
+    "descTitle": "MOD Description",
+    "screenshotTitle": "MOD Screenshots",
+    "ok": "OK",
+    "okShort": "OK",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+
+    "btnLike": "Like",
+    "btnDislike": "Dislike",
+    "btnDownload": "Download",
+    "btnComment": "Comment",
+
+    "loadFailed": "Failed to load",
+    "noComments": "No comments yet",
+
+    "unknownAuthor": "Unknown Author",
+    "authorPrefix": "By {}",
+    "sizeUnknown": "Size unknown",
+    "modVersionUnknown": "MOD Version: Unknown",
+    "modVersionFmt": "MOD Version: {}",
+    "gameVersionUnknown": "Game Version: Unknown",
+    "gameVersionUniversal": "Game Version: Universal",
+    "gameVersionFmt": "Game Version: {}",
+    "noDescription": "No description",
+
+    "tooFast": "Too fast, please wait~",
+    "noRepeatInstall": "Already downloaded!",
+    "downloading": "Downloading {}",
+    "calculating": "Calculating...",
+    "downloadRateLimit": "Server resources are limited. You can only download once every 30 seconds. Thank you for your understanding.",
+    "downloadFailed": "Download failed!",
+    "downloadComplete": "{}\n\nDownload complete! The mod has been added to the corresponding game's mod list.",
+    "updateFailed": "Update failed!",
+    "updateComplete": "{}\n\nUpdate complete! The mod list is now synced.",
+    "confirmDownload": "Confirm downloading this mod?",
+    "updateInstalledBlocked": "This mod is currently installed in the game. Please uninstall it before trying to update again.",
+    "confirmUpdate": "The existing mod will be overwritten. Confirm updating this mod?",
+    "continueBrowse": "Continue",
+    "backToHome": "Back to Home",
+    "backToModList": "Back to Mod List",
+
+    "anonymousUser": "Anonymous",
+    "inputComment": "Enter your comment",
+    "commentSuccess": "Comment submitted, pending review!",
+
+    "changelogBtn": "Changelog",
+    "noChangelog": "No changelog available"
+}

@@ -1,0 +1,71 @@
+{
+    "gameCard": {
+        "virtualGame": "新增未安裝遊戲"
+    },
+    "modCard": {
+        "type": "類型：{}",
+        "disabled": "已禁用",
+        "installed": "已安裝",
+        "notInstalled": "未安裝"
+    },
+    "storeModCard": {
+        "gameVersionUnknown": "適配遊戲：未知",
+        "gameVersionUniversal": "適配遊戲：通用",
+        "gameVersionFmt": "適配遊戲：{}"
+    },
+    "qrCodeView": {
+        "back": "返回",
+        "confirm": "確認",
+        "scanHint": "請掃描 QR Code"
+    },
+    "imageViewer": {
+        "back": "返回",
+        "confirm": "確認"
+    },
+    "myframe": {
+        "back": "返回",
+        "cancel": "取消",
+        "ok": "確定",
+        "exitConfirm": "確定要退出嗎？"
+    },
+    "customDialog": {
+        "back": "返回"
+    },
+    "recyclingGrid": {
+        "pageUp": "上翻",
+        "pageDown": "下翻"
+    },
+    "actionMenu": {
+        "back": "返回",
+        "submit": "提交"
+    },
+    "keyboard": {
+        "nativeKeyboard": "原生鍵盤",
+        "search": "搜尋",
+        "space": "空格",
+        "delete": "刪除",
+        "placeholder": "請輸入文字...",
+        "input": "輸入"
+    },
+    "keyboardInput": {
+        "confirm": "確認",
+        "back": "返回"
+    },
+    "ftpDialog": {
+        "acknowledged": "我已知曉",
+        "end": "結束",
+        "connected": "FTP 已連接，等待傳輸指令",
+        "disconnected": "FTP 連接已斷開，等待重新連接\nftp://{}:6666",
+        "transferring": "正在傳輸檔案...",
+        "successCount": "\n成功傳輸 {} 個檔案",
+        "failedCount": "\n傳輸失敗 {} 個檔案",
+        "transferDone": "傳輸結束，等待新的任務...",
+        "started": "FTP 已啟動，等待連接\nftp://{}:6666"
+    },
+    "mtpDialog": {
+        "end": "結束",
+        "waiting": "MTP 已開啟，等待 USB 連接",
+        "connected": "USB 已連接，等待傳輸指令",
+        "completed": "已完成 {} 個檔案，等待新傳輸指令..."
+    }
+}

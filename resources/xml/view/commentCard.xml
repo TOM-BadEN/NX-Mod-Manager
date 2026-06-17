@@ -1,0 +1,51 @@
+<!--
+    CommentCard - 留言卡片组件
+    昵称+时间（同行两端对齐） + 留言内容（多行自动换行）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    shadowType="generic">
+
+    <!-- 第1行：昵称 + 时间 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        justifyContent="spaceBetween"
+        alignItems="center">
+
+        <brls:Label
+            id="commentCard/nickname"
+            width="auto"
+            height="auto"
+            fontSize="22"
+            singleLine="true"/>
+
+        <brls:Label
+            id="commentCard/time"
+            width="auto"
+            height="auto"
+            fontSize="22"
+            singleLine="true"/>
+
+    </brls:Box>
+
+    <!-- 第2行：留言内容（多行自动换行） -->
+    <brls:Label
+        id="commentCard/content"
+        width="auto"
+        height="auto"
+        fontSize="20"
+        textColor="@theme/app/textSecondary"
+        marginTop="20"/>
+
+</brls:Box>
