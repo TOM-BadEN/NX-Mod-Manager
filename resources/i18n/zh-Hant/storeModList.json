@@ -1,0 +1,43 @@
+{
+    "notInstalled": "本機：未安裝",
+    "localVersion": "本機：{}",
+    "loading": "載入資料中...",
+    "ok": "我已知曉",
+    "noMods": "未找到任何模組",
+    "loadingHint": "正在載入...",
+    "titleSearch": "搜尋: {}",
+
+    "searchPlaceholder": "搜尋模組名或作者名，支援拼音、首字母、模糊搜尋...",
+    "searchAction": "搜尋",
+
+    "filterMenuTitle": "篩選",
+    "filterAction": "篩選",
+
+    "sortMenuTitle": "排序方式",
+    "sortEntry": "排序方式",
+    "sortEntryDesc": "選擇模組的排列順序",
+    "sortLatest": "最新上傳",
+    "sortLatestDesc": "按上傳時間從新到舊",
+    "sortDownload": "下載最多",
+    "sortDownloadDesc": "按下載量從高到低",
+    "sortLike": "最多按讚",
+    "sortLikeDesc": "按按讚數從高到低",
+
+    "typeMenuTitle": "模組類型",
+    "typeEntry": "模組類型",
+    "typeEntryDesc": "按功能分類篩選模組",
+    "typeAll": "不限類型",
+    "typeAllDesc": "顯示所有類型的模組",
+
+    "versionMenuTitle": "遊戲版本",
+    "versionEntry": "遊戲版本",
+    "versionEntryDesc": "按適配的遊戲版本篩選模組",
+    "versionAll": "不限版本",
+    "versionAllDesc": "顯示所有版本的模組",
+    "versionUniversal": "版本通用",
+    "versionUniversalDesc": "所有遊戲版本都支援的模組",
+    "versionSpecificDesc": "只顯示適配遊戲 {} 版本的模組",
+
+    "resetFilter": "重設篩選",
+    "resetFilterDesc": "恢復預設排序和篩選條件"
+}
