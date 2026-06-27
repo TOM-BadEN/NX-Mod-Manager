@@ -1,0 +1,80 @@
+<!--
+    StoreGameCard - 商店游戏卡片组件
+    游戏图标 + 底部覆盖层（游戏名、MOD数量胶囊、更新时间胶囊）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    focusable="true"
+    paddingTop="5"
+    paddingBottom="5"
+    paddingLeft="5"
+    paddingRight="5"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 游戏图标 -->
+    <brls:Image
+        id="storeGameCard/icon"
+        width="100%"
+        height="100%"
+        grow="1"
+        scalingType="fit"
+        cornerRadius="6"
+        image="@res/img/game/defaultIconUp.jpg" />
+
+    <!-- 底部半透明遮罩 -->
+    <brls:Box
+        id="storeGameCard/overlay"
+        width="auto"
+        height="35%"
+        positionType="absolute"
+        positionBottom="5"
+        positionLeft="5"
+        positionRight="5"
+        backgroundColor="@theme/app/storeOverlayBg"
+        cornerRadius="6"
+        axis="column"
+        justifyContent="spaceEvenly"
+        paddingLeft="8"
+        paddingRight="8"
+        clipsToBounds="true">
+
+        <!-- 游戏名 -->
+        <brls:Label
+            id="storeGameCard/name"
+            width="auto"
+            height="auto"
+            fontSize="16"
+            singleLine="true"
+            />
+
+        <!-- 胶囊标签行 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            marginTop="0">
+            <CapsuleBadge id="storeGameCard/modCount" fontSize="12" paddingTop="2" paddingBottom="2" paddingLeft="8" paddingRight="8" cornerRadius="8" marginRight="6" backgroundColor="@theme/app/storeOverlayTag" />
+            <CapsuleBadge id="storeGameCard/lastUpdate" fontSize="12" paddingTop="2" paddingBottom="2" paddingLeft="8" paddingRight="8" cornerRadius="8" backgroundColor="@theme/app/storeOverlayTag" />
+        </brls:Box>
+
+    </brls:Box>
+
+    <brls:Image
+        id="storeGameCard/installed"
+        width="25"
+        height="25"
+        positionType="absolute"
+        positionBottom="10"
+        positionRight="10"
+        scalingType="fit"
+        visibility="gone"
+        image="@res/img/game/installed.png" />
+
+
+</brls:Box>

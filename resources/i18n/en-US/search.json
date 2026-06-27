@@ -1,0 +1,9 @@
+{
+    "title": "Search",
+    "switchResult": "Switch: Results",
+    "switchKeyboard": "Switch: Keyboard",
+    "back": "Back",
+    "hintIdle": "Supports pinyin, polyphone, initials, fuzzy, and full pinyin search",
+    "hintEmpty": "No results found",
+    "confirm": "Confirm"
+}

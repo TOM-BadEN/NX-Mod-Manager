@@ -1,0 +1,40 @@
+<!--
+    主页面布局文件
+-->
+
+<MyFrame id="home/frame">
+    <brls:Box id="home/content" width="100%" height="100%" title="@i18n/home/pageTitle">
+        <RecyclingGrid
+            id="home/grid"
+            width="auto"
+            height="auto"
+            grow="1"
+            marginRight="7"
+            marginTop="4"
+            marginBottom="5"
+            spanCount="5"
+            itemHeight="210"
+            itemSpace="12"/>
+        <brls:Box
+            id="home/noModHintBox"
+            width="100%"
+            height="auto"
+            grow="1"
+            visibility="gone"
+            focusable="true"
+            hideHighlight="true"
+            axis="column"
+            justifyContent="center"
+            alignItems="center">
+            <brls:Label
+                id="home/noModHint"
+                width="auto"
+                height="auto"
+                fontSize="30"
+                lineHeight="2"
+                text="@i18n/home/noModHint"
+                textColor="@theme/app/textSecondary"
+                horizontalAlign="center"/>
+        </brls:Box>
+    </brls:Box>
+</MyFrame>

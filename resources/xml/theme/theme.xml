@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme>
+    <!-- 卡片背景色 -->
+    <color name="app/cardBg" dark="#00000020" light="#0000000A"/>
+    <!-- 次要文字颜色（版本、数量等） -->
+    <color name="app/textSecondary" dark="#808080" light="#666666"/>
+    <!-- 文字警告色 -->
+    <color name="app/textWarning" dark="#FF5050" light="#FF5050"/>
+    <!-- 商店游戏名颜色 -->
+    <color name="app/textStore" dark="#4FC3F7" light="#0288D1"/>
+    <!-- 高亮文字颜色（已安装等状态） -->
+    <color name="app/textHighlight" dark="#00FFC8" light="#00CC9E"/>
+    <!-- 胶囊标签背景色 -->
+    <color name="app/tagBg" dark="#FFFFFF18" light="#00000010"/>
+    <!-- 菜单面板 / 提示卡片背景色（较低透明度） -->
+    <color name="app/menuBg" dark="#1A1A1AF5" light="#FAFAFAF5"/>
+    <!-- 进度条轨道背景色 -->
+    <color name="app/progressTrack" dark="#3C3C3C" light="#D0D0D0"/>
+    <!-- 进度条填充前景色 -->
+    <color name="app/progressFill" dark="#0096FF" light="#0096FF"/>
+    <!-- 搜索页键盘区域背景色 -->
+    <color name="app/keyboardBg" dark="#3d3d3d41" light="#d0d0d041"/>
+    <!-- 二维码卡片背景色 -->
+    <color name="app/qrCardBg" dark="#FFFFFF" light="#FFFFFF"/>
+    <!-- 深色文字颜色（与框架 light 主题默认文字色一致） -->
+    <color name="app/textDark" dark="#2D2D2D" light="#2D2D2D"/>
+    <!-- 长按按钮进度填充色 -->
+    <color name="app/longPressFill" dark="#292C31" light="#EDF0E9"/>
+    <!-- 卡片覆盖层背景色 -->
+    <color name="app/cardOverlayBg" dark="#000000CC" light="#FFFFFFEE"/>
+    <!-- 卡片覆盖层文字色 -->
+    <color name="app/cardOverlayText" dark="#FFFFFF" light="#1A1A1A"/>
+    <!-- 卡片覆盖层胶囊背景色 -->
+    <color name="app/cardOverlayTag" dark="#FFFFFF40" light="#0000000C"/>
+    <!-- 商店卡片覆盖层背景色（黑金） -->
+    <color name="app/storeOverlayBg" dark="#8B2315CC" light="#D97C6AD9"/>
+    <!-- 商店卡片覆盖层胶囊背景色 -->
+    <color name="app/storeOverlayTag" dark="#FFFFFF60" light="#FFFFFF60"/>
+    <!-- 新增页面卡片覆盖层背景色（黑绿） -->
+    <color name="app/addGameOverlayBg" dark="#085528CC" light="#75DFA8D9"/>
+    <!-- 新增页面卡片覆盖层胶囊背景色 -->
+    <color name="app/addGameOverlayTag" dark="#FFFFFF60" light="#FFFFFF60"/>
+</theme>

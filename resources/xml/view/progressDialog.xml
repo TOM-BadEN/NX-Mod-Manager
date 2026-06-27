@@ -1,0 +1,103 @@
+<!--
+    ProgressDialog - 通用进度对话框布局
+    作为 CustomDialog(Box*) 的 contentView 使用
+    包含：主文本、文件名+数量进度、主进度条（有轨道）、副进度条（无轨道，默认隐藏）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="center"
+    alignItems="stretch"
+    paddingTop="@style/brls/dialog/paddingTopBottom"
+    paddingBottom="@style/brls/dialog/paddingTopBottom"
+    paddingLeft="@style/brls/dialog/paddingLeftRight"
+    paddingRight="@style/brls/dialog/paddingLeftRight">
+
+    <!-- 主文本 -->
+    <brls:Label
+        id="progress_dialog/text"
+        width="auto"
+        height="auto"
+        fontSize="@style/brls/dialog/fontSize"
+        horizontalAlign="center"
+        singleLine="true"
+        marginBottom="45"/>
+
+    <!-- 进度区域 -->
+    <brls:Box
+        id="progress_dialog/progressArea"
+        width="auto"
+        height="auto"
+        axis="column">
+
+        <!-- 信息行：左文本 + 右文本 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            justifyContent="spaceBetween"
+            alignItems="center"
+            marginBottom="10">
+
+            <!-- 左文本，左对齐，超长截断 -->
+            <brls:Label
+                id="progress_dialog/leftText"
+                width="0"
+                height="auto"
+                grow="1"
+                shrink="1"
+                singleLine="true"
+                fontSize="17"
+                marginRight="26"/>
+
+            <!-- 右文本，右对齐，不缩小 -->
+            <brls:Label
+                id="progress_dialog/rightText"
+                width="auto"
+                height="auto"
+                singleLine="true"
+                fontSize="17"/>
+
+        </brls:Box>
+
+        <!-- 主进度条：track（背景）包裹 fill（前景） -->
+        <brls:Box
+            width="auto"
+            height="30"
+            cornerRadius="6"
+            backgroundColor="@theme/app/progressTrack">
+
+            <brls:Rectangle
+                id="progress_dialog/mainFill"
+                width="0%"
+                height="auto"
+                cornerRadius="6"
+                color="@theme/app/progressFill"/>
+
+            <brls:Label
+                id="progress_dialog/percentage"
+                positionType="absolute"
+                width="100%"
+                height="100%"
+                horizontalAlign="center"
+                verticalAlign="center"
+                fontSize="18"
+                singleLine="true"/>
+
+        </brls:Box>
+
+        <!-- 副进度条：无轨道，2px 高，默认隐藏 -->
+        <brls:Rectangle
+            id="progress_dialog/subFill"
+            width="0%"
+            height="3"
+            cornerRadius="1.5"
+            marginTop="10"
+            color="@theme/app/progressFill"
+            visibility="invisible"/>
+
+    </brls:Box>
+
+</brls:Box>
