@@ -1,0 +1,119 @@
+<!--
+    StoreModCard - 商店模组卡片组件
+    左侧图标 + 右侧文本（名称、胶囊标签、统计数据）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    focusable="true"
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 左侧：mod 图标 -->
+    <brls:Image
+        id="storeModCard/icon"
+        width="120"
+        height="120"
+        marginRight="20"
+        scalingType="fit"
+        cornerRadius="8"
+        image="@res/img/mod/modType/other.jpg" />
+
+    <!-- 右侧：文本区域 -->
+    <brls:Box
+        width="auto"
+        height="120"
+        axis="column"
+        justifyContent="spaceEvenly"
+        grow="1"
+        clipsToBounds="true">
+
+        <!-- mod 名称 + 已安装标识 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center"
+            marginRight="15">
+
+            <brls:Label
+                id="storeModCard/name"
+                width="auto"
+                height="auto"
+                fontSize="23"
+                singleLine="true"
+                shrink="1" />
+
+            <brls:Box
+                width="20"
+                height="20"
+                marginLeft="15"
+                marginBottom="2"
+                shrink="0">
+
+                <brls:Image
+                    id="storeModCard/installedIcon"
+                    image="@res/img/mod/installed.png"
+                    width="20"
+                    height="20"
+                    visibility="invisible" />
+
+                <brls:Box
+                    id="storeModCard/updateBadge"
+                    width="6"
+                    height="6"
+                    cornerRadius="3"
+                    backgroundColor="@theme/app/textWarning"
+                    positionType="absolute"
+                    positionTop="-4"
+                    positionRight="-4"
+                    visibility="invisible"/>
+            </brls:Box>
+        </brls:Box>
+
+        <!-- 胶囊标签区域（限一行，溢出裁剪） -->
+        <brls:Box
+            id="storeModCard/tagRow"
+            width="auto"
+            height="auto"
+            axis="row"
+            clipsToBounds="true">
+
+            <CapsuleBadge id="storeModCard/tagType" fontSize="16" paddingTop="4" paddingBottom="4" paddingLeft="10" paddingRight="10" marginRight="6"/>
+            <CapsuleBadge id="storeModCard/tagGameVersion" fontSize="16" paddingTop="4" paddingBottom="4" paddingLeft="10" paddingRight="10" marginRight="6"/>
+
+        </brls:Box>
+
+        <!-- 统计数据（图标+数字） -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center">
+
+            <brls:Image id="storeModCard/iconLike" width="16" height="16" marginRight="6" image="@res/img/mod/like-dark.png" />
+            <brls:Label id="storeModCard/statLike" width="auto" height="auto" fontSize="16" textColor="@theme/app/textSecondary" singleLine="true" marginRight="12" />
+
+            <brls:Image id="storeModCard/iconDislike" width="16" height="16" marginRight="6" image="@res/img/mod/dislike-dark.png" />
+            <brls:Label id="storeModCard/statDislike" width="auto" height="auto" fontSize="16" textColor="@theme/app/textSecondary" singleLine="true" marginRight="12" />
+
+            <brls:Image id="storeModCard/iconDownload" width="16" height="16" marginRight="6" image="@res/img/mod/download-dark.png" />
+            <brls:Label id="storeModCard/statDownload" width="auto" height="auto" fontSize="16" textColor="@theme/app/textSecondary" singleLine="true" marginRight="12" />
+
+            <brls:Image id="storeModCard/iconTime" width="16" height="16" marginRight="6" image="@res/img/mod/time-dark.png" />
+            <brls:Label id="storeModCard/statTime" width="auto" height="auto" fontSize="16" textColor="@theme/app/textSecondary" singleLine="true" />
+
+        </brls:Box>
+
+    </brls:Box>
+
+</brls:Box>

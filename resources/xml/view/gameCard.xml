@@ -1,0 +1,79 @@
+<!--
+    GameCard - 游戏卡片组件
+    游戏图标 + 底部覆盖层（游戏名、版本胶囊、MOD数量胶囊）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    focusable="true"
+    paddingTop="5"
+    paddingBottom="5"
+    paddingLeft="5"
+    paddingRight="5"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 游戏图标 -->
+    <brls:Image
+        id="gameCard/icon"
+        width="100%"
+        height="100%"
+        grow="1"
+        scalingType="fit"
+        cornerRadius="6"
+        image="@res/img/game/defaultIconUp.jpg" />
+
+    <!-- 底部半透明遮罩 -->
+    <brls:Box
+        id="gameCard/overlay"
+        width="auto"
+        height="35%"
+        positionType="absolute"
+        positionBottom="5"
+        positionLeft="5"
+        positionRight="5"
+        backgroundColor="@theme/app/cardOverlayBg"
+        cornerRadius="6"
+        axis="column"
+        justifyContent="spaceEvenly"
+        paddingLeft="8"
+        paddingRight="8"
+        clipsToBounds="true">
+
+        <!-- 游戏名 -->
+        <brls:Label
+            id="gameCard/name"
+            width="auto"
+            height="auto"
+            fontSize="16"
+            singleLine="true"
+            textColor="@theme/app/cardOverlayText" />
+
+        <!-- 胶囊标签行 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            marginTop="0">
+            <CapsuleBadge id="gameCard/modCount" fontSize="12" paddingTop="2" paddingBottom="2" paddingLeft="8" paddingRight="8" cornerRadius="8" marginRight="6" backgroundColor="@theme/app/cardOverlayTag" />
+            <CapsuleBadge id="gameCard/version" fontSize="12" paddingTop="2" paddingBottom="2" paddingLeft="8" paddingRight="8" cornerRadius="8" backgroundColor="@theme/app/cardOverlayTag" />
+        </brls:Box>
+
+    </brls:Box>
+
+    <brls:Image
+        id="gameCard/like"
+        width="25"
+        height="25"
+        positionType="absolute"
+        positionBottom="10"
+        positionRight="10"
+        scalingType="fit"
+        visibility="gone"
+        image="@res/img/game/like.png" />
+
+</brls:Box>
