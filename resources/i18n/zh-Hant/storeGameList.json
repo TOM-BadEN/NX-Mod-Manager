@@ -1,0 +1,20 @@
+{
+    "frameTitle": "線上商店",
+    "ok": "我已知曉",
+    "noGames": "未找到任何遊戲",
+    "searchPlaceholder": "搜尋遊戲名或TID，支援拼音、首字母、模糊搜尋...",
+    "searchAction": "搜尋",
+    "uploadMod": "上傳模組",
+    "titleDefault": "模組商店 - 遊戲",
+    "titleSearch": "搜尋: {}",
+    "filterAction": "篩選",
+    "filterTitle": "篩選",
+    "filterAll": "全部遊戲",
+    "filterAllDesc": "顯示伺服器中所有有模組的遊戲",
+    "filterInstalled": "已安裝遊戲",
+    "filterInstalledDesc": "只顯示 Switch 本地已安裝的遊戲",
+    "filterNotInstalled": "未安裝遊戲",
+    "filterNotInstalledDesc": "只顯示 Switch 本地未安裝的遊戲",
+    "placeholderTitle": "載入中...",
+    "placeholderIndex": "載入中..."
+}
