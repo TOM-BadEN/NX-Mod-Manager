@@ -1,0 +1,70 @@
+<!--
+    LongPressDialog - 长按确认对话框布局
+    作为 CustomDialog(Box*) 的 contentView 使用
+    包含：可滚动文本区域、蓝灰双段进度分界线、单个全宽确认按钮
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="center"
+    alignItems="stretch">
+
+    <!-- 滚动文本区域 -->
+    <brls:ScrollingFrame
+        id="long_press_dialog/scroll"
+        width="auto"
+        height="350"
+        shrink="1"
+        marginTop="63"
+        marginBottom="63"
+        marginLeft="63"
+        marginRight="15">
+
+        <brls:Box
+            id="long_press_dialog/body"
+            width="auto"
+            height="auto"
+            paddingLeft="0"
+            paddingRight="48">
+
+            <brls:Label
+                id="long_press_dialog/text"
+                width="auto"
+                height="auto"
+                fontSize="@style/brls/dialog/fontSize"
+                horizontalAlign="left"
+                singleLine="false"
+                lineHeight="1.8"/>
+
+        </brls:Box>
+
+    </brls:ScrollingFrame>
+
+    <!-- 分界线 + 单个确认按钮（按钮本身为进度条） -->
+    <brls:Box
+        width="auto"
+        height="72"
+        axis="row"
+        justifyContent="center"
+        alignItems="stretch"
+        lineTop="2px"
+        lineColor="@theme/brls/sidebar/separator">
+
+        <LongPressButton
+            id="long_press_dialog/btn"
+            width="0"
+            height="auto"
+            grow="1"
+            focusable="true"
+            justifyContent="center"
+            alignItems="center"
+            highlightCornerRadius="6"
+            style="borderless"
+            fontSize="@style/brls/dialog/fontSize"
+            textColor="@theme/brls/accent"/>
+
+    </brls:Box>
+
+</brls:Box>

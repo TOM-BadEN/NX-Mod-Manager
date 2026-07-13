@@ -1,0 +1,342 @@
+<!--
+    StoreModDetail - 商店模组详情页面
+    左卡片（模组信息+描述） + 中卡片（截图） + 右卡片（留言板）
+-->
+
+<MyFrame id="storeModDetail/frame" subtitle="@i18n/storeModDetail/notInstalled">
+    <brls:Box
+        id="storeModDetail/content"
+        width="100%"
+        height="100%"
+        axis="row">
+
+        <!-- 左卡片：模组信息 + 描述 (40%) -->
+        <brls:Box
+            id="storeModDetail/leftCard"
+            width="40%"
+            height="auto"
+            axis="column"
+            focusable="true"
+            marginTop="25"
+            marginBottom="25"
+            marginLeft="40"
+            marginRight="0"
+            paddingTop="20"
+            paddingBottom="20"
+            paddingLeft="20"
+            paddingRight="20"
+            backgroundColor="@theme/app/cardBg"
+            cornerRadius="8"
+            highlightCornerRadius="8"
+            shadowType="generic">
+
+            <!-- 加载提示（占满卡片，隐藏后兄弟元素自然填充） -->
+            <brls:Label
+                id="storeModDetail/leftLoading"
+                width="auto"
+                height="auto"
+                grow="1"
+                fontSize="22"
+                text="@i18n/storeModDetail/loading"
+                textColor="@theme/app/textSecondary"
+                horizontalAlign="center"
+                verticalAlign="center"/>
+
+            <!-- 内容区（加载完成后显示） -->
+            <brls:Box
+                id="storeModDetail/leftContent"
+                width="100%"
+                height="auto"
+                grow="1"
+                axis="column"
+                visibility="gone">
+
+                <!-- 图标 + 右侧（名称 + 统计） -->
+                <brls:Box
+                    width="auto"
+                    height="auto"
+                    axis="row"
+                    alignItems="center">
+
+                    <brls:Image
+                        id="storeModDetail/modIcon"
+                        width="80"
+                        height="80"
+                        marginRight="16"
+                        cornerRadius="8"
+                        shadowType="generic"
+                        scalingType="fit"
+                        image="@res/img/mod/modType/other.jpg"/>
+
+                    <brls:Box
+                        width="auto"
+                        height="auto"
+                        axis="column"
+                        justifyContent="center"
+                        grow="1">
+
+                        <!-- 模组名称 + 已安装标识 -->
+                        <brls:Box
+                            width="auto"
+                            height="auto"
+                            axis="row"
+                            alignItems="center"
+                            marginRight="15">
+
+                            <brls:Label
+                                id="storeModDetail/modName"
+                                width="auto"
+                                height="auto"
+                                fontSize="24"
+                                singleLine="true"
+                                shrink="1" />
+
+                            <brls:Box
+                                width="20"
+                                height="20"
+                                marginLeft="15"
+                                marginBottom="2"
+                                shrink="0">
+
+                                <brls:Image
+                                    id="storeModDetail/installedIcon"
+                                    width="20"
+                                    height="20"
+                                    visibility="invisible"
+                                    image="@res/img/mod/installed.png" />
+
+                                <brls:Box
+                                    id="storeModDetail/installedUpdateBadge"
+                                    width="6"
+                                    height="6"
+                                    cornerRadius="3"
+                                    backgroundColor="@theme/app/textWarning"
+                                    positionType="absolute"
+                                    positionTop="-4"
+                                    positionRight="-4"
+                                    visibility="invisible"/>
+
+                            </brls:Box>
+                        </brls:Box>
+
+                        <!-- 统计数据（图标 + 数字） -->
+                        <brls:Box
+                            width="auto"
+                            height="auto"
+                            axis="row"
+                            alignItems="center"
+                            marginTop="15">
+
+                            <brls:Image id="storeModDetail/iconLike" width="18" height="18" marginRight="6" image="@res/img/mod/like-dark.png"/>
+                            <brls:Label id="storeModDetail/statLike" width="auto" height="auto" fontSize="18" textColor="@theme/app/textSecondary" singleLine="true" marginRight="12"/>
+
+                            <brls:Image id="storeModDetail/iconDislike" width="18" height="18" marginRight="6" image="@res/img/mod/dislike-dark.png"/>
+                            <brls:Label id="storeModDetail/statDislike" width="auto" height="auto" fontSize="18" textColor="@theme/app/textSecondary" singleLine="true" marginRight="12"/>
+
+                            <brls:Image id="storeModDetail/iconDownload" width="18" height="18" marginRight="6" image="@res/img/mod/download-dark.png"/>
+                            <brls:Label id="storeModDetail/statDownload" width="auto" height="auto" fontSize="18" textColor="@theme/app/textSecondary" singleLine="true" marginRight="12"/>
+
+                            <brls:Image id="storeModDetail/iconTime" width="18" height="18" marginRight="6" image="@res/img/mod/time-dark.png"/>
+                            <brls:Label id="storeModDetail/statTime" width="auto" height="auto" fontSize="18" textColor="@theme/app/textSecondary" singleLine="true"/>
+
+                        </brls:Box>
+
+                    </brls:Box>
+
+                </brls:Box>
+
+                <!-- 胶囊标签行 -->
+                <brls:Box
+                    id="storeModDetail/tagRow"
+                    width="auto"
+                    height="auto"
+                    axis="row"
+                    marginTop="20"
+                    clipsToBounds="true">
+
+                    <CapsuleBadge id="storeModDetail/tagType" marginRight="8" marginBottom="8"/>
+                    <CapsuleBadge id="storeModDetail/tagAuthor" marginRight="8" marginBottom="8"/>
+                    <CapsuleBadge id="storeModDetail/tagSize" marginRight="8" marginBottom="8"/>
+                    <CapsuleBadge id="storeModDetail/tagVersion" marginRight="8" marginBottom="8"/>
+                    <CapsuleBadge id="storeModDetail/tagGameVersion" marginBottom="8"/>
+
+                </brls:Box>
+
+                <!-- MOD 描述 -->
+                <brls:Label
+                    width="auto"
+                    height="auto"
+                    fontSize="22"
+                    marginTop="12"
+                    text="@i18n/storeModDetail/descTitle"/>
+
+                <brls:ScrollingFrame
+                    id="storeModDetail/scroll"
+                    width="100%"
+                    grow="1"
+                    marginTop="20"
+                    marginBottom="5">
+
+                    <brls:Label
+                        id="storeModDetail/descBody"
+                        width="auto"
+                        height="auto"
+                        fontSize="20"
+                        autoAnimate="false"
+                        textColor="@theme/app/textSecondary"/>
+
+                </brls:ScrollingFrame>
+
+            </brls:Box>
+
+        </brls:Box>
+
+        <!-- 中区域：截图 + 按钮 (30%) -->
+        <brls:Box
+            id="storeModDetail/middleCard"
+            width="25%"
+            height="auto"
+            axis="column"
+            marginTop="25"
+            marginBottom="25"
+            marginLeft="18"
+            marginRight="0">
+
+            <!-- 截图卡片 (85%) -->
+            <brls:Box
+                id="storeModDetail/screenshotCard"
+                width="auto"
+                height="0"
+                grow="17"
+                axis="column"
+                paddingTop="20"
+                paddingBottom="20"
+                paddingLeft="20"
+                paddingRight="20"
+                backgroundColor="@theme/app/cardBg"
+                cornerRadius="8"
+                highlightCornerRadius="8"
+                shadowType="generic">
+
+                <brls:Label
+                    width="auto"
+                    height="auto"
+                    fontSize="22"
+                    text="@i18n/storeModDetail/screenshotTitle"/>
+
+                <brls:Box
+                    width="auto"
+                    height="auto"
+                    grow="1"
+                    axis="column"
+                    marginTop="20"
+                    justifyContent="center"
+                    alignItems="center">
+
+                    <brls:Image
+                        id="storeModDetail/screenshot1"
+                        width="auto"
+                        height="145"
+                        image="@res/img/mod/loading.png"
+                        cornerRadius="8"
+                        highlightCornerRadius="8"
+                        shadowType="generic"
+                        scalingType="fit"/>
+
+                    <brls:Image
+                        id="storeModDetail/screenshot2"
+                        width="auto"
+                        height="145"
+                        image="@res/img/mod/loading.png"
+                        marginTop="20"
+                        cornerRadius="8"
+                        highlightCornerRadius="8"
+                        shadowType="generic"
+                        scalingType="fit"/>
+
+                </brls:Box>
+
+            </brls:Box>
+
+            <!-- 按钮卡片 -->
+            <brls:Box
+                id="storeModDetail/buttonCard"
+                width="auto"
+                height="0"
+                grow="3"
+                axis="row"
+                justifyContent="center"
+                alignItems="center"
+                marginTop="18"
+                paddingLeft="20"
+                paddingRight="20"
+                backgroundColor="@theme/app/cardBg"
+                cornerRadius="8"
+                highlightCornerRadius="8"
+                shadowType="generic">
+
+                <!-- 点赞按钮 -->
+                <CircleButton id="storeModDetail/buttonLike" icon="img/mod/like" selectedIcon="img/mod/like-done.png"/>
+
+                <!-- 踩按钮 -->
+                <CircleButton id="storeModDetail/buttonDislike" icon="img/mod/dislike" selectedIcon="img/mod/dislike-done.png" marginLeft="20"/>
+
+                <!-- 下载按钮 -->
+                <CircleButton id="storeModDetail/buttonDownload" icon="img/mod/download" marginLeft="20"/>
+
+                <!-- 评论按钮 -->
+                <CircleButton id="storeModDetail/buttonComment" icon="img/mod/comment" marginLeft="20"/>
+
+            </brls:Box>
+
+        </brls:Box>
+
+        <!-- 右卡片：留言板 -->
+        <brls:Box
+            id="storeModDetail/rightCard"
+            width="auto"
+            height="auto"
+            grow="1"
+            axis="column"
+            marginTop="25"
+            marginBottom="25"
+            marginLeft="18"
+            marginRight="40">
+
+            <!-- 加载/空状态卡片（加载中 or 暂无留言） -->
+            <brls:Box
+                id="storeModDetail/rightHintCard"
+                width="auto"
+                height="auto"
+                grow="1"
+                backgroundColor="@theme/app/cardBg"
+                cornerRadius="8"
+                shadowType="generic">
+
+                <brls:Label
+                    id="storeModDetail/rightHintLabel"
+                    width="100%"
+                    height="100%"
+                    fontSize="22"
+                    text="@i18n/storeModDetail/loading"
+                    textColor="@theme/app/textSecondary"
+                    horizontalAlign="center"
+                    verticalAlign="center"/>
+
+            </brls:Box>
+
+            <!-- 留言列表 -->
+            <RecyclingGrid
+                id="storeModDetail/commentGrid"
+                width="auto"
+                height="auto"
+                grow="1"
+                visibility="gone"
+                flowMode="true"
+                spanCount="1"
+                itemSpace="12"/>
+
+        </brls:Box>
+
+    </brls:Box>
+</MyFrame>
