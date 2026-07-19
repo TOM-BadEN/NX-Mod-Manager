@@ -1,0 +1,98 @@
+{
+    "modType": {
+        "performance": "Performance",
+        "graphics": "Graphics",
+        "translation": "Translation",
+        "feature": "Feature",
+        "ui": "Visual",
+        "music": "Music",
+        "skin": "Skin",
+        "cheat": "Cheat",
+        "other": "Other"
+    },
+    "modTypeDesc": {
+        "performance": "Optimize game settings to improve frame rate and smoothness",
+        "graphics": "Enhance visual quality including textures, lighting, and resolution",
+        "translation": "Provide localized text translation for the game",
+        "feature": "Add new gameplay mechanics, systems, or features",
+        "ui": "Improve the game interface for better usability and aesthetics",
+        "music": "Replace or add background music and sound effects",
+        "skin": "Change character or model appearance including outfits and styles",
+        "cheat": "Modify game values or mechanics for assistance or reduced difficulty",
+        "other": "Mod types not covered by current categories"
+    },
+    "localExtract": {
+        "cheats": "Local Extract-Cheats",
+        "otherFiles": "Local Extract-Other",
+        "cheatsDescription": "Cheats extracted from the SD card that were not managed by this manager",
+        "otherDescription": "Mods extracted from the SD card that were not managed by this manager"
+    },
+    "format": {
+        "seconds": "{} sec",
+        "hms": "{}h {}m {}s",
+        "ms": "{}m {}s",
+        "justNow": "Just now",
+        "minutesAgo": "{} min ago",
+        "hoursAgo": "{} h ago",
+        "daysAgo": "{} d ago",
+        "monthsAgo": "{} mo ago",
+        "yearsAgo": "{} y ago"
+    },
+    "installer": {
+        "scanningFiles": "Scanning files...",
+        "scanningDirs": "Scanning directories...",
+        "detectingConflicts": "Detecting conflicts...",
+        "checkingConflicts": "Checking conflict files, please wait...",
+        "buildingDirs": "Building directories...",
+        "aggregatingFiles": "Aggregating files...",
+        "createDirFailed": "Failed to create directory, error: {}",
+        "pchtxtConvertFailed": "pchtxt conversion failed: {}",
+        "pchtxtCreateDirFailed": "Failed to create pchtxt directory",
+        "writeIpsFailed": "Failed to write IPS, error: {}",
+        "unknownMod": "Unknown Mod",
+        "zipNotFound": "ZIP file not found",
+        "zipOpenFailed": "Failed to open ZIP file",
+        "zipNoFiles": "ZIP contains no files",
+        "zipExtractFailed": "ZIP extraction failed",
+        "zipReadFailed": "ZIP read failed",
+        "invalidModStructure": "Invalid mod structure",
+        "specialRulesInitFailed": "Unable to initialize this game's special installation rules!",
+        "mhrisePatchNoLimit": "The file number limit has been reached. Installation cannot continue!",
+        "specialUninstallRulesInitFailed": "Unable to initialize this game's special uninstall rules!",
+        "specialUninstallRulesApplyFailed": "Failed due to an unknown reason. Please use Force Clean to uninstall all mods!",
+        "mhriseReorderFailed": "Failed to reorder mod file numbers. Please use Force Clean to uninstall all mods!",
+        "memAllocFailed": "Memory allocation failed",
+        "modConflict": "Mod file conflict",
+        "readPchtxtFailed": "Failed to read pchtxt",
+        "writeFailed": "Write failed, error: {}",
+        "createFileFailed": "Failed to create file, error: {}",
+        "openDirFailed": "Failed to open directory, error: {}",
+        "readDirFailed": "Failed to read directory, error: {}",
+        "readSourceFailed": "Failed to read source file, error: {}",
+        "readSourceFailedNoCode": "Failed to read source file"
+    },
+    "pchtxt": {
+        "oddLength": "Data length is not even",
+        "invalidHex": "Data contains invalid hex characters",
+        "unknownEscape": "Unknown escape sequence",
+        "unclosedString": "Unclosed string",
+        "invalidOffset": "Invalid offset format",
+        "missingData": "Missing data",
+        "emptyData": "Data is empty",
+        "missingNsobid": "Missing @nsobid",
+        "lineError": "Line {}: {}",
+        "noPatchFound": "No valid patches found"
+    },
+    "ftp": {
+        "alreadyRunning": "FTP service is already running",
+        "noIpAddress": "Cannot get IP address, please check network connection",
+        "startFailed": "FTP service failed to start"
+    },
+    "api": {
+        "networkError": "Network request failed!",
+        "parseError": "Data parsing failed!",
+        "gameNotFound": "Game not found!",
+        "modDownloadRateLimit": "Due to limited server resources, downloads are restricted to once every 30 seconds, with a maximum of 20 mods per hour. We appreciate your understanding.",
+        "modDownloadFailed": "Download failed!"
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "gameCard": {
+        "virtualGame": "Add Uninstalled Game",
+        "launch": "Launch",
+        "launching": "Launching"
+    },
+    "modCard": {
+        "type": "Type: {}",
+        "disabled": "Disabled",
+        "installed": "Installed",
+        "notInstalled": "Not Installed"
+    },
+    "storeModCard": {
+        "gameVersionUnknown": "Game Version: Unknown",
+        "gameVersionUniversal": "Game Version: Universal",
+        "gameVersionFmt": "Game Version: {}"
+    },
+    "qrCodeView": {
+        "back": "Back",
+        "confirm": "Confirm",
+        "scanHint": "Scan QR Code"
+    },
+    "imageViewer": {
+        "back": "Back",
+        "confirm": "Confirm"
+    },
+    "myframe": {
+        "back": "Back",
+        "cancel": "Cancel",
+        "ok": "OK",
+        "exitConfirm": "Are you sure you want to exit?"
+    },
+    "customDialog": {
+        "back": "Back"
+    },
+    "recyclingGrid": {
+        "pageUp": "Page Up",
+        "pageDown": "Page Down"
+    },
+    "actionMenu": {
+        "back": "Back",
+        "submit": "Submit"
+    },
+    "keyboard": {
+        "nativeKeyboard": "Native Keyboard",
+        "search": "Search",
+        "space": "Space",
+        "delete": "Delete",
+        "placeholder": "Type here...",
+        "input": "Input"
+    },
+    "keyboardInput": {
+        "confirm": "Confirm",
+        "back": "Back"
+    },
+    "ftpDialog": {
+        "acknowledged": "OK",
+        "end": "End",
+        "connected": "FTP connected, waiting for transfer",
+        "disconnected": "FTP disconnected, waiting for reconnect\nftp://{}:6666",
+        "transferring": "Transferring files...",
+        "successCount": "\nSuccessfully transferred {} file(s)",
+        "failedCount": "\nFailed to transfer {} file(s)",
+        "transferDone": "Transfer complete, waiting for new tasks...",
+        "started": "FTP started, waiting for connection\nftp://{}:6666"
+    },
+    "mtpDialog": {
+        "end": "End",
+        "waiting": "MTP enabled, waiting for USB connection",
+        "connected": "USB connected, waiting for transfer",
+        "completed": "Completed {} file(s), waiting for new transfer..."
+    }
+}
