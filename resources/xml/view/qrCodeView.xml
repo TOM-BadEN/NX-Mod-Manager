@@ -1,0 +1,40 @@
+<!--
+    QrCodeView - 二维码全屏展示组件布局
+    全屏暗色遮罩 + 白色圆角卡片 + 居中二维码 + 底部提示文字
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="center"
+    alignItems="center"
+    backgroundColor="@theme/brls/backdrop">
+
+    <brls:Box
+        id="qrCodeView/card"
+        axis="column"
+        alignItems="center"
+        backgroundColor="@theme/app/qrCardBg"
+        cornerRadius="15"
+        paddingTop="15"
+        paddingBottom="25"
+        paddingLeft="15"
+        paddingRight="15"
+        focusable="true"
+        hideHighlight="true">
+
+        <QrCode
+            id="qrCodeView/qrcode"
+            width="350"
+            height="350"/>
+
+        <brls:Label
+            id="qrCodeView/hint"
+            text="@i18n/views/qrCodeView/scanHint"
+            fontSize="26"
+            textColor="@theme/app/textDark"/>
+
+    </brls:Box>
+
+</brls:Box>
