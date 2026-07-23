@@ -1,0 +1,44 @@
+{
+    "notInstalled": "Local: Não Instalado",
+    "localVersion": "Local: {}",
+    "loading": "Carregando...",
+    "ok": "OK",
+    "noMods": "Nenhum mod encontrado",
+    "loadingHint": "Carregando...",
+    "titleSearch": "Busca: {}",
+
+    "searchPlaceholder": "Buscar mod ou autor; suporta pinyin, abreviação, aproximada...",
+    "searchAction": "Buscar",
+    "uploadMod": "Enviar Mod",
+
+    "filterMenuTitle": "Filtrar",
+    "filterAction": "Filtrar",
+
+    "sortMenuTitle": "Ordenar Por",
+    "sortEntry": "Ordenar Por",
+    "sortEntryDesc": "Escolha a ordem de exibição dos mods",
+    "sortLatest": "Mais Recentes",
+    "sortLatestDesc": "Ordenar por data de envio, mais recentes primeiro",
+    "sortDownload": "Mais Baixados",
+    "sortDownloadDesc": "Ordenar por número de downloads, maior primeiro",
+    "sortLike": "Mais Curtidos",
+    "sortLikeDesc": "Ordenar por número de curtidas, maior primeiro",
+
+    "typeMenuTitle": "Tipo de Mod",
+    "typeEntry": "Tipo de Mod",
+    "typeEntryDesc": "Filtrar mods por categoria",
+    "typeAll": "Todos os Tipos",
+    "typeAllDesc": "Mostrar mods de todos os tipos",
+
+    "versionMenuTitle": "Versão do Jogo",
+    "versionEntry": "Versão do Jogo",
+    "versionEntryDesc": "Filtrar mods pela versão compatível do jogo",
+    "versionAll": "Todas as Versões",
+    "versionAllDesc": "Mostrar mods para todas as versões",
+    "versionUniversal": "Universal",
+    "versionUniversalDesc": "Mods compatíveis com todas as versões do jogo",
+    "versionSpecificDesc": "Mostrar apenas mods para a versão {} do jogo",
+
+    "resetFilter": "Redefinir Filtro",
+    "resetFilterDesc": "Restaurar ordenação e filtros padrão"
+}

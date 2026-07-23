@@ -1,0 +1,9 @@
+{
+    "title": "Buscar",
+    "switchResult": "Alternar: Resultados",
+    "switchKeyboard": "Alternar: Teclado",
+    "back": "Voltar",
+    "hintIdle": "Suporta busca por pinyin, homófonos, iniciais, aproximada e pinyin completo",
+    "hintEmpty": "Nenhum resultado encontrado",
+    "confirm": "Confirmar"
+}

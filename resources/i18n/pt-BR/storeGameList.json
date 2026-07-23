@@ -1,0 +1,20 @@
+{
+    "frameTitle": "Loja Online",
+    "ok": "OK",
+    "noGames": "Nenhum jogo encontrado",
+    "searchPlaceholder": "Buscar por nome do jogo ou TID; suporta pinyin, abreviação, aproximada...",
+    "searchAction": "Buscar",
+    "uploadMod": "Enviar Mod",
+    "titleDefault": "Loja de Mods - Jogos",
+    "titleSearch": "Busca: {}",
+    "filterAction": "Filtrar",
+    "filterTitle": "Filtrar",
+    "filterAll": "Todos os Jogos",
+    "filterAllDesc": "Mostrar todos os jogos com mods no servidor",
+    "filterInstalled": "Jogos Instalados",
+    "filterInstalledDesc": "Mostrar apenas jogos instalados neste Switch",
+    "filterNotInstalled": "Jogos Não Instalados",
+    "filterNotInstalledDesc": "Mostrar apenas jogos não instalados neste Switch",
+    "placeholderTitle": "Carregando...",
+    "placeholderIndex": "Carregando..."
+}

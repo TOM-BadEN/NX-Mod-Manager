@@ -1,0 +1,98 @@
+{
+    "modType": {
+        "performance": "Desempenho",
+        "graphics": "Gráficos",
+        "translation": "Tradução",
+        "feature": "Recurso",
+        "ui": "Visual",
+        "music": "Música",
+        "skin": "Skin",
+        "cheat": "Cheat",
+        "other": "Outro"
+    },
+    "modTypeDesc": {
+        "performance": "Otimiza as configurações do jogo para melhorar a taxa de quadros e a fluidez",
+        "graphics": "Aprimora a qualidade visual, incluindo texturas, iluminação e resolução",
+        "translation": "Fornece tradução de texto localizada para o jogo",
+        "feature": "Adiciona novas mecânicas, sistemas ou recursos de jogabilidade",
+        "ui": "Melhora a interface do jogo para maior usabilidade e estética",
+        "music": "Substitui ou adiciona música de fundo e efeitos sonoros",
+        "skin": "Altera a aparência de personagens ou modelos, incluindo roupas e estilos",
+        "cheat": "Modifica valores ou mecânicas do jogo para auxílio ou redução de dificuldade",
+        "other": "Tipos de mod não cobertos pelas categorias atuais"
+    },
+    "localExtract": {
+        "cheats": "Extração Local-Cheats",
+        "otherFiles": "Extração Local-Outros",
+        "cheatsDescription": "Cheats extraídos do cartão SD que não eram gerenciados por este gerenciador",
+        "otherDescription": "Mods extraídos do cartão SD que não eram gerenciados por este gerenciador"
+    },
+    "format": {
+        "seconds": "{} s",
+        "hms": "{}h {}m {}s",
+        "ms": "{}m {}s",
+        "justNow": "Agora mesmo",
+        "minutesAgo": "há {} min",
+        "hoursAgo": "há {} h",
+        "daysAgo": "há {} d",
+        "monthsAgo": "há {} mês(es)",
+        "yearsAgo": "há {} ano(s)"
+    },
+    "installer": {
+        "scanningFiles": "Escaneando arquivos...",
+        "scanningDirs": "Escaneando diretórios...",
+        "detectingConflicts": "Detectando conflitos...",
+        "checkingConflicts": "Verificando arquivos em conflito, aguarde...",
+        "buildingDirs": "Construindo diretórios...",
+        "aggregatingFiles": "Agregando arquivos...",
+        "createDirFailed": "Falha ao criar diretório, erro: {}",
+        "pchtxtConvertFailed": "Falha na conversão do pchtxt: {}",
+        "pchtxtCreateDirFailed": "Falha ao criar diretório pchtxt",
+        "writeIpsFailed": "Falha ao gravar IPS, erro: {}",
+        "unknownMod": "Mod Desconhecido",
+        "zipNotFound": "Arquivo ZIP não encontrado",
+        "zipOpenFailed": "Falha ao abrir o arquivo ZIP",
+        "zipNoFiles": "O ZIP não contém arquivos",
+        "zipExtractFailed": "Falha na extração do ZIP",
+        "zipReadFailed": "Falha na leitura do ZIP",
+        "invalidModStructure": "Estrutura de mod inválida",
+        "specialRulesInitFailed": "Não foi possível inicializar as regras especiais de instalação deste jogo!",
+        "mhrisePatchNoLimit": "O limite de número de arquivos foi atingido. A instalação não pode continuar!",
+        "specialUninstallRulesInitFailed": "Não foi possível inicializar as regras especiais de desinstalação deste jogo!",
+        "specialUninstallRulesApplyFailed": "Falha por motivo desconhecido. Use a Limpeza Forçada para desinstalar todos os mods!",
+        "mhriseReorderFailed": "Falha ao reordenar os números dos arquivos de mod. Use a Limpeza Forçada para desinstalar todos os mods!",
+        "memAllocFailed": "Falha na alocação de memória",
+        "modConflict": "Conflito de arquivo de mod",
+        "readPchtxtFailed": "Falha ao ler o pchtxt",
+        "writeFailed": "Falha na gravação, erro: {}",
+        "createFileFailed": "Falha ao criar arquivo, erro: {}",
+        "openDirFailed": "Falha ao abrir diretório, erro: {}",
+        "readDirFailed": "Falha ao ler diretório, erro: {}",
+        "readSourceFailed": "Falha ao ler o arquivo de origem, erro: {}",
+        "readSourceFailedNoCode": "Falha ao ler o arquivo de origem"
+    },
+    "pchtxt": {
+        "oddLength": "O comprimento dos dados não é par",
+        "invalidHex": "Os dados contêm caracteres hexadecimais inválidos",
+        "unknownEscape": "Sequência de escape desconhecida",
+        "unclosedString": "String não fechada",
+        "invalidOffset": "Formato de offset inválido",
+        "missingData": "Dados ausentes",
+        "emptyData": "Os dados estão vazios",
+        "missingNsobid": "@nsobid ausente",
+        "lineError": "Linha {}: {}",
+        "noPatchFound": "Nenhum patch válido encontrado"
+    },
+    "ftp": {
+        "alreadyRunning": "O serviço FTP já está em execução",
+        "noIpAddress": "Não foi possível obter o endereço IP, verifique a conexão de rede",
+        "startFailed": "Falha ao iniciar o serviço FTP"
+    },
+    "api": {
+        "networkError": "Falha na requisição de rede!",
+        "parseError": "Falha ao analisar os dados!",
+        "gameNotFound": "Jogo não encontrado!",
+        "modDownloadRateLimit": "Devido aos recursos limitados do servidor, os downloads são restritos a uma vez a cada 30 segundos, com no máximo 20 mods por hora. Agradecemos a compreensão.",
+        "modDownloadFailed": "Falha no download!"
+    }
+}

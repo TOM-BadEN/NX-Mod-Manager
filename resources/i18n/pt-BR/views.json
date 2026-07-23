@@ -1,0 +1,73 @@
+{
+    "gameCard": {
+        "virtualGame": "Adicionar Jogo Não Instalado",
+        "launch": "Iniciar",
+        "launching": "Iniciando"
+    },
+    "modCard": {
+        "type": "Tipo: {}",
+        "disabled": "Desativado",
+        "installed": "Instalado",
+        "notInstalled": "Não Instalado"
+    },
+    "storeModCard": {
+        "gameVersionUnknown": "Versão do Jogo: Desconhecida",
+        "gameVersionUniversal": "Versão do Jogo: Universal",
+        "gameVersionFmt": "Versão do Jogo: {}"
+    },
+    "qrCodeView": {
+        "back": "Voltar",
+        "confirm": "Confirmar",
+        "scanHint": "Escanear QR Code"
+    },
+    "imageViewer": {
+        "back": "Voltar",
+        "confirm": "Confirmar"
+    },
+    "myframe": {
+        "back": "Voltar",
+        "cancel": "Cancelar",
+        "ok": "OK",
+        "exitConfirm": "Tem certeza de que deseja sair?"
+    },
+    "customDialog": {
+        "back": "Voltar"
+    },
+    "recyclingGrid": {
+        "pageUp": "Página Acima",
+        "pageDown": "Página Abaixo"
+    },
+    "actionMenu": {
+        "back": "Voltar",
+        "submit": "Enviar"
+    },
+    "keyboard": {
+        "nativeKeyboard": "Teclado Nativo",
+        "search": "Buscar",
+        "space": "Espaço",
+        "delete": "Apagar",
+        "placeholder": "Digite aqui...",
+        "input": "Entrada"
+    },
+    "keyboardInput": {
+        "confirm": "Confirmar",
+        "back": "Voltar"
+    },
+    "ftpDialog": {
+        "acknowledged": "OK",
+        "end": "Encerrar",
+        "connected": "FTP conectado, aguardando transferência",
+        "disconnected": "FTP desconectado, aguardando reconexão\nftp://{}:6666",
+        "transferring": "Transferindo arquivos...",
+        "successCount": "\n{} arquivo(s) transferido(s) com sucesso",
+        "failedCount": "\nFalha ao transferir {} arquivo(s)",
+        "transferDone": "Transferência concluída, aguardando novas tarefas...",
+        "started": "FTP iniciado, aguardando conexão\nftp://{}:6666"
+    },
+    "mtpDialog": {
+        "end": "Encerrar",
+        "waiting": "MTP ativado, aguardando conexão USB",
+        "connected": "USB conectado, aguardando transferência",
+        "completed": "{} arquivo(s) concluído(s), aguardando nova transferência..."
+    }
+}

@@ -488,6 +488,7 @@ void Home::setupSettingsMenu() {
         if (l == "zh-Hans") return brls::getStr("home/langZhCNItem");
         if (l == "zh-Hant") return brls::getStr("home/langZhTWItem");
         if (l == "en-US")   return brls::getStr("home/langEnUSItem");
+        if (l == "pt-BR")   return brls::getStr("home/langPtBRItem");
         return brls::getStr("home/langAutoItem");
     });
     langItem.setSubmenu(&m_langMenu);
@@ -589,6 +590,11 @@ void Home::setupLangMenu() {
     enUSItem.setBadge([=]{ return currentLang() == "en-US" ? "\uE14B" : ""; });
     enUSItem.setStayOpen();
     enUSItem.setAction([=]{ applyLang("en-US"); });
+
+    auto& ptBRItem = m_langMenu.addItem(brls::getStr("home/langPtBRItem"), brls::getStr("home/langPtBRDesc"));
+    ptBRItem.setBadge([=]{ return currentLang() == "pt-BR" ? "\uE14B" : ""; });
+    ptBRItem.setStayOpen();
+    ptBRItem.setAction([=]{ applyLang("pt-BR"); });
 }
 
 void Home::setupThemeMenu() {
