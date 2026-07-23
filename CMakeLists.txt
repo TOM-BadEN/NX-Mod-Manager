@@ -45,6 +45,37 @@ set(PROJECT_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources)               # 资
 # GCC 编译选项
 add_compile_options(-fdiagnostics-color=always -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft)
 
+# Apply local borealis patches before the submodule is compiled.
+# The submodule stays pinned to its upstream commit; the change is versioned
+# in this repo under patches/ and applied at configure time. Idempotent:
+# skipped when already applied, fatal if it no longer applies cleanly
+# (signals the upstream source changed and the patch needs updating).
+set(BOREALIS_SUBMODULE ${CMAKE_CURRENT_SOURCE_DIR}/library/borealis)
+set(BOREALIS_LATIN_FONT_PATCH ${CMAKE_CURRENT_SOURCE_DIR}/patches/borealis-latin-font.patch)
+# --ignore-whitespace tolerates CRLF/whitespace differences between the LF
+# patch and the submodule's working-tree line endings (devkitPro's git is
+# stricter than Git-for-Windows about this).
+execute_process(
+    COMMAND git -c safe.directory=* -C ${BOREALIS_SUBMODULE} apply --reverse --check --ignore-whitespace ${BOREALIS_LATIN_FONT_PATCH}
+    RESULT_VARIABLE _BOREALIS_PATCH_APPLIED OUTPUT_QUIET ERROR_QUIET)
+if (_BOREALIS_PATCH_APPLIED EQUAL 0)
+    message(STATUS "borealis latin-font patch: already applied")
+else()
+    execute_process(
+        COMMAND git -c safe.directory=* -C ${BOREALIS_SUBMODULE} apply --check --ignore-whitespace ${BOREALIS_LATIN_FONT_PATCH}
+        RESULT_VARIABLE _BOREALIS_PATCH_CHECK OUTPUT_QUIET ERROR_QUIET)
+    if (NOT _BOREALIS_PATCH_CHECK EQUAL 0)
+        message(FATAL_ERROR "borealis latin-font patch does not apply cleanly; upstream may have changed. Update patches/borealis-latin-font.patch")
+    endif()
+    execute_process(
+        COMMAND git -c safe.directory=* -C ${BOREALIS_SUBMODULE} apply --ignore-whitespace ${BOREALIS_LATIN_FONT_PATCH}
+        RESULT_VARIABLE _BOREALIS_PATCH_RESULT)
+    if (NOT _BOREALIS_PATCH_RESULT EQUAL 0)
+        message(FATAL_ERROR "failed to apply borealis latin-font patch")
+    endif()
+    message(STATUS "borealis latin-font patch: applied")
+endif()
+
 # 添加 Borealis 库子目录
 add_subdirectory(library)
 

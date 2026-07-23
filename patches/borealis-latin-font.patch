@@ -1,0 +1,60 @@
+diff --git a/library/lib/core/application.cpp b/library/lib/core/application.cpp
+index 13454090..3247f38e 100644
+--- a/library/lib/core/application.cpp
++++ b/library/lib/core/application.cpp
+@@ -1275,11 +1275,26 @@ int Application::getFont(std::string fontName)
+ int Application::getDefaultFont()
+ {
+ #ifdef __SWITCH__
+-    static int regular = Application::getFont(FONT_CHINESE_SIMPLIFIED);
++    // CJK locales use the Chinese font as primary (it carries the CJK glyphs);
++    // Latin locales must use the Standard font as primary so accented Latin
++    // characters (e.g. Portuguese á ã ç é í õ) render with proper Latin glyphs
++    // instead of the CJK font's wider look-alikes. Both fonts have a full
++    // fallback chain (see SwitchFontLoader::loadFonts) so mixed content works.
++    static int def = [] {
++        std::string locale = Application::getLocale();
++        bool cjk = locale == LOCALE_ZH_HANS || locale == LOCALE_ZH_HANT
++            || locale == LOCALE_ZH_CN || locale == LOCALE_ZH_TW
++            || locale == LOCALE_JA || locale == LOCALE_Ko;
++        int primary = Application::getFont(cjk ? FONT_CHINESE_SIMPLIFIED : FONT_REGULAR);
++        if (primary == FONT_INVALID)
++            primary = Application::getFont(FONT_CHINESE_SIMPLIFIED);
++        return primary;
++    }();
++    return def;
+ #else
+     static int regular = Application::getFont(FONT_REGULAR);
+-#endif
+     return regular;
++#endif
+ }
+ 
+ bool Application::XMLViewsRegisterContains(std::string name)
+diff --git a/library/lib/platforms/switch/switch_font.cpp b/library/lib/platforms/switch/switch_font.cpp
+index 3bba8891..0e39d29f 100644
+--- a/library/lib/platforms/switch/switch_font.cpp
++++ b/library/lib/platforms/switch/switch_font.cpp
+@@ -90,6 +90,22 @@ void SwitchFontLoader::loadFonts()
+     else
+         Logger::error("switch: could not load Material icons font from resources");
+ 
++    // For Latin (non-CJK) UI locales the Standard font is used as the primary
++    // font (see Application::getDefaultFont) so accented characters render with
++    // correct Latin glyphs instead of the wider CJK-styled ones. Give it the
++    // same fallback chain so mixed content (Chinese/Korean game names, Switch
++    // button glyphs, Material icons) still renders while a Latin locale is active.
++    int regularFont = Application::getFont(FONT_REGULAR);
++    if (regularFont != FONT_INVALID)
++    {
++        nvgAddFallbackFontId(vg, regularFont, Application::getFont(FONT_CHINESE_SIMPLIFIED));
++        nvgAddFallbackFontId(vg, regularFont, Application::getFont(FONT_CHINESE_SIMPLIFIED_EXT));
++        nvgAddFallbackFontId(vg, regularFont, Application::getFont(FONT_CHINESE_TRADITIONAL));
++        nvgAddFallbackFontId(vg, regularFont, Application::getFont(FONT_KOREAN_REGULAR));
++        nvgAddFallbackFontId(vg, regularFont, Application::getFont(FONT_SWITCH_ICONS));
++        nvgAddFallbackFontId(vg, regularFont, Application::getFont(FONT_MATERIAL_ICONS));
++    }
++
+     // Load Emoji
+     if (!USER_EMOJI_PATH.empty())
+     {
