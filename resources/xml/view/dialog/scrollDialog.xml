@@ -1,0 +1,90 @@
+<!--
+    ScrollDialog - 可滚动长文本对话框布局
+    作为 CustomDialog(Box*) 的 contentView 使用
+    包含：可滚动文本区域、两个并排按钮（全宽）
+    文本四周间距对称（63px），滚动条靠右（距对话框边缘 15px）
+-->
+
+<ScrollDialogContent
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="center"
+    alignItems="stretch">
+
+    <!-- 滚动文本区域 -->
+    <brls:ScrollingFrame
+        id="scroll_dialog/scroll"
+        width="auto"
+        height="350"
+        shrink="1"
+        marginTop="63"
+        marginBottom="63"
+        marginLeft="63"
+        marginRight="15">
+
+        <brls:Box
+            id="scroll_dialog/body"
+            width="auto"
+            height="auto"
+            paddingLeft="0"
+            paddingRight="48">
+
+            <brls:Label
+                id="scroll_dialog/text"
+                width="auto"
+                height="auto"
+                fontSize="@style/brls/dialog/fontSize"
+                horizontalAlign="left"
+                singleLine="false"
+                lineHeight="1.8"/>
+
+        </brls:Box>
+
+    </brls:ScrollingFrame>
+
+    <!-- 按钮行 -->
+    <DialogButtonBox
+        width="auto"
+        height="72"
+        axis="row"
+        justifyContent="spaceEvenly"
+        alignItems="stretch"
+        lineTop="2px"
+        lineColor="@theme/brls/sidebar/separator">
+
+        <DialogButton
+            id="scroll_dialog/btn1"
+            width="0"
+            height="auto"
+            grow="1"
+            focusable="true"
+            justifyContent="center"
+            alignItems="center"
+            highlightCornerRadius="6"
+            style="borderless"
+            fontSize="@style/brls/dialog/fontSize"
+            textColor="@theme/brls/accent"/>
+
+        <brls:Rectangle
+            id="scroll_dialog/separator"
+            width="2"
+            height="auto"
+            color="@theme/brls/sidebar/separator"/>
+
+        <DialogButton
+            id="scroll_dialog/btn2"
+            width="0"
+            height="auto"
+            grow="1"
+            focusable="true"
+            justifyContent="center"
+            alignItems="center"
+            highlightCornerRadius="6"
+            style="borderless"
+            fontSize="@style/brls/dialog/fontSize"
+            textColor="@theme/brls/accent"/>
+
+    </DialogButtonBox>
+
+</ScrollDialogContent>

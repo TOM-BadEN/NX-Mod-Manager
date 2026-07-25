@@ -1,0 +1,138 @@
+name: Release 推送到服务器
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: GitHub Release tag to resend; leave empty to use latest release
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  releasePush:
+    if: github.repository == 'TOM-BadEN/NX-Mod-Manager'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve release metadata
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const assetName = 'NX-Mod-Manager.nro';
+            const outputDir = 'releasePushData';
+
+            function cleanNewlines(text) {
+              return (text || '').replace(/\r\n/g, '\n');
+            }
+
+            function doubleLineBreaks(text) {
+              return (text || '')
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .join('\n\n');
+            }
+
+            function parseReleaseNotes(body) {
+              body = cleanNewlines(body);
+
+              let zh = '';
+              let en = '';
+
+              if (body.includes('# EN')) {
+                const parts = body.split('# EN');
+                zh = parts[0].split('# 中文').join('').trim();
+                en = (parts[1] || '').trim();
+              } else {
+                zh = body.split('# 中文').join('').trim();
+              }
+
+              zh = doubleLineBreaks(zh);
+              en = doubleLineBreaks(en);
+
+              return { zh, en };
+            }
+
+            function writeData(name, value) {
+              fs.writeFileSync(path.join(outputDir, name), value || '', 'utf8');
+            }
+
+            let release;
+            if (context.eventName === 'release') {
+              release = context.payload.release;
+            } else {
+              const tag = (context.payload.inputs?.tag_name || '').trim();
+
+              const response = tag
+                ? await github.rest.repos.getReleaseByTag({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    tag,
+                  })
+                : await github.rest.repos.getLatestRelease({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                  });
+              release = response.data;
+            }
+
+            if (!release?.tag_name) throw new Error('Release is missing tag_name');
+            if (!release?.published_at) throw new Error(`Release ${release.tag_name} is missing published_at`);
+
+            const asset = (release.assets || []).find((item) => item.name === assetName);
+            if (!asset?.url) throw new Error(`Release ${release.tag_name} is missing asset ${assetName}`);
+
+            const notes = parseReleaseNotes(release.body || '');
+
+            fs.mkdirSync(outputDir, { recursive: true });
+            writeData('tagName.txt', release.tag_name);
+            writeData('publishTime.txt', release.published_at);
+            writeData('releaseNotesZh.txt', notes.zh);
+            writeData('releaseNotesEn.txt', notes.en);
+            writeData('assetApiUrl.txt', asset.url);
+            writeData('assetName.txt', asset.name);
+
+            core.info(`Prepared release ${release.tag_name} with asset ${asset.name}`);
+
+      - name: Download NRO asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          asset_url="$(cat releasePushData/assetApiUrl.txt)"
+          asset_name="$(cat releasePushData/assetName.txt)"
+
+          curl --fail --show-error --silent --location \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/octet-stream" \
+            "${asset_url}" \
+            -o "${asset_name}"
+
+          test -s "${asset_name}"
+
+      - name: Push release to server
+        env:
+          RELEASE_PUSH_URL: ${{ secrets.RELEASE_PUSH_URL }}
+          RELEASE_PUSH_TOKEN: ${{ secrets.RELEASE_PUSH_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          : "${RELEASE_PUSH_URL:?RELEASE_PUSH_URL secret is required}"
+          : "${RELEASE_PUSH_TOKEN:?RELEASE_PUSH_TOKEN secret is required}"
+
+          curl --fail-with-body --show-error --silent --location \
+            -X POST "${RELEASE_PUSH_URL}" \
+            -H "X-Release-Token: ${RELEASE_PUSH_TOKEN}" \
+            -F "file=@NX-Mod-Manager.nro" \
+            -F "tag_name=<releasePushData/tagName.txt" \
+            -F "publish_time=<releasePushData/publishTime.txt" \
+            -F "release_notes_zh=<releasePushData/releaseNotesZh.txt" \
+            -F "release_notes_en=<releasePushData/releaseNotesEn.txt"

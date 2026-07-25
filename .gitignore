@@ -1,0 +1,17 @@
+.*/
+*build*/
+*~
+*.bak
+*.nro
+*.nacp
+*.elf
+!.vscode
+builddir
+*.dksh
+*.DS_Store
+*.suprx
+libromfs-generator
+!.github/
+!.windsurf/
+*reference*/
+CLAUDE.md
