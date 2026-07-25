@@ -1,0 +1,12 @@
+<!--
+    AppShell - 全局常驻 UI 外壳
+
+    GlobalHeader、PageHost 和 GlobalFooter 由 AppShell 按固定顺序创建，
+    作为本容器的三个直接子 View。
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="spaceBetween"/>

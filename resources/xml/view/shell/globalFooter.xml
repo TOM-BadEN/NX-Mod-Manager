@@ -1,0 +1,45 @@
+<!--
+    GlobalFooter - 全局常驻底部栏
+-->
+
+<brls:Box
+    width="auto"
+    height="@style/brls/applet_frame/footer_height"
+    axis="row"
+    justifyContent="spaceBetween"
+    alignItems="center"
+    marginLeft="@style/brls/applet_frame/padding_sides"
+    marginRight="@style/brls/applet_frame/padding_sides"
+    paddingLeft="@style/brls/hints/footer_padding_sides"
+    paddingRight="@style/brls/hints/footer_padding_sides"
+    paddingTop="@style/brls/hints/footer_padding_top_bottom"
+    paddingBottom="@style/brls/hints/footer_padding_top_bottom"
+    lineColor="@theme/brls/applet_frame/separator"
+    lineTop="1px">
+
+    <!-- 左侧：索引信息 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        alignItems="center"
+        grow="1"
+        shrink="1">
+
+        <brls:Label
+            id="globalFooter/index"
+            width="auto"
+            height="auto"
+            fontSize="21.5"
+            visibility="gone"/>
+
+    </brls:Box>
+
+    <!-- 右侧：由 Borealis 根据当前焦点和 Action 自动生成 -->
+    <brls:Hints
+        width="auto"
+        height="auto"
+        shrink="0"
+        addBaseAction="false"/>
+
+</brls:Box>

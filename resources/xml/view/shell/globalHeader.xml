@@ -1,0 +1,98 @@
+<!--
+    GlobalHeader - 全局常驻顶部栏
+-->
+
+<brls:Box
+    width="auto"
+    height="@style/brls/applet_frame/header_height"
+    axis="row"
+    justifyContent="spaceBetween"
+    alignItems="center"
+    paddingLeft="@style/brls/applet_frame/header_padding_sides"
+    paddingRight="@style/brls/applet_frame/header_padding_sides"
+    marginLeft="@style/brls/applet_frame/padding_sides"
+    marginRight="@style/brls/applet_frame/padding_sides"
+    lineColor="@theme/brls/applet_frame/separator"
+    lineBottom="1px">
+
+    <!-- 左侧：页面标题和副标题 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        alignItems="flexEnd"
+        grow="1"
+        shrink="1"
+        marginTop="8"
+        marginRight="60">
+
+        <brls:Label
+            id="globalHeader/title"
+            width="auto"
+            height="auto"
+            shrink="1"
+            fontSize="@style/brls/applet_frame/header_title_font_size"
+            singleLine="true"/>
+
+        <brls:Label
+            id="globalHeader/subtitle"
+            width="auto"
+            height="auto"
+            shrink="0"
+            marginLeft="12"
+            fontSize="18"
+            textColor="@theme/app/textSecondary"
+            singleLine="true"
+            visibility="gone"/>
+
+    </brls:Box>
+
+    <!-- 右侧：全局设备状态 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        alignItems="center"
+        shrink="0"
+        marginTop="13">
+
+        <brls:Label
+            id="globalHeader/fps"
+            width="auto"
+            height="auto"
+            marginRight="20"
+            fontSize="21.5"
+            visibility="gone"/>
+
+        <brls:Label
+            id="globalHeader/memory"
+            width="auto"
+            height="auto"
+            marginRight="20"
+            fontSize="21.5"
+            visibility="gone"/>
+
+        <brls:Label
+            id="globalHeader/time"
+            width="auto"
+            height="auto"
+            marginRight="20"
+            fontSize="21.5"/>
+
+        <brls:Wireless
+            marginRight="20"
+            marginBottom="5"/>
+
+        <brls:Label
+            id="globalHeader/batteryPercent"
+            width="auto"
+            height="auto"
+            marginRight="5"
+            fontSize="21.5"/>
+
+        <brls:Battery
+            marginBottom="5"/>
+
+    </brls:Box>
+
+</brls:Box>
