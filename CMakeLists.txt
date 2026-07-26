@@ -36,7 +36,7 @@ include(${BOREALIS_LIBRARY}/cmake/toolchain.cmake)
 project(NX-Mod-Manager)  # 项目名称
 set(VERSION_MAJOR "3")                       # 主版本号
 set(VERSION_MINOR "3")                       # 次版本号
-set(VERSION_ALTER "1")                       # 修订版本号
+set(VERSION_ALTER "2")                       # 修订版本号
 set(VERSION_BUILD "0")                       # 构建号
 set(PROJECT_AUTHOR "TOM")               # 作者名 (显示在 Switch 主菜单)
 set(PROJECT_ICON ${CMAKE_CURRENT_SOURCE_DIR}/resources/img/icon.jpg)  # Switch 图标 (256x256 JPG)
