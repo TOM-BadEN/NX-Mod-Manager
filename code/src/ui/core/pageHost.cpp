@@ -107,9 +107,11 @@ bool PageHost::popPages(std::size_t count, PageAnimType anim) {
     Page* leavingPage = m_pageStack.back().page;
     Page* enteringPage = m_pageStack[targetIndex].page;
 
-    // 中间页面不参与动画，立即从页面栈和内容容器中移除。
-    for (std::size_t i = targetIndex + 1; i < m_pageStack.size() - 1; i++) {
-        brls::Box::removeView(m_pageStack[i].page);
+    // 动画期间保留待移除页面，结束后按栈顶到栈底的顺序销毁。
+    std::vector<Page*> leavingPages;
+    leavingPages.reserve(count);
+    for (std::size_t i = 0; i < count; i++) {
+        leavingPages.push_back(m_pageStack[m_pageStack.size() - i - 1].page);
     }
     m_pageStack.resize(targetIndex + 1);
 
@@ -117,14 +119,16 @@ bool PageHost::popPages(std::size_t count, PageAnimType anim) {
     enteringPage->onResume();
     m_pageStack.back().state = PageState::Visible;
 
+    auto removeLeavingPages = [this, leavingPages] {
+        for (auto* page : leavingPages) {
+            brls::Box::removeView(page);
+        }
+        brls::Application::unblockInputs();
+    };
+
     brls::Application::blockInputs();
-    if (!m_pageAnim.start(enteringPage, leavingPage, anim, getWidth(), getHeight(), [this, leavingPage] {
-        brls::Box::removeView(leavingPage);
-        brls::Application::unblockInputs();
-    })) {
-        brls::Box::removeView(leavingPage);
-        brls::Application::unblockInputs();
-    }
+    if (!m_pageAnim.start(enteringPage, leavingPage, anim, getWidth(), getHeight(), removeLeavingPages))
+        removeLeavingPages();
 
     notifyCurrentPageChanged();
     brls::Application::giveFocus(enteringPage);
