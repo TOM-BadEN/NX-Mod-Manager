@@ -10,12 +10,18 @@ PageHost::PageHost() {
 }
 
 PageHost::~PageHost() {
-    for (auto& entry : m_pageStack) {
-        if (entry.state == PageState::Disappeared) continue;
+    // 动画返回期间，待移除页面已不在 m_pageStack 中，因此大退时不会在此收到 willDisappear。
+    // 它们仍保留在 Box 中并会正确销毁；以后若在 willDisappear 中加入必要清理，需要同步处理此情况。
+    for (auto it = m_pageStack.rbegin(); it != m_pageStack.rend(); ++it) {
+        if (it->state == PageState::Disappeared) continue;
 
-        entry.page->willDisappear(true);
-        entry.state = PageState::Disappeared;
+        it->page->willDisappear(true);
+        it->state = PageState::Disappeared;
     }
+
+    // Box 按子 View 的存放顺序销毁，退出时调整为页面栈顶到栈底。
+    auto& pages = getChildren();
+    std::reverse(pages.begin(), pages.end());
 }
 
 bool PageHost::setRootPage(Page* page) {
