@@ -1,0 +1,62 @@
+{
+    "gameCard": {
+        "launch": "Iniciar",
+        "launching": "Iniciando"
+    },
+    "addGameCard": {
+        "virtualGame": "Adicionar Jogo Não Instalado"
+    },
+    "modCard": {
+        "type": "Tipo: {}",
+        "disabled": "Desativado",
+        "installed": "Instalado",
+        "notInstalled": "Não Instalado"
+    },
+    "storeModCard": {
+        "gameVersionUnknown": "Versão do Jogo: Desconhecida",
+        "gameVersionUniversal": "Versão do Jogo: Universal",
+        "gameVersionFmt": "Versão do Jogo: {}"
+    },
+    "contextMenu": {
+        "submit": "Enviar"
+    },
+    "qrCodeView": {
+        "scanHint": "Escanear QR Code"
+    },
+    "dialog": {
+        "cancel": "Cancelar",
+        "confirm": "Confirmar"
+    },
+    "ftpDialog": {
+        "acknowledged": "OK",
+        "end": "Encerrar",
+        "connected": "FTP conectado, aguardando transferência",
+        "disconnected": "FTP desconectado, aguardando reconexão\nftp://{}:{}",
+        "transferring": "Transferindo arquivos...",
+        "successCount": "\n{} arquivo(s) transferido(s) com sucesso",
+        "failedCount": "\nFalha ao transferir {} arquivo(s)",
+        "transferDone": "Transferência concluída, aguardando novas tarefas...",
+        "started": "FTP iniciado, aguardando conexão\nftp://{}:{}"
+    },
+    "mtpDialog": {
+        "end": "Encerrar",
+        "waiting": "MTP ativado, aguardando conexão USB",
+        "connected": "USB conectado, aguardando transferência",
+        "completed": "{} arquivo(s) concluído(s), aguardando nova transferência..."
+    },
+    "keyboard": {
+        "nativeKeyboard": "Teclado Nativo",
+        "search": "Buscar",
+        "space": "Espaço",
+        "delete": "Apagar",
+        "placeholder": "Digite aqui...",
+        "input": "Entrada"
+    },
+    "keyboardInput": {
+        "confirm": "Confirmar",
+        "back": "Voltar"
+    },
+    "shell": {
+        "exitConfirm": "Tem certeza de que deseja sair?"
+    }
+}

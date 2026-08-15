@@ -1,0 +1,62 @@
+{
+    "gameCard": {
+        "launch": "リリース",
+        "launching": "リリース中"
+    },
+    "addGameCard": {
+        "virtualGame": "アンインストール済みのゲームを追加する"
+    },
+    "modCard": {
+        "type": "種類: {}",
+        "disabled": "無効",
+        "installed": "導入済み",
+        "notInstalled": "未導入"
+    },
+    "storeModCard": {
+        "gameVersionUnknown": "ゲームのバージョン: 不明",
+        "gameVersionUniversal": "ゲームのバージョン: すべて",
+        "gameVersionFmt": "ゲームのバージョン: {}"
+    },
+    "contextMenu": {
+        "submit": "送信"
+    },
+    "qrCodeView": {
+        "scanHint": "QRコードをスキャン"
+    },
+    "dialog": {
+        "cancel": "キャンセル",
+        "confirm": "確認"
+    },
+    "ftpDialog": {
+        "acknowledged": "OK",
+        "end": "終了",
+        "connected": "FTP接続中、転送を待機中",
+        "disconnected": "FTP接続が切断され、再接続を待機中です\nftp://{}:{}",
+        "transferring": "ファイルの転送中...",
+        "successCount": "\n{}個のファイルの転送に成功しました",
+        "failedCount": "\n{} 個のファイルの転送に失敗しました",
+        "transferDone": "転送が完了し、新しいタスクを待機中...",
+        "started": "FTPが起動しました。接続を待機中です\nftp://{}:{}"
+    },
+    "mtpDialog": {
+        "end": "終了",
+        "waiting": "MTPが有効になっており、USB接続を待機中です",
+        "connected": "USB接続済み、転送待ち",
+        "completed": "{}個のファイルの転送が完了し、新しい転送を待機中..."
+    },
+    "keyboard": {
+        "nativeKeyboard": "ネイティブキーボード",
+        "search": "検索",
+        "space": "スペース",
+        "delete": "削除",
+        "placeholder": "ここに文字を入力してください...",
+        "input": "入力"
+    },
+    "keyboardInput": {
+        "confirm": "確認",
+        "back": "戻る"
+    },
+    "shell": {
+        "exitConfirm": "本当に終了しますか?"
+    }
+}

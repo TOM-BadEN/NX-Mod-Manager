@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme>
+    <!-- 卡片背景色 -->
+    <color name="app/cardBg" dark="#FFFFFF0A" light="#0000000A"/>
+    <!-- 底部滚动提示遮罩色 -->
+    <color name="app/scrollHintBg" dark="#303231" light="#DFE1E1"/>
+    <!-- 游戏封面卡片背景色 -->
+    <color name="app/gameCardBg" dark="#00000000" light="#00000000"/>
+    <!-- 轻量骨架颜色 -->
+    <color name="app/skeleton" dark="#626665" light="#929C9D"/>
+    <!-- 次要文字颜色（版本、数量等） -->
+    <color name="app/textSecondary" dark="#808080" light="#666666"/>
+    <!-- 文字警告色 -->
+    <color name="app/textWarning" dark="#FF5050" light="#C93636"/>
+    <!-- 高亮文字颜色（已安装等状态） -->
+    <color name="app/textHighlight" dark="#00FFC8" light="#007F68"/>
+    <!-- 段落标题标识色 -->
+    <color name="app/sectionTitleIndicator" dark="#89F1F2" light="#35AEB4"/>
+    <!-- 胶囊标签背景色 -->
+    <color name="app/tagBg" dark="#FFFFFF18" light="#00000010"/>
+    <!-- 全局外壳胶囊背景色 -->
+    <color name="app/shellCapsuleBg" dark="#282828" light="#F7F8F8"/>
+    <!-- 全局外壳胶囊边框色 -->
+    <color name="app/shellCapsuleBorder" dark="#404040" light="#D4D7D7"/>
+    <!-- 顶部导航选中项的纵向渐变色 -->
+    <color name="app/navigationHighlightTop" dark="#23AFD4" light="#86D4ED"/>
+    <color name="app/navigationHighlightBottom" dark="#168CBE" light="#3FAAD5"/>
+    <!-- 全局外壳渐变背景色 -->
+    <color name="app/shellBackgroundTop" dark="#181A1A" light="#F1F2F2"/>
+    <color name="app/shellBackgroundBottom" dark="#282A29" light="#E7E9E9"/>
+    <!-- 菜单面板 / 提示卡片背景色（较低透明度） -->
+    <color name="app/menuBg" dark="#1A1A1AF7" light="#F4F5F5F7"/>
+    <!-- 菜单选项分隔线 -->
+    <color name="app/menuItemDivider" dark="#FFFFFF1A" light="#0000001A"/>
+    <!-- 开关滑块色 -->
+    <color name="app/switchKnob" dark="#F5F6F4" light="#F5F6F4"/>
+    <!-- 开关滑块描边色 -->
+    <color name="app/switchKnobBorder" dark="#00000028" light="#00000014"/>
+    <!-- 单选指示器未选中外圈色 -->
+    <color name="app/radioRing" dark="#A6A6AA" light="#75757A"/>
+    <!-- 进度条轨道背景色 -->
+    <color name="app/progressTrack" dark="#3C3C3C" light="#D0D0D0"/>
+    <!-- 进度条填充前景色 -->
+    <color name="app/progressFill" dark="#0096FF" light="#159DC1"/>
+    <!-- 搜索页键盘与底栏背景色 -->
+    <color name="app/keyboardBg" dark="#3d3d3d41" light="#d0d0d041"/>
+    <!-- 键盘按键底部层次色 -->
+    <color name="app/keyboardKeyDepth" dark="#00000040" light="#00000024"/>
+    <!-- 二维码卡片背景色 -->
+    <color name="app/qrCardBg" dark="#FFFFFF" light="#FFFFFF"/>
+    <!-- 关于插件页面二维码卡片边框色 -->
+    <color name="app/helpQrCardBorder" dark="#00000000" light="#D5DCDC"/>
+    <!-- 深色文字颜色（与框架 light 主题默认文字色一致） -->
+    <color name="app/textDark" dark="#2D2D2D" light="#2D2D2D"/>
+    <!-- 长按按钮进度填充色 -->
+    <color name="app/longPressFill" dark="#292C31" light="#D8E6E8"/>
+    <!-- 卡片覆盖层背景色 -->
+    <color name="app/cardOverlayBg" dark="#000000CC" light="#000000CC"/>
+    <!-- 卡片覆盖层文字色 -->
+    <color name="app/cardOverlayText" dark="#FFFFFF" light="#FFFFFF"/>
+    <!-- 卡片覆盖层胶囊背景色 -->
+    <color name="app/cardOverlayTag" dark="#FFFFFF40" light="#FFFFFF40"/>
+    <!-- 商店游戏列表页面卡片标题标识色 -->
+    <color name="app/storeGamePageIndicator" dark="#E09137" light="#E09137"/>
+    <!-- 添加游戏页面卡片标题标识色 -->
+    <color name="app/addGamePageIndicator" dark="#48B577" light="#48B577"/>
+</theme>

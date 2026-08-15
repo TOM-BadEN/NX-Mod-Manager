@@ -1,0 +1,20 @@
+/**
+ * CommentCard - 留言卡片组件实现
+ */
+
+#include "ui/view/commentCard.hpp"
+#include "utils/format.hpp"
+
+CommentCard::CommentCard() {
+    inflateFromXMLRes("xml/view/commentCard.xml");
+}
+
+void CommentCard::setComment(const std::string& nickname, const std::string& content, const std::string& createTime) {
+    m_nickname->setText(nickname);
+    m_content->setText(content);
+    m_time->setText(format::timeAgo(createTime));
+}
+
+RecyclingGridItem* CommentCard::create() {
+    return new CommentCard();
+}

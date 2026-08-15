@@ -1,0 +1,85 @@
+<!--
+    KeyboardInput - 底部键盘输入
+    外层全屏遮罩 + 内层键盘面板贴底部
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    justifyContent="flexEnd"
+    alignItems="stretch"
+    backgroundColor="@theme/brls/backdrop">
+
+    <!-- 键盘面板 -->
+    <brls:Box
+        id="keyboardInput/panel"
+        width="auto"
+        height="auto"
+        axis="column"
+        alignItems="center"
+        backgroundColor="@theme/brls/background">
+
+        <!-- Keyboard 容器（由代码注入 Keyboard 视图） -->
+        <brls:Box
+            id="keyboardInput/content"
+            width="auto"
+            height="auto"
+            axis="column"
+            alignItems="center"
+            paddingBottom="5"/>
+
+        <!-- 底部栏：计数器 + 按钮提示 -->
+        <brls:Box
+            width="auto"
+            height="78"
+            axis="row"
+            alignSelf="stretch"
+            justifyContent="spaceBetween"
+            alignItems="center"
+            marginLeft="@style/brls/applet_frame/padding_sides"
+            marginRight="@style/brls/applet_frame/padding_sides">
+
+            <brls:Box
+                width="auto"
+                height="auto"
+                axis="row"
+                alignItems="center"
+                grow="1"
+                shrink="1">
+
+                <CapsuleBadge
+                    width="auto"
+                    height="46"
+                    axis="row"
+                    alignItems="center"
+                    paddingTop="0"
+                    paddingBottom="0"
+                    paddingLeft="18"
+                    paddingRight="18"
+                    cornerRadius="23"
+                    backgroundColor="@theme/app/shellCapsuleBg"
+                    borderColor="@theme/app/shellCapsuleBorder"
+                    borderThickness="1.5">
+
+                    <brls:Label
+                        id="keyboardInput/counter"
+                        width="auto"
+                        height="auto"
+                        fontSize="19.5"/>
+
+                </CapsuleBadge>
+
+            </brls:Box>
+
+            <CapsuleHints
+                width="auto"
+                height="auto"
+                shrink="0"
+                addBaseAction="false"/>
+
+        </brls:Box>
+
+    </brls:Box>
+
+</brls:Box>

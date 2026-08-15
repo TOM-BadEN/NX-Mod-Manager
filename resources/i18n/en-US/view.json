@@ -1,0 +1,62 @@
+{
+    "gameCard": {
+        "launch": "Launch",
+        "launching": "Launching"
+    },
+    "addGameCard": {
+        "virtualGame": "Add Uninstalled Game"
+    },
+    "modCard": {
+        "type": "Type: {}",
+        "disabled": "Disabled",
+        "installed": "Installed",
+        "notInstalled": "Not Installed"
+    },
+    "storeModCard": {
+        "gameVersionUnknown": "Game Version: Unknown",
+        "gameVersionUniversal": "Game Version: Universal",
+        "gameVersionFmt": "Game Version: {}"
+    },
+    "contextMenu": {
+        "submit": "Submit"
+    },
+    "qrCodeView": {
+        "scanHint": "Scan QR Code"
+    },
+    "dialog": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
+    "ftpDialog": {
+        "acknowledged": "OK",
+        "end": "End",
+        "connected": "FTP connected, waiting for transfer",
+        "disconnected": "FTP disconnected, waiting for reconnect\nftp://{}:{}",
+        "transferring": "Transferring files...",
+        "successCount": "\nSuccessfully transferred {} file(s)",
+        "failedCount": "\nFailed to transfer {} file(s)",
+        "transferDone": "Transfer complete, waiting for new tasks...",
+        "started": "FTP started, waiting for connection\nftp://{}:{}"
+    },
+    "mtpDialog": {
+        "end": "End",
+        "waiting": "MTP enabled, waiting for USB connection",
+        "connected": "USB connected, waiting for transfer",
+        "completed": "Completed {} file(s), waiting for new transfer..."
+    },
+    "keyboard": {
+        "nativeKeyboard": "Native Keyboard",
+        "search": "Search",
+        "space": "Space",
+        "delete": "Delete",
+        "placeholder": "Type here...",
+        "input": "Input"
+    },
+    "keyboardInput": {
+        "confirm": "Confirm",
+        "back": "Back"
+    },
+    "shell": {
+        "exitConfirm": "Are you sure you want to exit?"
+    }
+}

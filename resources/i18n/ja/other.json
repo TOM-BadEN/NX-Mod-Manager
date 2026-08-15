@@ -1,0 +1,98 @@
+{
+    "modType": {
+        "performance": "パフォーマンス",
+        "graphics": "グラフィックス",
+        "translation": "翻訳",
+        "feature": "特集",
+        "ui": "ビジュアル",
+        "music": "音楽",
+        "skin": "スキン",
+        "cheat": "チート",
+        "other": "その他"
+    },
+    "modTypeDesc": {
+        "performance": "ゲームの設定を最適化して、フレームレートと動作の滑らかさを向上させる",
+        "graphics": "テクスチャ、照明、解像度など、映像の品質を向上させる",
+        "translation": "ゲーム内のテキストを各言語に合わせて翻訳する",
+        "feature": "新しいゲームプレイの仕組み、システム、または機能を追加する",
+        "ui": "使いやすさと見た目を向上させるため、ゲームのインターフェースを改善する",
+        "music": "BGMや効果音を置き換えたり追加したりする",
+        "skin": "キャラクターやモデルの見た目を、衣装やスタイルも含めて変更する",
+        "cheat": "サポートや難易度を下げるために、ゲームのパラメータや仕組みを変更する",
+        "other": "現在のカテゴリに含まれていないMODの種類"
+    },
+    "api": {
+        "networkError": "ネットワークリクエストに失敗しました!",
+        "parseError": "データの解析に失敗しました!",
+        "gameNotFound": "ゲームが見つかりません!",
+        "modDownloadRateLimit": "サーバーのリソースに限りがあるため、ダウンロードは30秒に1回、1時間あたり最大20個のMODまでと制限されています。何卒ご理解のほどよろしくお願いいたします。",
+        "modDownloadFailed": "ダウンロードに失敗しました!"
+    },
+    "format": {
+        "seconds": "{} 秒",
+        "hms": "{}時間 {}分 {}秒",
+        "ms": "{}分 {}秒",
+        "justNow": "たった今",
+        "minutesAgo": "{} 分前",
+        "hoursAgo": "{} 時間前",
+        "daysAgo": "{} 日前",
+        "monthsAgo": "{} 月前",
+        "yearsAgo": "{} 年前"
+    },
+    "modManager": {
+        "cheats": "ローカル抽出-チート",
+        "otherFiles": "ローカル抽出-その他",
+        "cheatsDescription": "このマネージャーで管理されていない、SDカードから抽出されたチート",
+        "otherDescription": "このマネージャーで管理されていなかった、SDカードから抽出されたMOD"
+    },
+    "installer": {
+        "scanningFiles": "ファイルのスキャン中...",
+        "scanningDirs": "ディレクトリのスキャン中...",
+        "detectingConflicts": "競合の検出中...",
+        "checkingConflicts": "競合ファイルのチェック中、しばらくお待ちください...",
+        "buildingDirs": "ディレクトリの作成中...",
+        "aggregatingFiles": "ファイルの集約中...",
+        "createDirFailed": "ディレクトリの作成に失敗しました。エラー: {}",
+        "pchtxtConvertFailed": "pchtxtの変換に失敗しました: {}",
+        "pchtxtCreateDirFailed": "pchtxtディレクトリの作成に失敗しました",
+        "writeIpsFailed": "FIPSの書き込みに失敗しました、エラー: {}",
+        "unknownMod": "不明なMOD",
+        "zipNotFound": "ZIPファイルが見つかりません",
+        "zipOpenFailed": "ZIPファイルを開くことができませんでした",
+        "zipNoFiles": "ZIPファイルにはファイルが含まれていません",
+        "zipExtractFailed": "ZIPファイルの解凍に失敗しました",
+        "zipReadFailed": "ZIPファイルの読み込みに失敗しました",
+        "invalidModStructure": "無効なMOD構造",
+        "specialRulesInitFailed": "このゲームの特別なインストールルールを初期化できませんでした!",
+        "mhrisePatchNoLimit": "ファイル数の制限に達しました。インストールを続行できません!",
+        "specialUninstallRulesInitFailed": "このゲームの特別なアンインストールルールを初期化できませんでした!",
+        "specialUninstallRulesApplyFailed": "不明な理由で失敗しました。すべてのMODをアンインストールするには、「強制クリーン」をご利用ください!",
+        "mhriseReorderFailed": "MODファイルの番号の並べ替えに失敗しました。「強制クリーン」を使用して、すべてのMODをアンインストールしてください!",
+        "memAllocFailed": "メモリの割り当てに失敗しました",
+        "modConflict": "MODファイルの競合",
+        "readPchtxtFailed": "pchtxtの読み込みに失敗しました",
+        "writeFailed": "書き込みに失敗しました。エラー: {}",
+        "createFileFailed": "ファイルの作成に失敗しました。エラー: {}",
+        "openDirFailed": "ディレクトリを開くことができませんでした。エラー: {}",
+        "readDirFailed": "ディレクトリの読み取りに失敗しました。エラー: {}",
+        "readSourceFailed": "ソースファイルの読み込みに失敗しました。エラー: {}",
+        "readSourceFailedNoCode": "ソースファイルの読み込みに失敗しました"
+    },
+    "pchtxt": {
+        "oddLength": "データの長さが均等ではありません",
+        "invalidHex": "データに無効な16進数の文字が含まれています",
+        "unknownEscape": "不明なエスケープシーケンス",
+        "unclosedString": "閉じられていない文字列",
+        "invalidOffset": "無効なオフセット形式",
+        "missingData": "欠損データ",
+        "emptyData": "データがありません",
+        "missingNsobid": "@nsobid が見当たりません",
+        "lineError": "行 {}: {}",
+        "noPatchFound": "有効なパッチが見つかりませんでした"
+    },
+    "ftp": {
+        "alreadyRunning": "FTPサービスはすでに稼働中です",
+        "noIpAddress": "IPアドレスを取得できません。ネットワーク接続を確認してください。",
+        "startFailed": "FTPサービスの起動に失敗しました"
+    }
+}

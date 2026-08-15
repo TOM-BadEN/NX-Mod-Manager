@@ -1,0 +1,56 @@
+<!--
+    上下文菜单单元格布局文件
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    paddingTop="18"
+    paddingBottom="18"
+    paddingLeft="30"
+    paddingRight="30"
+    lineColor="@theme/app/menuItemDivider"
+    lineBottom="1px">
+    <brls:Image
+        id="contextMenuCell/icon"
+        width="32"
+        height="32"
+        marginRight="18"
+        shrink="0"
+        scalingType="fit"
+        visibility="gone"/>
+    <brls:Label
+        id="contextMenuCell/title"
+        width="auto"
+        height="auto"
+        grow="1"
+        shrink="1"
+        fontSize="24"
+        singleLine="true"/>
+    <brls:Box
+        id="contextMenuCell/right"
+        width="auto"
+        height="auto"
+        axis="row"
+        alignItems="center"
+        shrink="0"
+        marginLeft="20">
+        <brls:Label
+            id="contextMenuCell/badge"
+            width="auto"
+            maxWidth="136"
+            height="auto"
+            shrink="0"
+            fontSize="22"
+            singleLine="true"
+            visibility="gone"/>
+        <brls:ProgressSpinner
+            id="contextMenuCell/loading"
+            width="28"
+            height="28"
+            size="normal"
+            visibility="gone"/>
+    </brls:Box>
+</brls:Box>

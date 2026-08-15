@@ -1,0 +1,36 @@
+<!--
+    StoreModList - 商店模组列表页面
+    网格展示某游戏的所有模组，支持分页加载
+-->
+
+<brls:Box
+    id="storeModList/content"
+    width="100%"
+    height="100%">
+
+    <RecyclingGrid
+        id="storeModList/grid"
+        width="auto"
+        height="auto"
+        grow="1"
+        marginRight="7"
+        marginTop="0"
+        marginBottom="0"
+        spanCount="2"
+        itemHeight="126.25"
+        itemSpace="18"/>
+
+    <brls:Label
+        id="storeModList/emptyHint"
+        width="100%"
+        height="100%"
+        visibility="gone"
+        focusable="true"
+        hideHighlight="true"
+        fontSize="32"
+        text="@i18n/page/storeModList/loading"
+        textColor="@theme/app/textSecondary"
+        horizontalAlign="center"
+        verticalAlign="center"/>
+
+</brls:Box>

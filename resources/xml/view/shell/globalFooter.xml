@@ -1,0 +1,65 @@
+<!--
+    GlobalFooter - 全局常驻底部栏
+-->
+
+<brls:Box
+    width="auto"
+    height="78"
+    axis="column">
+
+    <!-- 底栏内容：保留原有间距与布局 -->
+    <brls:Box
+        width="auto"
+        height="78"
+        axis="row"
+        alignSelf="stretch"
+        justifyContent="spaceBetween"
+        alignItems="center"
+        marginLeft="@style/brls/applet_frame/padding_sides"
+        marginRight="@style/brls/applet_frame/padding_sides">
+
+        <!-- 左侧：索引信息 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center"
+            grow="1"
+            shrink="1">
+
+            <CapsuleBadge
+                id="globalFooter/indexCapsule"
+                width="auto"
+                height="46"
+                axis="row"
+                alignItems="center"
+                paddingTop="0"
+                paddingBottom="0"
+                paddingLeft="18"
+                paddingRight="18"
+                cornerRadius="23"
+                backgroundColor="@theme/app/shellCapsuleBg"
+                borderColor="@theme/app/shellCapsuleBorder"
+                borderThickness="1.5"
+                visibility="gone">
+
+                <brls:Label
+                    id="globalFooter/index"
+                    width="auto"
+                    height="auto"
+                    fontSize="19.5"/>
+
+            </CapsuleBadge>
+
+        </brls:Box>
+
+        <!-- 右侧：由 Borealis 根据当前焦点和 Action 自动生成 -->
+        <CapsuleHints
+            width="auto"
+            height="auto"
+            shrink="0"
+            addBaseAction="false"/>
+
+    </brls:Box>
+
+</brls:Box>

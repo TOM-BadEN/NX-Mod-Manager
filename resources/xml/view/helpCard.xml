@@ -1,0 +1,29 @@
+<!--
+    HelpCard - 帮助卡片组件
+    居中显示标题文字
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="row"
+    alignItems="center"
+    justifyContent="center"
+    focusable="true"
+    paddingTop="20"
+    paddingBottom="20"
+    paddingLeft="20"
+    paddingRight="20"
+    backgroundColor="@theme/app/cardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <brls:Label
+        id="helpCard/title"
+        width="auto"
+        height="auto"
+        fontSize="22"
+        singleLine="true"/>
+
+</brls:Box>

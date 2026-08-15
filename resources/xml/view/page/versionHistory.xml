@@ -1,0 +1,108 @@
+<!--
+    历史版本页面布局
+    左侧 RecyclingGrid（单列版本列表） + 右侧更新日志内容
+-->
+
+<brls:Box
+    id="versionHistory/content"
+    width="100%"
+    height="100%"
+    axis="row">
+
+    <!-- 左侧：历史版本列表 -->
+    <RecyclingGrid
+        id="versionHistory/grid"
+        width="25%"
+        height="100%"
+        spanCount="1"
+        itemHeight="70"
+        itemSpace="18"/>
+
+    <!-- 右侧：更新日志内容卡片 -->
+    <brls:Box
+        id="versionHistory/detail"
+        width="auto"
+        height="auto"
+        grow="1"
+        axis="column"
+        focusable="true"
+        marginTop="5"
+        marginBottom="5"
+        marginLeft="0"
+        marginRight="40"
+        paddingTop="40"
+        paddingBottom="40"
+        paddingLeft="40"
+        paddingRight="40"
+        backgroundColor="@theme/app/cardBg"
+        cornerRadius="8"
+        highlightCornerRadius="8"
+        shadowType="generic">
+
+        <!-- 内容区 -->
+        <brls:ScrollingFrame
+            id="versionHistory/scroll"
+            width="auto"
+            grow="1"
+            marginRight="-32">
+
+            <brls:Box
+                id="versionHistory/scrollContent"
+                width="100%"
+                height="auto"
+                axis="column"
+                paddingRight="44">
+
+                <SectionTitle marginBottom="21">
+
+                    <brls:Label
+                        id="versionHistory/versionTitle"
+                        width="auto"
+                        height="auto"
+                        fontSize="24"/>
+
+                </SectionTitle>
+
+                <brls:Label
+                    id="versionHistory/publishTime"
+                    width="auto"
+                    height="auto"
+                    fontSize="20"
+                    textColor="@theme/app/textSecondary"
+                    marginBottom="30"/>
+
+                <SectionTitle marginBottom="21">
+
+                    <brls:Label
+                        width="auto"
+                        height="auto"
+                        fontSize="24"
+                        text="@i18n/page/versionHistory/changelog"/>
+
+                </SectionTitle>
+
+                <brls:Label
+                    id="versionHistory/releaseNotes"
+                    width="auto"
+                    height="auto"
+                    fontSize="20"
+                    lineHeight="1.3"
+                    textColor="@theme/app/textSecondary"
+                    marginBottom="30"/>
+
+            </brls:Box>
+
+        </brls:ScrollingFrame>
+
+        <!-- 底部滚动提示遮罩（覆盖完整卡片宽度） -->
+        <ScrollHint
+            id="versionHistory/scrollHint"
+            height="104"
+            positionType="absolute"
+            positionBottom="0"
+            positionLeft="0"
+            positionRight="0"/>
+
+    </brls:Box>
+
+</brls:Box>

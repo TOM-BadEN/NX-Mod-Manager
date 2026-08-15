@@ -1,0 +1,164 @@
+<!--
+    GlobalHeader - 全局常驻顶部栏
+-->
+
+<brls:Box
+    width="auto"
+    height="@style/brls/applet_frame/header_height"
+    axis="row"
+    justifyContent="spaceBetween"
+    alignItems="center"
+    marginLeft="@style/brls/applet_frame/padding_sides"
+    marginRight="@style/brls/applet_frame/padding_sides">
+
+    <!-- 左侧区域：导航标题 + 普通标题 + 内容标题 -->
+    <brls:Box
+        width="auto"
+        height="auto"
+        axis="row"
+        alignItems="center"
+        shrink="1"
+        marginRight="40">
+
+        <!-- 导航标题 -->
+        <CapsuleBadge
+            id="globalHeader/navigationCapsule"
+            width="auto"
+            height="56"
+            axis="row"
+            alignItems="center"
+            shrink="1"
+            paddingTop="0"
+            paddingBottom="0"
+            paddingLeft="24"
+            paddingRight="24"
+            cornerRadius="28"
+            backgroundColor="@theme/app/shellCapsuleBg"
+            borderColor="@theme/app/shellCapsuleBorder"
+            borderThickness="1.5"
+            visibility="gone">
+
+            <brls:Box
+                id="globalHeader/navigationContent"
+                width="auto"
+                height="auto"
+                axis="row"
+                alignItems="center"
+                shrink="1"/>
+
+        </CapsuleBadge>
+
+        <!-- 普通标题 -->
+        <CapsuleBadge
+            id="globalHeader/titleCapsule"
+            width="auto"
+            height="56"
+            axis="row"
+            alignItems="center"
+            shrink="1"
+            paddingTop="0"
+            paddingBottom="0"
+            paddingLeft="24"
+            paddingRight="24"
+            cornerRadius="28"
+            backgroundColor="@theme/app/shellCapsuleBg"
+            borderColor="@theme/app/shellCapsuleBorder"
+            borderThickness="1.5"
+            visibility="gone">
+
+            <brls:Box
+                id="globalHeader/titleContent"
+                width="auto"
+                height="auto"
+                axis="row"
+                alignItems="center"
+                shrink="1"/>
+
+        </CapsuleBadge>
+
+        <!-- 内容标题 -->
+        <CapsuleBadge
+            id="globalHeader/contentTitleCapsule"
+            width="auto"
+            height="56"
+            axis="row"
+            alignItems="center"
+            shrink="0"
+            paddingTop="0"
+            paddingBottom="0"
+            paddingLeft="20"
+            paddingRight="20"
+            cornerRadius="28"
+            backgroundColor="@theme/app/shellCapsuleBg"
+            borderColor="@theme/app/shellCapsuleBorder"
+            borderThickness="1.5"
+            visibility="gone">
+
+            <brls:Label
+                id="globalHeader/contentTitle"
+                width="auto"
+                height="auto"
+                fontSize="18"
+                textColor="@theme/app/textSecondary"
+                singleLine="true"/>
+
+        </CapsuleBadge>
+
+    </brls:Box>
+
+    <!-- 右侧胶囊：全局设备状态 -->
+    <CapsuleBadge
+        width="auto"
+        height="56"
+        axis="row"
+        alignItems="center"
+        shrink="0"
+        paddingTop="0"
+        paddingBottom="0"
+        paddingLeft="24"
+        paddingRight="24"
+        cornerRadius="28"
+        backgroundColor="@theme/app/shellCapsuleBg"
+        borderColor="@theme/app/shellCapsuleBorder"
+        borderThickness="1.5">
+
+        <brls:Label
+            id="globalHeader/fps"
+            width="auto"
+            height="auto"
+            marginRight="20"
+            fontSize="19.5"
+            visibility="gone"/>
+
+        <brls:Label
+            id="globalHeader/memory"
+            width="auto"
+            height="auto"
+            marginRight="20"
+            fontSize="19.5"
+            visibility="gone"/>
+
+        <brls:Label
+            id="globalHeader/time"
+            width="auto"
+            height="auto"
+            marginRight="20"
+            fontSize="19.5"/>
+
+        <brls:Wireless
+            marginRight="20"
+            marginBottom="5"/>
+
+        <brls:Label
+            id="globalHeader/batteryPercent"
+            width="auto"
+            height="auto"
+            marginRight="5"
+            fontSize="19.5"/>
+
+        <brls:Battery
+            marginBottom="5"/>
+
+    </CapsuleBadge>
+
+</brls:Box>

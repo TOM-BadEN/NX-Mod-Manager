@@ -1,0 +1,146 @@
+<!--
+    StoreGameCard - 商店游戏卡片组件
+    游戏图标 + 底部覆盖层（游戏名、MOD数量胶囊、更新时间胶囊）
+-->
+
+<brls:Box
+    width="auto"
+    height="auto"
+    axis="column"
+    focusable="true"
+    paddingTop="5"
+    paddingBottom="5"
+    paddingLeft="5"
+    paddingRight="5"
+    backgroundColor="@theme/app/gameCardBg"
+    cornerRadius="8"
+    highlightCornerRadius="8"
+    shadowType="generic">
+
+    <!-- 游戏图标 -->
+    <brls:Image
+        id="storeGameCard/icon"
+        width="100%"
+        height="100%"
+        grow="1"
+        scalingType="fit"
+        cornerRadius="6"
+        image="@res/img/game/defaultIconUp.jpg" />
+
+    <!-- 底部渐变遮罩：由 StoreGameCard 跟随游戏图标一起绘制和缩放 -->
+    <brls:Image
+        id="storeGameCard/mask"
+        width="auto"
+        height="35%"
+        positionType="absolute"
+        positionBottom="5"
+        positionLeft="5"
+        positionRight="5"
+        scalingType="stretch"
+        cornerRadius="6"
+        visibility="invisible"
+        image="@res/img/game/gameCardMask.png" />
+
+    <!-- 底部信息层 -->
+    <brls:Box
+        id="storeGameCard/overlay"
+        width="auto"
+        height="35%"
+        positionType="absolute"
+        positionBottom="5"
+        positionLeft="5"
+        positionRight="5"
+        cornerRadius="6"
+        axis="column"
+        justifyContent="spaceEvenly"
+        paddingLeft="8"
+        paddingRight="8"
+        clipsToBounds="true">
+
+        <!-- 游戏名 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            alignItems="center">
+
+            <brls:Box
+                width="8"
+                height="8"
+                marginRight="8"
+                cornerRadius="4"
+                backgroundColor="@theme/app/storeGamePageIndicator" />
+
+            <brls:Label
+                id="storeGameCard/name"
+                width="auto"
+                height="auto"
+                grow="1"
+                fontSize="16"
+                singleLine="true"
+                textColor="@theme/app/cardOverlayText" />
+
+        </brls:Box>
+
+        <!-- 胶囊标签行 -->
+        <brls:Box
+            width="auto"
+            height="auto"
+            axis="row"
+            marginTop="0">
+
+            <CapsuleBadge
+                id="storeGameCard/modCount"
+                paddingTop="2"
+                paddingBottom="2"
+                paddingLeft="8"
+                paddingRight="8"
+                cornerRadius="8"
+                marginRight="6"
+                backgroundColor="@theme/app/cardOverlayTag">
+
+                <brls:Label
+                    id="storeGameCard/modCountText"
+                    width="auto"
+                    height="auto"
+                    fontSize="12"
+                    singleLine="true"
+                    textColor="@theme/app/cardOverlayText" />
+
+            </CapsuleBadge>
+
+            <CapsuleBadge
+                id="storeGameCard/lastUpdate"
+                paddingTop="2"
+                paddingBottom="2"
+                paddingLeft="8"
+                paddingRight="8"
+                cornerRadius="8"
+                backgroundColor="@theme/app/cardOverlayTag">
+
+                <brls:Label
+                    id="storeGameCard/lastUpdateText"
+                    width="auto"
+                    height="auto"
+                    fontSize="12"
+                    singleLine="true"
+                    textColor="@theme/app/cardOverlayText" />
+
+            </CapsuleBadge>
+
+        </brls:Box>
+
+    </brls:Box>
+
+    <brls:Image
+        id="storeGameCard/installed"
+        width="25"
+        height="25"
+        positionType="absolute"
+        positionBottom="10"
+        positionRight="10"
+        scalingType="fit"
+        visibility="gone"
+        image="@res/img/game/installed.png" />
+
+</brls:Box>
