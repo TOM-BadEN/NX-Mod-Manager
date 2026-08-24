@@ -251,7 +251,7 @@
     "faqNetwork": "Online features network error",
     "faqNetworkDesc": "Store browsing, mod downloads, and online game name retrieval all require a network connection. If you see network-related errors, verify that your console is connected to Wi-Fi. If the network is fine but access still fails, the server may be temporarily unavailable. Also ensure your Switch has been time-synced, as incorrect time can cause network request failures.",
     "faqInvalidMod": "Invalid mod structure",
-    "faqInvalidModDesc": "This message means no valid mod file structure was found in the folder or ZIP archive. A valid mod must contain at least one of: romfs, romfslite, exefs, cheats, exefs_patches, romfs.bin, or a pchtxt patch file.",
+    "faqInvalidModDesc": "This message means no valid mod file structure was found in the folder or ZIP archive. A valid mod must contain at least one of: romfs, romfslite, exefs, cheats, exefs_patches, nro_patches, romfs.bin, or a pchtxt patch file.",
     "faqConflict": "Mod file conflict",
     "faqConflictDesc": "When installing a mod, the software checks if any files it modifies are already occupied by other mods. If two mods modify the same file with different content, a conflict is detected and the conflicting mod name is shown. You need to uninstall the conflicting mod first. Files with identical content across multiple mods do not trigger conflicts — the software uses reference counting to manage shared files safely.",
     "faqRemoveGame": "Cannot remove game with installed mods",

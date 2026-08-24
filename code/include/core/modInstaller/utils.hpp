@@ -5,6 +5,7 @@
 #pragma once
 
 #include "core/modInstaller/install.hpp"
+#include "core/modInstaller/targetStrategy.hpp"
 
 #include <cstdlib>
 #include <malloc.h>
@@ -13,11 +14,6 @@ namespace ModInstaller {
 
 inline const std::string atmospherePath = "/atmosphere";          // Atmosphere 根目录
 inline const std::string contentsPath = "/atmosphere/contents";   // 游戏内容覆盖目录
-
-/** @brief 用于定位 MOD 内容根目录的路径关键词 */
-inline const std::vector<std::string> modKeywords = {
-    "romfs", "romfslite", "exefs", "cheats", "exefs_patches", "romfs.bin"
-};
 
 inline constexpr const char* pchtxtExt = ".pchtxt";         // pchtxt 文件扩展名
 inline constexpr size_t ioBufSize = 32 * 1024 * 1024;   // 32MB
@@ -98,19 +94,16 @@ bool hasDotPathSegment(const std::string& path);
  */
 size_t findKeywordPos(const std::string& path);
 
-/** @brief MOD 安装涉及的 TID 与 IPS 目录集合 */
-struct ModTidAndIpsDirs {
-    std::vector<std::string> tidDirs;        // contents 下的 TID 目录名
-    std::vector<std::string> ipsDirs;        // exefs_patches 下的子目录名
-};
-
 /**
- * @brief 扫描 mod 源目录，收集安装涉及的 TID 目录名和 exefs_patches 子目录名
+ * @brief 扫描 mod 源目录，收集安装涉及的受管理目标
+ *
+ * 一个模组可以同时包含 contents 和 nro_patches，因此返回值是所有策略目标的集合，
+ * 供 ModManager 的禁用、恢复和强制清理共同使用。
  * @param mod 模组信息
  * @param game 游戏信息
- * @return 扫描得到的 TID 与 IPS 目录集合
+ * @return 扫描得到的受管理目标
  */
-ModTidAndIpsDirs collectTidAndIpsDirs(const ModInfo& mod, const GameInfo& game);
+std::vector<targets::ManagedTarget> collectManagedTargets(const ModInfo& mod, const GameInfo& game);
 
 /**
  * @brief 构建目标目录列表

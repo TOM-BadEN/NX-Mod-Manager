@@ -13,22 +13,32 @@
 #include <borealis/core/i18n.hpp>
 
 namespace {
-// 获取 mod 源目录内的原始目录列表（相对路径）
-std::vector<std::string> collectRawDirs(const ModInfo& mod) {
+// 获取 mod 源目录内的原始目录与文件列表（相对路径）。目录安装和 ZIP 安装
+// 最终转换成同一种 RawModPaths，后续策略不需要知道数据来自哪种载体。
+struct RawModPaths {
+    std::vector<std::string> dirs;
+    std::vector<std::string> files;
+};
+
+RawModPaths collectRawPaths(const ModInfo& mod) {
+    RawModPaths result;
     if (mod.isZip) {
+        // ZIP 文件列表不能只扫描目录，否则 NRO IPS 无法确认目录中存在合法 .ips 文件。
         std::string zipPath = ModInstaller::utils::getZipModFilePath(mod.path);
-        if (zipPath.empty()) return {};
+        if (zipPath.empty()) return result;
         ZipReader zip(zipPath);
-        if (!zip.isOpen()) return {};
-        return zip.dirs();
+        if (!zip.isOpen()) return result;
+        result.dirs = zip.dirs();
+        for (const auto& entry : zip.files()) result.files.push_back(entry.path);
+        return result;
     }
 
-    std::vector<std::string> rawDirs;
     std::vector<std::string> stack;
     stack.push_back(mod.path);
     size_t baseLen = mod.path.size();
 
     while (!stack.empty()) {
+        // 使用显式栈遍历普通目录，避免递归深度受模组目录层级影响。
         std::string cur = std::move(stack.back());
         stack.pop_back();
 
@@ -40,14 +50,17 @@ std::vector<std::string> collectRawDirs(const ModInfo& mod) {
             if (reader.read(batch) != 0) break;
             if (batch.empty()) break;
             for (auto& e : batch) {
-                if (e.isFile) continue;
                 std::string full = cur + "/" + e.name;
-                rawDirs.push_back(full.substr(baseLen + 1));
+                if (e.isFile) {
+                    result.files.push_back(full.substr(baseLen + 1));
+                    continue;
+                }
+                result.dirs.push_back(full.substr(baseLen + 1));
                 stack.push_back(std::move(full));
             }
         }
     }
-    return rawDirs;
+    return result;
 }
 } // namespace
 
@@ -77,82 +90,22 @@ bool hasDotPathSegment(const std::string& path) {
 }
 
 size_t findKeywordPos(const std::string& path) {
-    for (const auto& kw : modKeywords) {
-        size_t pos = 0;
-        while ((pos = path.find(kw, pos)) != std::string::npos) {
-            bool leftOk = (pos == 0 || path[pos - 1] == '/');
-            size_t end = pos + kw.size();
-            bool rightOk = (end == path.size() || path[end] == '/');
-            if (leftOk && rightOk) return pos;
-            pos = end;
-        }
-    }
-    return std::string::npos;
-}
-
-// 从关键词前一级目录提取 TID（16位hex），未找到返回空
-std::string extractTidBeforeKeyword(const std::string& path, size_t keywordPos) {
-    if (keywordPos < 17) return {};
-    if (path[keywordPos - 1] != '/') return {};
-    if (keywordPos >= 18 && path[keywordPos - 18] != '/') return {};
-    for (size_t i = keywordPos - 17; i < keywordPos - 1; ++i) {
-        char c = path[i];
-        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) return {};
-    }
-    return path.substr(keywordPos - 17, 16);
+    // 保留原 utils API，实际识别逻辑集中到策略注册表，避免各扫描流程维护不同关键词列表。
+    return targets::findKeywordPos(path);
 }
 
 std::vector<std::string> buildTargetDirs(const std::vector<std::string>& dirs, const std::string& tid, bool skipDotEntries) {
-    std::vector<std::string> result;
-    result.reserve(dirs.size() + 2);
-
-    bool hasExefsPatches = false;
-    std::vector<std::string> addedTids;
-
+    std::vector<std::string> filtered;
+    filtered.reserve(dirs.size());
     for (const auto& dir : dirs) {
-        if (skipDotEntries && hasDotPathSegment(dir)) continue;
-
-        // 跳过不含关键词的目录（如 contents/、纯 TID 目录等）
-        size_t pos = findKeywordPos(dir);
-        if (pos == std::string::npos) continue;
-
-        // 截取关键词及之后的相对路径，如 "romfs/data" "exefs_patches/xxx"
-        const std::string& rel = dir.substr(pos);
-
-        // exefs_patches → 直接映射到 /atmosphere/exefs_patches/...
-        if (rel.compare(0, 13, "exefs_patches") == 0) {
-            if (!hasExefsPatches) {
-                result.push_back(atmospherePath + "/exefs_patches");
-                hasExefsPatches = true;
-            }
-            result.push_back(atmospherePath + "/" + rel);
-            continue;
-        }
-
-        // 尝试从关键词前一级目录提取 TID，提取失败则使用游戏 TID
-        std::string modTid = extractTidBeforeKeyword(dir, pos);
-        const std::string& targetTid = modTid.empty() ? tid : modTid;
-
-        // 确保 contents/<tid> 目录只添加一次
-        if (std::find(addedTids.begin(), addedTids.end(), targetTid) == addedTids.end()) {
-            result.push_back(contentsPath + "/" + targetTid);
-            addedTids.push_back(targetTid);
-        }
-
-        // 添加实际目标目录，如 /atmosphere/contents/<tid>/romfs/data
-        result.push_back(contentsPath + "/" + targetTid + "/" + rel);
+        if (!skipDotEntries || !hasDotPathSegment(dir)) filtered.push_back(dir);
     }
-
-    return result;
+    // 隐藏目录过滤仍由旧 API 控制，路径映射和 NRO IPS 层级校验交给策略。
+    return targets::buildTargetDirs(filtered, tid);
 }
 
 std::string buildTargetPath(const std::string& path, const std::string& tid) {
-    size_t pos = findKeywordPos(path);
-    if (pos == std::string::npos) return {};
-    std::string rel = path.substr(pos);
-    if (rel.compare(0, 13, "exefs_patches") == 0) return atmospherePath + "/" + rel;
-    std::string modTid = extractTidBeforeKeyword(path, pos);
-    return contentsPath + "/" + (modTid.empty() ? tid : modTid) + "/" + rel;
+    return targets::buildTargetPath(path, tid);
 }
 
 CreateDirsResult createDirs(const std::vector<std::string>& dirs) {
@@ -304,27 +257,11 @@ std::string findConflictModName(const std::string& targetPath, uint32_t conflict
     return brls::getStr("other/installer/unknownMod");
 }
 
-ModTidAndIpsDirs collectTidAndIpsDirs(const ModInfo& mod, const GameInfo& game) {
-    ModTidAndIpsDirs result;
-    std::string tid = format::appIdHex(game.appId);
-
-    for (const auto& dir : collectRawDirs(mod)) {
-        size_t pos = findKeywordPos(dir);
-        if (pos == std::string::npos) continue;
-        std::string rel = dir.substr(pos);
-
-        if (rel.compare(0, 13, "exefs_patches") == 0) {
-            if (rel.size() <= 14) continue;
-            std::string name = rel.substr(14);
-            if (std::find(result.ipsDirs.begin(), result.ipsDirs.end(), name) == result.ipsDirs.end()) result.ipsDirs.push_back(std::move(name));
-        } else {
-            std::string modTid = extractTidBeforeKeyword(dir, pos);
-            const std::string& target = modTid.empty() ? tid : modTid;
-            if (std::find(result.tidDirs.begin(), result.tidDirs.end(), target) == result.tidDirs.end()) result.tidDirs.push_back(target);
-        }
-    }
-
-    return result;
+std::vector<targets::ManagedTarget> collectManagedTargets(const ModInfo& mod, const GameInfo& game) {
+    // 先完整收集目录和文件，再统一调用策略层；同一模组的 contents 与 nro_patches
+    // 会因此返回两个目标，并由上层作为一个模组管理。
+    RawModPaths sourcePaths = collectRawPaths(mod);
+    return targets::collectManagedTargets(sourcePaths.dirs, sourcePaths.files, format::appIdHex(game.appId));
 }
 
 } // namespace ModInstaller::utils
