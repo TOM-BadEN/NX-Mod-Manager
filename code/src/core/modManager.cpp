@@ -12,23 +12,54 @@
 #include <algorithm>
 #include <chrono>
 
-ModInstaller::utils::ModTidAndIpsDirs ModManager::collectAllTidAndIpsDirs() {
-    ModInstaller::utils::ModTidAndIpsDirs result;
+namespace {
+
+// 多个模组可能指向同一个 Title ID 或补丁集。去重后每个物理目标只操作一次，
+// 避免重复重命名导致失败。
+void appendUniqueTarget(std::vector<ModInstaller::targets::ManagedTarget>& targets, const ModInstaller::targets::ManagedTarget& target) {
+    auto it = std::find_if(targets.begin(), targets.end(), [&](const auto& current) {
+        return current.kind == target.kind && current.path == target.path;
+    });
+    if (it == targets.end()) targets.push_back(target);
+}
+
+// IPS 补丁通过后缀改名实现禁用；目录保留，便于同一补丁集整体恢复。
+bool disableIpsFiles(const std::string& ipsDir) {
+    if (!fs::dirExists(ipsDir)) return true;
+    auto files = fs::listSubFiles(ipsDir, {".ips"});
+    for (const auto& fileName : files) {
+        if (!fs::moveFile(ipsDir + "/" + fileName, ipsDir + "/" + fileName + "-disable")) return false;
+    }
+    return true;
+}
+
+// 仅恢复 .ips-disable 文件，补丁目录中的其他文件保持不变。
+bool enableIpsFiles(const std::string& ipsDir) {
+    if (!fs::dirExists(ipsDir)) return true;
+    auto files = fs::listSubFiles(ipsDir, {".ips-disable"});
+    for (const auto& fileName : files) {
+        std::string restored = fileName.substr(0, fileName.size() - 8);
+        if (!fs::moveFile(ipsDir + "/" + fileName, ipsDir + "/" + restored)) return false;
+    }
+    return true;
+}
+
+} // namespace
+
+std::vector<ModInstaller::targets::ManagedTarget> ModManager::collectAllManagedTargets() {
+    std::vector<ModInstaller::targets::ManagedTarget> result;
     std::string gameTid = format::appIdHex(m_game.appId);
-    result.tidDirs.push_back(gameTid);
+    // 当前游戏的 contents/<TitleID> 始终加入保底目标，保持原有无模组时的行为；
+    // 具体补丁目标只从已安装模组收集，避免误操作未安装模组。
+    result.push_back({
+        ModInstaller::targets::ManagedTargetKind::ContentsDirectory,
+        ModInstaller::contentsPath + "/" + gameTid
+    });
 
     for (const auto& mod : m_mods) {
-        auto dirs = ModInstaller::utils::collectTidAndIpsDirs(mod, m_game);
-        for (auto& tid : dirs.tidDirs) {
-            if (std::find(result.tidDirs.begin(), result.tidDirs.end(), tid) == result.tidDirs.end()) {
-                result.tidDirs.push_back(std::move(tid));
-            }
-        }
-        for (auto& ips : dirs.ipsDirs) {
-            if (std::find(result.ipsDirs.begin(), result.ipsDirs.end(), ips) == result.ipsDirs.end()) {
-                result.ipsDirs.push_back(std::move(ips));
-            }
-        }
+        if (!mod.isInstalled) continue;
+        auto targets = ModInstaller::utils::collectManagedTargets(mod, m_game);
+        for (const auto& target : targets) appendUniqueTarget(result, target);
     }
     return result;
 }
@@ -564,35 +595,22 @@ void ModManager::clearAllInstalledStates() {
 
 bool ModManager::disableMods() {
     std::string gameDirName = format::gameDirName(m_game.dirPath);
-    auto allDirs = collectAllTidAndIpsDirs();
+    auto targets = collectAllManagedTargets();
 
-    // rename contents/{tid} → contents/{tid}-disable
-    for (const auto& tidDir : allDirs.tidDirs) {
-        std::string tidPath = ModInstaller::contentsPath + "/" + tidDir;
-        std::string tidDisable = tidPath + "-disable";
-        if (fs::dirExists(tidPath)) {
-            if (!fs::moveDir(tidPath, tidDisable)) return false;
+    for (const auto& target : targets) {
+        // contents 通过目录整体改名，IPS 目标通过文件后缀改名。类型判断把两种
+        // 物理操作隔离在管理器中，策略层只负责声明目标。
+        if (target.kind == ModInstaller::targets::ManagedTargetKind::ContentsDirectory) {
+            if (fs::dirExists(target.path) && !fs::moveDir(target.path, target.path + "-disable")) return false;
+            continue;
         }
-    }
-
-    // rename exefs_patches 下 .ips → .ips-disable
-    for (const auto& ipsDirName : allDirs.ipsDirs) {
-        std::string ipsDir = ModInstaller::atmospherePath + "/exefs_patches/" + ipsDirName;
-        if (!fs::dirExists(ipsDir)) continue;
-        auto files = fs::listSubFiles(ipsDir, {".ips"});
-        for (const auto& fname : files) {
-            fs::moveFile(ipsDir + "/" + fname, ipsDir + "/" + fname + "-disable");
-        }
+        if (!disableIpsFiles(target.path)) return false;
     }
 
     // pchtxt 生成的 ips 目录
     for (const auto& mod : m_mods) {
         std::string ipsDir = ModInstaller::atmospherePath + "/exefs_patches/" + mod.dirName + "_" + gameDirName;
-        if (!fs::dirExists(ipsDir)) continue;
-        auto files = fs::listSubFiles(ipsDir, {".ips"});
-        for (const auto& fname : files) {
-            fs::moveFile(ipsDir + "/" + fname, ipsDir + "/" + fname + "-disable");
-        }
+        if (!disableIpsFiles(ipsDir)) return false;
     }
 
     return true;
@@ -600,37 +618,20 @@ bool ModManager::disableMods() {
 
 bool ModManager::enableMods() {
     std::string gameDirName = format::gameDirName(m_game.dirPath);
-    auto allDirs = collectAllTidAndIpsDirs();
+    auto targets = collectAllManagedTargets();
 
-    // rename contents/{tid}-disable → contents/{tid}
-    for (const auto& tidDir : allDirs.tidDirs) {
-        std::string tidPath = ModInstaller::contentsPath + "/" + tidDir;
-        std::string tidDisable = tidPath + "-disable";
-        if (fs::dirExists(tidDisable)) {
-            if (!fs::moveDir(tidDisable, tidPath)) return false;
+    for (const auto& target : targets) {
+        if (target.kind == ModInstaller::targets::ManagedTargetKind::ContentsDirectory) {
+            if (fs::dirExists(target.path + "-disable") && !fs::moveDir(target.path + "-disable", target.path)) return false;
+            continue;
         }
-    }
-
-    // rename exefs_patches 下 .ips-disable → .ips
-    for (const auto& ipsDirName : allDirs.ipsDirs) {
-        std::string ipsDir = ModInstaller::atmospherePath + "/exefs_patches/" + ipsDirName;
-        if (!fs::dirExists(ipsDir)) continue;
-        auto files = fs::listSubFiles(ipsDir, {".ips-disable"});
-        for (const auto& fname : files) {
-            std::string restored = fname.substr(0, fname.size() - 8); // 去掉 "-disable"
-            fs::moveFile(ipsDir + "/" + fname, ipsDir + "/" + restored);
-        }
+        if (!enableIpsFiles(target.path)) return false;
     }
 
     // pchtxt 生成的 ips 目录
     for (const auto& mod : m_mods) {
         std::string ipsDir = ModInstaller::atmospherePath + "/exefs_patches/" + mod.dirName + "_" + gameDirName;
-        if (!fs::dirExists(ipsDir)) continue;
-        auto files = fs::listSubFiles(ipsDir, {".ips-disable"});
-        for (const auto& fname : files) {
-            std::string restored = fname.substr(0, fname.size() - 8); // 去掉 "-disable"
-            fs::moveFile(ipsDir + "/" + fname, ipsDir + "/" + restored);
-        }
+        if (!enableIpsFiles(ipsDir)) return false;
     }
 
     return true;
@@ -642,40 +643,36 @@ fs::RemoveResult ModManager::forceClean(std::stop_token token, std::function<voi
     auto startTime = Clock::now();
 
     std::string gameDirName = format::gameDirName(m_game.dirPath);
-    auto allDirs = collectAllTidAndIpsDirs();
+    auto targets = collectAllManagedTargets();
 
-    // 删除所有 TID 对应的 contents 目录（含 -disable）
     fs::RemoveResult result{};
     result.status = fs::RemoveResult::Completed;
 
-    for (const auto& tidDir : allDirs.tidDirs) {
-        std::string tidPath = ModInstaller::contentsPath + "/" + tidDir;
-        std::string tidDisable = tidPath + "-disable";
+    for (const auto& target : targets) {
+        // contents 需要同时处理启用目录和 -disable 目录；IPS 目标直接删除补丁集目录。
+        if (target.kind == ModInstaller::targets::ManagedTargetKind::ContentsDirectory) {
+            if (fs::dirExists(target.path)) {
+                result = fs::removeDirContentsWithProgress(target.path, token, onProgress);
+                if (result.status != fs::RemoveResult::Completed) return result;
+                fs::removeDirAll(target.path);
+            }
 
-        if (fs::dirExists(tidPath)) {
-            result = fs::removeDirContentsWithProgress(tidPath, token, onProgress);
-            if (result.status != fs::RemoveResult::Completed) return result;
-            fs::removeDirAll(tidPath);
+            if (fs::dirExists(target.path + "-disable")) {
+                result = fs::removeDirContentsWithProgress(target.path + "-disable", token, onProgress);
+                if (result.status != fs::RemoveResult::Completed) return result;
+                fs::removeDirAll(target.path + "-disable");
+            }
+            continue;
         }
 
-        if (fs::dirExists(tidDisable)) {
-            result = fs::removeDirContentsWithProgress(tidDisable, token, onProgress);
-            if (result.status != fs::RemoveResult::Completed) return result;
-            fs::removeDirAll(tidDisable);
-        }
-    }
-
-    // 删除 exefs_patches 目录
-    for (const auto& ipsDirName : allDirs.ipsDirs) {
-        std::string ipsDir = ModInstaller::atmospherePath + "/exefs_patches/" + ipsDirName;
-        if (fs::dirExists(ipsDir) && !fs::removeDirAll(ipsDir)) {
+        if (fs::dirExists(target.path) && !fs::removeDirAll(target.path)) {
             result.status = fs::RemoveResult::FsError;
-            result.errorPath = ipsDir;
+            result.errorPath = target.path;
             return result;
         }
     }
 
-    // 删除 pchtxt 生成的 ips 目录
+    // pchtxt 生成的 IPS 目录不对应源模组目录，保留现有按模组名推导的清理方式。
     for (const auto& mod : m_mods) {
         std::string ipsDir = ModInstaller::atmospherePath + "/exefs_patches/" + mod.dirName + "_" + gameDirName;
         if (fs::dirExists(ipsDir) && !fs::removeDirAll(ipsDir)) {

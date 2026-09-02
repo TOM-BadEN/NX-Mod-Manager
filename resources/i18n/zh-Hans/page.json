@@ -251,7 +251,7 @@
     "faqNetwork": "在线功能网络异常",
     "faqNetworkDesc": "商店浏览、模组下载、在线获取游戏名称等功能均需要网络连接。如果出现网络相关的错误提示，请先确认主机已连接到 Wi-Fi 且网络通畅。如果网络正常但仍无法访问，可能是服务器暂时不可用，请稍后再试。此外，请确保您的 Switch 设备已进行过时间同步，时间不正确可能导致网络请求失败。",
     "faqInvalidMod": "MOD 结构不合法",
-    "faqInvalidModDesc": "此提示表示模组的文件夹或 ZIP 压缩包内没有找到有效的模组文件结构。一个合法的模组至少需要包含以下目录或文件之一：romfs、romfslite、exefs、cheats、exefs_patches、romfs.bin 或 pchtxt 补丁文件。",
+    "faqInvalidModDesc": "此提示表示模组的文件夹或 ZIP 压缩包内没有找到有效的模组文件结构。一个合法的模组至少需要包含以下目录或文件之一：romfs、romfslite、exefs、cheats、exefs_patches、nro_patches、romfs.bin 或 pchtxt 补丁文件。",
     "faqConflict": "MOD 文件冲突",
     "faqConflictDesc": "当你安装一个模组时，软件会检查该模组要修改的文件是否已被其他模组占用。如果两个模组修改了同一个文件但内容不同，就会触发冲突检测，提示中会显示冲突模组的名称。遇到此情况需要先卸载与之冲突的模组，再安装当前模组。同一文件被多个模组以相同内容覆盖时不会报冲突，软件会通过引用计数自动管理，确保卸载时不会误删共享文件。",
     "faqRemoveGame": "存在已安装的 MOD，无法移除游戏",

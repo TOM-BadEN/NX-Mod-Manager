@@ -267,25 +267,22 @@ public:
     void clearAllInstalledStates();
 
     /**
-     * @brief 禁用当前游戏所有模组
-     *   - rename /atmosphere/contents/{tid} → {tid}-disable（存在才 rename）
-     *   - 遍历所有 mod，检测 /atmosphere/exefs_patches/{dirName}_{gameDirName}/ 是否存在，
-     *     存在则将目录内所有 .ips 文件 rename 为 .ips-disable
-     * @return true 成功，false contents 目录 rename 失败
+     * @brief 禁用当前游戏所有模组的受管理目标
+     * contents 目标整体改名为 -disable；IPS 目标中的 .ips 文件改名为 .ips-disable。
+     * @return true 成功，false 任一受管理目标操作失败
      */
     bool disableMods();
 
     /**
-     * @brief 取消禁用，恢复所有模组
-     *   - rename /atmosphere/contents/{tid}-disable → {tid}（存在才 rename）
-     *   - 遍历所有 mod，检测 /atmosphere/exefs_patches/{dirName}_{gameDirName}/ 是否存在，
-     *     存在则将目录内所有 .ips-disable 文件 rename 回 .ips
-     * @return true 成功，false contents 目录 rename 失败
+     * @brief 取消禁用，恢复当前游戏所有模组的受管理目标
+     * 将 contents 的 -disable 目录和 IPS 的 .ips-disable 文件恢复为启用名称。
+     * @return true 成功，false 任一受管理目标操作失败
      */
     bool enableMods();
 
     /**
      * @brief 强制清理该游戏所有已安装 mod 文件、ips 补丁和引用计数
+     * 受管理目标来自策略注册表，因此一个模组同时包含 contents 与 NRO IPS 时会一起清理。
      * @param token 取消令牌
      * @param onProgress 进度回调
      * @return 强制清理结果
@@ -297,10 +294,10 @@ private:
     void buildUnmanagedModPlan();
 
     /**
-     * @brief 遍历所有已安装 mod，收集涉及的 TID 和 exefs_patches 目录（含游戏 TID 保底）
-     * @return 涉及的 TID 与 IPS 目录集合
+     * @brief 遍历所有已安装 mod，收集涉及的生命周期目标（含游戏 TID 保底）
+     * @return 受管理目标集合
      */
-    ModInstaller::utils::ModTidAndIpsDirs collectAllTidAndIpsDirs();
+    std::vector<ModInstaller::targets::ManagedTarget> collectAllManagedTargets();
 
     /** @brief 排序实现（三级：已安装 > 未安装 → 类型分组 → 拼音） */
     void sort(bool ascending);
